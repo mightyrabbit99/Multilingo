@@ -3,10 +3,10 @@ import { Card, Icon, Image } from 'semantic-ui-react';
 
 export type DeckProps = {
     title: string;
-    dateAdded: Date;
+    dateAdded: number;
     description: string;
     noOfWords: number;
-    lastRevised: Date;
+    lastRevised: number;
     lastResult: number;
     id: number;
     link: string;
@@ -21,7 +21,7 @@ class Deck extends React.Component<DeckProps, {}> {
                     <Card.Content>
                         <Card.Header>{this.props.title}</Card.Header>
                         <Card.Meta>
-                            <span className='date'>Last revised in: {this.props.lastRevised.getTime()}</span>
+                            <span className='date'>Last revised in: {this.props.lastRevised}</span>
                         </Card.Meta>
                         <Card.Description>{this.props.description}</Card.Description>
                     </Card.Content>
