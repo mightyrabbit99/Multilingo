@@ -11,7 +11,8 @@ const testingQuesProp: MCQProps = {
   title: 'svdavas',
   question: 'vasdv',
   answer: 'vasdvsadasvd',
-  answerType: 1
+  choices: ['ch1', 'ch2', 'ch3'],
+  answerType: 1,
 }
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
