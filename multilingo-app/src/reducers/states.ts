@@ -1,10 +1,15 @@
-import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
+// import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
+import {CardCollection, CardType} from '../extension/types';
 
 export interface IState {
-  readonly router: any;
-  readonly session: any;
+  readonly main: MainState;
+  
 }
 
+export interface MainState {
+  DefaultCardCollections: CardCollection<CardType>;
+}
+/*
 export interface IWorkspaceState {
   readonly editorValue: string | null;
   readonly editorBreakpoints: string[];
@@ -60,4 +65,4 @@ export const defaultState: IState = {
   session: defaultSession
 };
 
-export interface ISessionState {}
+export interface ISessionState {}*/

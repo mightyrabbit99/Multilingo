@@ -6,9 +6,8 @@ export type MCQProps = {
     id: number;
     title: string;
     question: string;
-    answer: string;
+    answerChecker: (answer: string) => boolean;
     choices: string[];
-    answerType: number;
 }
 
 type State = {
@@ -38,7 +37,7 @@ class MCQ extends React.Component<MCQProps, State> {
                 <Grid.Row columns={1}>
                     <Grid.Column>
                     <div className='choices'> 
-                        {this.createChoice(this.state.choicesCopy, this.props.answer)}
+                        {this.createChoice(this.state.choicesCopy)}
                     </div>
                     </Grid.Column>
                 </Grid.Row>
@@ -48,7 +47,6 @@ class MCQ extends React.Component<MCQProps, State> {
 
     private random = (choices: string[]) => {
         let choicesCopy = choices.concat([]);
-        choicesCopy.push(this.props.answer);
         let temp: string;
         for(let n = choicesCopy.length - 1; n >= 0; n--) {
             let i = Math.floor(Math.random() * choices.length);
@@ -59,7 +57,7 @@ class MCQ extends React.Component<MCQProps, State> {
         return choicesCopy;
     }
 
-    private createChoice = (choices: string[], answer: string) => {
+    private createChoice = (choices: string[]) => {
         const onButtonClickFactory = (i: number) => (e: any) => {
             this.setState({
                 ...this.state,
@@ -69,7 +67,7 @@ class MCQ extends React.Component<MCQProps, State> {
 
         const checkColor = (i: number) => {
             if(this.state.pickedAns !== null) {
-                if(choices[i] === answer) {
+                if(this.props.answerChecker(choices[i])) {
                     return 'green';
                 } else {
                     if(this.state.pickedAns === i) {
