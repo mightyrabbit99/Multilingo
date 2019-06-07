@@ -38,6 +38,8 @@ export type Card = {
     dateAdded: number;
     comments: Comment[];
     info: {
+        lastRevised: number;
+        lastResult: number;
         correct: number;
         wrong: number;
         asked: number;

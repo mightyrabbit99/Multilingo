@@ -9,7 +9,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
-  handleBrowseHistoryDown: () => void;
+
 
 }
 

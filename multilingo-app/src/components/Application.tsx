@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
-import Academy from '../containers/AcademyContainer';
+import Main from '../containers/MainContainer';
 import NotFound from '../components/NotFound'
 
 
 export interface IApplicationProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
 export interface IStateProps {
+  accessToken : string;
+  role: string;
   title: string;
 }
 
@@ -25,8 +27,7 @@ class Application extends React.Component<IApplicationProps, {}> {
       <div className="Application">
         <div className="Application__main">
           <Switch>
-            <Route path="/main" component={toAcademy(this.props)} />
-            <Route path="/academy" component={Academy} />
+            <Route path="/main" component={toMain(this.props)} />
             <Route exact={true} path="/" render={this.redirectToMain} />
             <Route component={NotFound} />
           </Switch>
@@ -43,7 +44,8 @@ class Application extends React.Component<IApplicationProps, {}> {
  *  1. If the user is logged in, render the Academy component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAcademy = (props: IApplicationProps) => () => <Redirect to="/academy" />
+const toMain = (props: IApplicationProps) => 
+  () => <Main />
 
 
 export default Application;

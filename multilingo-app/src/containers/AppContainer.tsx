@@ -10,6 +10,8 @@ import { Action as ReduxAction } from 'redux';
 
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
+  accessToken: '1',
+  role: 'ss',
   title: 'dd'
 });
 

@@ -1,13 +1,22 @@
 // import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
-import {CardCollection, CardType} from '../extension/types';
+import {CardDeck, sampleDeck} from '../extension/cards';
 
 export interface IState {
   readonly main: MainState;
-  
 }
 
 export interface MainState {
-  DefaultCardCollections: CardCollection<CardType>;
+  title: string;
+  decks: CardDeck[];
+}
+
+export const defaultMain: MainState = {
+  title: "aaa",
+  decks: sampleDeck()
+}
+
+export const defaultState: IState = {
+  main: defaultMain
 }
 /*
 export interface IWorkspaceState {

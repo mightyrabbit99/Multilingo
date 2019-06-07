@@ -2,19 +2,19 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import Main, { MainDispatchProps, MainStateProps } from '../components/Main';
+import Main, { MainDispatchProps, MainStateProps } from '../components/main';
 import { IState } from '../reducers/states';
 import { Action as ReduxAction } from 'redux';
 
-
 const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
-  title: 'dd'
+  title: state.main.title,
+  decks: state.main.decks
 });
 
 const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>
-  bindActionCreators(
+  bindActionCreators<any, any>(
     {
-
+      logout: () => {}
     },
     dispatch
   );

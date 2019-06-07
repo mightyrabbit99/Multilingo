@@ -1,6 +1,7 @@
  import { Card, QuestionType, Question } from './types';
+ import { createCard } from './cards';
   
-export function createRandomQuestion(cards: Card[], type: QuestionType): Question {
+export function createRandomQuestion(cards: Card[], type: QuestionType): Question | undefined {
   switch(type) {
     case QuestionType.MCQ : {
       return createMCQ(cards);
@@ -14,13 +15,27 @@ export function createRandomQuestion(cards: Card[], type: QuestionType): Questio
     default: {
 
     }
-    return undefined;
   }
+  return undefined;
+}
+
+const sampleMCQ: Question = {
+  type: QuestionType.MCQ,
+  difficulty: 0,
+  question: ["aaa"],
+  answer: {
+    options: {
+      allOptions: ["options"],
+      cards: []
+    },
+    checkAnswer: (answer: string) => answer === "sss"
+  },
+  questionedCard: createCard("type", ["front"], ["back"])
 }
 
 function createMCQ(cards: Card[], questioned: Card = popRandom(cards), noOfOptions: number = 4) {
   if(noOfOptions > cards.length || noOfOptions < 1) {
-    return undefined;
+    return sampleMCQ;
   } else {
     let cardsCopy = cards.slice();
     let options = [questioned.back[0]];
@@ -50,6 +65,5 @@ function createMCQ(cards: Card[], questioned: Card = popRandom(cards), noOfOptio
 }
 
 function popRandom<T>(array: T[]): T {
-  if(array.length === 0) return undefined;
   return array.splice(Math.floor(Math.random() * array.length), 1)[0];
 }

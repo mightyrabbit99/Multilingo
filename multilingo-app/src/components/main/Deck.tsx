@@ -1,35 +1,29 @@
 import * as React from 'react';
 import { Card, Icon, Image } from 'semantic-ui-react';
+import { CardDeck } from '../../extension/cards';
 
 export type DeckProps = {
-    title: string;
-    dateAdded: number;
-    description: string;
-    noOfWords: number;
-    lastRevised: number;
-    lastResult: number;
-    id: number;
-    link: string;
+    deck: CardDeck;
+    handleDeckClick: () => void;
 }
 
 class Deck extends React.Component<DeckProps, {}> {
     public render() {
+        const carddeck = this.props.deck.info;
         return (
-            <div className={"deck" + this.props.id}>
-                <Card href={this.props.link}>
+            <div className={"deck" + carddeck.name}>
+                <Card onclick={this.props.handleDeckClick}>
                     <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
                     <Card.Content>
-                        <Card.Header>{this.props.title}</Card.Header>
+                        <Card.Header>{carddeck.name}</Card.Header>
                         <Card.Meta>
-                            <span className='date'>Last revised in: {this.props.lastRevised}</span>
+                            <span className='date'>Last revised in: {carddeck.lastRevised}</span>
                         </Card.Meta>
-                        <Card.Description>{this.props.description}</Card.Description>
+                        <Card.Description>{carddeck.description}</Card.Description>
                     </Card.Content>
                     <Card.Content extra>
-                        <a>
                             <Icon name='user' />
-                            High Score: {this.props.lastResult}
-                        </a>
+                            High Score: {carddeck.lastResult}
                     </Card.Content>
                 </Card>
             </div>

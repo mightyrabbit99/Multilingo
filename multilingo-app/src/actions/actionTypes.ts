@@ -1,9 +1,9 @@
 import { Action as ReduxAction } from 'redux';
 
-export interface IAction extends ReduxAction<any> {
-  payload: any;
-}
+export interface IAction extends ReduxAction {
+    payload: any;
+  }
 
-/** Session */
+/** Main */
 export const LOG_OUT = 'LOG_OUT';
 export const LOG_IN = 'LOG_IN';

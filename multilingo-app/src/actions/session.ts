@@ -1,4 +1,4 @@
-import { ActionCreator } from 'redux';
+//import { ActionCreator } from 'redux';
 
 import * as actionTypes from './actionTypes';
 

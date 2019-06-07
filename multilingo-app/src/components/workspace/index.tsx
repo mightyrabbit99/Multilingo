@@ -7,12 +7,11 @@ export type WorkspaceProps = {
 };
 
 const testingQuesProp: MCQProps = {
-  id: 1,
-  title: 'svdavas',
-  question: 'vasdv',
-  answer: 'vasdvsadasvd',
-  choices: ['ch1', 'ch2', 'ch3'],
-  answerType: 1,
+  id: 2,
+  title: "string",
+  question: "string",
+  answerChecker: (answer: string) => answer === "aaa",
+  choices: ["sss", "aaa", "bbb"]
 }
 
 class Workspace extends React.Component<WorkspaceProps, {}> {

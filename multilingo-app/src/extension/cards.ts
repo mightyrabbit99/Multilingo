@@ -5,6 +5,8 @@ export function createCard(type: string, front: string[], back: string[]): Card 
         dateAdded: Date.now(),
         comments: [],
         info: {
+            lastRevised: 0,
+            lastResult: 0,
             correct: 0,
             wrong: 0,
             asked: 0
@@ -15,14 +17,21 @@ export function createCard(type: string, front: string[], back: string[]): Card 
     };
 }
 
+export type DeckInfo = {
+    name: string;
+    dateAdded: number;
+    description: string;
+    comment: Comment[];
+    lastRevised: number;
+    lastResult: number;
+}
+
 export class CardDeck {
-    public name: string;
-    public dateAdded: number;
-    public comment: Comment[];
+    public info: any = {}
     private collection: CardCollection = {};
     constructor(name: string) {
-        this.name = name;
-        this.dateAdded = Date.now();
+        this.info.name = name;
+        this.info.dateAdded = Date.now();
     }
     public addCard(card: Card) {
         if(this.collection[card.type] === undefined) {
@@ -46,3 +55,11 @@ export class CardDeck {
     }
 }
 
+export function sampleDeck(): CardDeck[] {
+    let ans = [];
+    ans.push(new CardDeck("deck1"));
+    ans.push(new CardDeck("deck2"));
+    ans.push(new CardDeck("deck3"));
+    ans[0].addCard(createCard("a", ["haha"], ["shit"]));
+    return ans;
+}
