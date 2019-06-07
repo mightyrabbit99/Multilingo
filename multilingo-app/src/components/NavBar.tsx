@@ -5,7 +5,8 @@ import {
   Menu,
   Responsive,
   Segment,
-  Visibility
+  Visibility,
+  Icon
 } from "semantic-ui-react";
 
 class NavBar extends React.Component<any> {
@@ -19,7 +20,6 @@ class NavBar extends React.Component<any> {
   showFixedMenu = () => this.setState({ fixed: true });
 
   render() {
-    const { children } = this.props;
     const { fixed } = this.state;
 
     return (
@@ -30,9 +30,13 @@ class NavBar extends React.Component<any> {
           onBottomPassedReverse={this.hideFixedMenu}
         >
           <Segment
-            inverted
             textAlign="center"
-            style={{ padding: "1em 0em" }}
+            style={{
+              padding: "0.2em 0em",
+              border: "0em",
+              background: "green",
+              marginBottom: "1em"
+            }}
             vertical
           >
             <Menu
@@ -41,10 +45,25 @@ class NavBar extends React.Component<any> {
               secondary={!fixed}
               size="large"
             >
+              <h1
+                className="header"
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  margin: "auto",
+                  fontFamily: "courier"
+                }}
+              >
+                <a href="a" style={{ color: "white" }}>
+                  MultiLingo
+                  <Icon name="language" style={{ marginLeft: "0.1em" }} />
+                </a>
+              </h1>
+
               <Container>
                 {this.state.name.map((name, id) => {
                   const active =
-                    this.state.activeIndex == this.state.name.indexOf(name)
+                    this.state.activeIndex === this.state.name.indexOf(name)
                       ? "active"
                       : "";
                   return (
@@ -66,6 +85,7 @@ class NavBar extends React.Component<any> {
                 <Menu.Item position="right">
                   <Button as="a" inverted={!fixed}>
                     Log in
+                    <Icon name="user" style={{ marginLeft: "0.3em" }} />
                   </Button>
                   <Button
                     as="a"
@@ -80,8 +100,6 @@ class NavBar extends React.Component<any> {
             </Menu>
           </Segment>
         </Visibility>
-
-        {children}
       </Responsive>
     );
   }
