@@ -8,18 +8,10 @@ import {
   Visibility
 } from "semantic-ui-react";
 
-export interface NavBarProps {}
-
-export interface NavBarState {}
-
-const getWidth = () => {
-  const isSSR = typeof window === "undefined";
-
-  return isSSR ? Responsive.onlyTablet.minWidth : window.innerWidth;
-};
-
-class NavBar extends React.Component<NavBarProps, NavBarState> {
+class NavBar extends React.Component<any> {
   state = {
+    name: ["Home", "MyDecks", "Play", "Profile"],
+    activeIndex: 0,
     fixed: false
   };
 
@@ -31,7 +23,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     const { fixed } = this.state;
 
     return (
-      <Responsive Width={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
+      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
         <Visibility
           once={false}
           onBottomPassed={this.showFixedMenu}
@@ -50,12 +42,27 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
               size="large"
             >
               <Container>
-                <Menu.Item as="a" active>
-                  Home
-                </Menu.Item>
-                <Menu.Item as="a">MyDecks</Menu.Item>
-                <Menu.Item as="a">Play!</Menu.Item>
-                <Menu.Item as="a">Profile</Menu.Item>
+                {this.state.name.map((name, id) => {
+                  const active =
+                    this.state.activeIndex == this.state.name.indexOf(name)
+                      ? "active"
+                      : "";
+                  return (
+                    <Menu.Item
+                      as="a"
+                      key={this.state.name.indexOf(name)}
+                      className={active}
+                      onClick={() =>
+                        this.setState({
+                          activeIndex: this.state.name.indexOf(name)
+                        })
+                      }
+                    >
+                      {name}
+                    </Menu.Item>
+                  );
+                })}
+
                 <Menu.Item position="right">
                   <Button as="a" inverted={!fixed}>
                     Log in
