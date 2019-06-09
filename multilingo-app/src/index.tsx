@@ -6,14 +6,14 @@ import * as serviceWorker from './utils/serviceWorker';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 
-import Main from './containers/MainContainer';
+import LoginBar, { defaultLoginBarProps } from './components/LoginBar';
 import { store } from './createStore';
 import { history } from './utils/history';
 
 ReactDOM.render(
 <Provider store={store}>
     <ConnectedRouter history={history}>
-        <Main/>
+        <LoginBar {...defaultLoginBarProps}/>
 
     </ConnectedRouter>
 </Provider>

@@ -4,6 +4,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import Main from '../containers/MainContainer';
 import NotFound from '../components/NotFound'
 
+import LoginBar, { defaultLoginBarProps } from './LoginBar';
 
 export interface IApplicationProps extends IDispatchProps, IStateProps, RouteComponentProps<{}> {}
 
@@ -25,7 +26,8 @@ class Application extends React.Component<IApplicationProps, {}> {
   public render() {
     return (
       <div className="Application">
-        <div className="Application__main">
+          <LoginBar {...defaultLoginBarProps} />
+        <div className="Application_main">
           <Switch>
             <Route path="/main" component={toMain(this.props)} />
             <Route exact={true} path="/" render={this.redirectToMain} />

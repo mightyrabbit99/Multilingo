@@ -5,30 +5,25 @@ import {
   Menu,
   Responsive,
   Segment,
-  Visibility,
   Icon
 } from "semantic-ui-react";
 
-class NavBar extends React.Component<any> {
-  state = {
-    name: ["Home", "MyDecks", "Play", "Profile"],
-    activeIndex: 0,
-    fixed: false
-  };
+export type LoginBarProps = {
+  name: string[];
+  activeIndex: number;
+  fixed: boolean;
+};
 
-  hideFixedMenu = () => this.setState({ fixed: false });
-  showFixedMenu = () => this.setState({ fixed: true });
+export const defaultLoginBarProps: LoginBarProps = {
+  name: ["Home", "MyDecks", "Play", "Profile"],
+  activeIndex: 0,
+  fixed: false
+};
 
-  render() {
-    const { fixed } = this.state;
-
-    return (
+const LoginBar: React.SFC<LoginBarProps> = props => {
+  const { fixed } = props
+  return (
       <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-        <Visibility
-          once={false}
-          onBottomPassed={this.showFixedMenu}
-          onBottomPassedReverse={this.hideFixedMenu}
-        >
           <Segment
             textAlign="center"
             style={{
@@ -61,7 +56,7 @@ class NavBar extends React.Component<any> {
               </h1>
 
               <Container>
-                {this.state.name.map((name, id) => {
+                {/*props.name.map((name, id) => {
                   const active =
                     this.state.activeIndex === this.state.name.indexOf(name)
                       ? "active"
@@ -80,7 +75,7 @@ class NavBar extends React.Component<any> {
                       {name}
                     </Menu.Item>
                   );
-                })}
+                })*/}
 
                 <Menu.Item position="right">
                   <Button as="a" inverted={!fixed}>
@@ -99,10 +94,8 @@ class NavBar extends React.Component<any> {
               </Container>
             </Menu>
           </Segment>
-        </Visibility>
       </Responsive>
     );
-  }
 }
 
-export default NavBar;
+export default LoginBar;

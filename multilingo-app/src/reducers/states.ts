@@ -8,11 +8,13 @@ export interface IState {
 export interface MainState {
   title: string;
   decks: CardDeck[];
+  selectedDeck: CardDeck | null;
 }
 
 export const defaultMain: MainState = {
   title: "aaa",
-  decks: sampleDeck()
+  decks: sampleDeck(),
+  selectedDeck: null
 }
 
 export const defaultState: IState = {

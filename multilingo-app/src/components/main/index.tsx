@@ -27,11 +27,7 @@ class Main extends React.Component<MainProps, MainState> {
 
   public render() {
     return (
-      <div className="Main">
-        <div className="Application_main">
-          {this.props.decks.map(generateDeck)}
-        </div>
-      </div>
+      rootElement(this.props.decks)
     );
   }
 
@@ -44,6 +40,14 @@ const generateDeck = (deck: CardDeck) => {
   };
   return <div className="deck"><Deck {...props}/></div>;
 };
+
+const rootElement = (deck: CardDeck[]) => (
+  <div className="Main">
+    <div className="Application_main">
+      {deck.map(generateDeck)}
+    </div>
+  </div>
+);
 
 
 
