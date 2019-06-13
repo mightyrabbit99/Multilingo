@@ -11,15 +11,11 @@ export type DecksPanelProps = {
 
 const DecksPanel: React.SFC<DecksPanelProps> = props => {
     const createDeckTabs = (deck: CardDeck) => {
-        const onHoverHandler = (e: any) => {
-            
-        }
         const selected = deck === props.activeDeck;
         return (
             <div 
                 className={selected ? 'decktab selected': 'decktab normal'}
                 style={{backgroundColor: selected ? props.color: props.color}}
-                onMouseOver={selected ? null : }
             >
                 <Button 
                     onClick={() => props.onClickHandler(deck)}
