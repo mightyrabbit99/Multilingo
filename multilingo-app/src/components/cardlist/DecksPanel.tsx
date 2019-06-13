@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { CardDeck } from '../../extension/cards';
-import { Button } from 'semantic-ui-react';
+import * as React from "react";
+import { CardDeck } from "../../extension/cards";
+import { Button } from "semantic-ui-react";
 
 export type DecksPanelProps = {
-    color: string;
-    activeDeck: CardDeck;
-    decks: CardDeck[];
-    onClickHandler: (deck: CardDeck) => void;
+  color: string;
+  activeDeck: CardDeck;
+  decks: CardDeck[];
+  onClickHandler: (deck: CardDeck) => void;
 };
 
 const DecksPanel: React.SFC<DecksPanelProps> = props => {
@@ -25,16 +25,14 @@ const DecksPanel: React.SFC<DecksPanelProps> = props => {
             </div>
         );
     }
-    return (
-        <div className='decksPanel'>
-            <div className='title'>
-                <h1>Decks</h1>
-            </div>
-            <div className='tabs'>
-                {props.decks.map(createDeckTabs)}
-            </div>
-        </div>
-    );
+  return (
+    <div className="decksPanel">
+      <div className="title">
+        <h1>Decks</h1>
+      </div>
+      <div className="tabs">{props.decks.map(createDeckTabs)}</div>
+    </div>
+  );
 };
 
 export default DecksPanel;
