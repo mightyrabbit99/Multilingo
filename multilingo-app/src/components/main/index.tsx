@@ -21,33 +21,29 @@ type MainState = {
 
 class Main extends React.Component<MainProps, MainState> {
 
-  public componentDidMount() {
-
-  }
-
   public render() {
+    const generateDeck = (deck: CardDeck) => {
+      let props: DeckProps = {
+        deck: deck,
+        handleDeckClick: () => {}
+      };
+      return <Deck {...props}/>;
+    };
+    
+    const rootElement = (deck: CardDeck[]) => (
+      <div className="Main">
+        <div className="Application_main">
+          {deck.map(generateDeck)}
+        </div>
+      </div>
+    );
+    
     return (
       rootElement(this.props.decks)
     );
   }
 
 }
-
-const generateDeck = (deck: CardDeck) => {
-  let props: DeckProps = {
-    deck: deck,
-    handleDeckClick: () => {}
-  };
-  return <div className="deck"><Deck {...props}/></div>;
-};
-
-const rootElement = (deck: CardDeck[]) => (
-  <div className="Main">
-    <div className="Application_main">
-      {deck.map(generateDeck)}
-    </div>
-  </div>
-);
 
 
 
