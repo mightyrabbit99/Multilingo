@@ -25,7 +25,8 @@ class Fab extends React.Component<any, State> {
           position: "absolute",
           bottom: "5%",
           right: "5%",
-          borderRadius: "50%"
+          borderRadius: "50%",
+          color: "green"
         }}
         name="plus circle"
         size="huge"
@@ -56,6 +57,7 @@ class Fab extends React.Component<any, State> {
           visible={visible}
           width="thin"
           direction="right"
+          style={{ background: "green" }}
         >
           <Menu.Item as="a">
             <Icon name="add square" />
