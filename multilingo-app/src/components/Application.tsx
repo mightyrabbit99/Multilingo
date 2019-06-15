@@ -28,11 +28,12 @@ class Application extends React.Component<IApplicationProps, {}> {
       <div className="Application">
           <LoginBar {...defaultLoginBarProps} />
         <div className="Application_main">
-          <Switch>
+          <Main />
+          {/*<Switch>
             <Route path="/main" component={toMain(this.props)} />
             <Route exact={true} path="/" render={this.redirectToMain} />
             <Route component={NotFound} />
-          </Switch>
+          </Switch>*/}
         </div>
       </div>
     );

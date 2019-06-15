@@ -15,7 +15,13 @@ import AcademyContainer from "./containers/AcademyContainer";
 import CardListContainer from "./containers/CardListContainer";
 import MainContainer from "./containers/MainContainer";
 
-ReactDOM.render(<Fab />, document.getElementById("root"));
+ReactDOM.render(
+    <Provider store={store}>
+        <ConnectedRouter history={history}>
+            <AppContainer/>
+        </ConnectedRouter>
+    </Provider>
+    , document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
