@@ -46,7 +46,9 @@ class Fab extends React.Component<any, State> {
   render() {
     const { visible } = this.state;
     return (
-      <Sidebar.Pushable style={{ height: "100vh" }}>
+      <Sidebar.Pushable
+        style={{ height: "100vh", width: "100vw", marginTop: "-13.5px" }}
+      >
         <Sidebar
           as={Menu}
           animation="overlay"
@@ -66,7 +68,7 @@ class Fab extends React.Component<any, State> {
         </Sidebar>
 
         <Sidebar.Pusher dimmed={visible}>
-          <Container style={{ margin: "10px" }}>
+          <Container>
             <Header as="h3">Application Content</Header>
             {this.icon()}
           </Container>
