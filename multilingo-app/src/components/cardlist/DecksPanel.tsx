@@ -19,7 +19,7 @@ class DecksPanel extends React.Component<DecksPanelProps, DecksPanelState> {
   public constructor(props: DecksPanelProps) {
     super(props);
     this.state = {
-      visible: false,
+      visible: true,
       segmentRef: React.createRef(),
       selectedDeck: props.activeDeck
     };

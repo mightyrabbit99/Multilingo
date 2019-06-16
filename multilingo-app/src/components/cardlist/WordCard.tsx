@@ -11,7 +11,7 @@ class WordCard extends React.Component<WordCardProps, {}> {
     public render() {
         return (
             <div className="card">
-                <Grid divided="vertically">
+                <Grid divided="vertically" padded>
                     <Grid.Row>
                         <Grid.Column width={2}>
                             <div className="subject">

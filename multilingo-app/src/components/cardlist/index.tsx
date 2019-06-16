@@ -3,15 +3,17 @@ import { RouteComponentProps} from 'react-router';
 
 import { CardDeck } from '../../extension/cards';
 import { Card } from '../../extension/types';
-import WordCard, { WordCardProps } from '../commons/WordCard';
-const SlidingPane = require('react-sliding-pane');
+import WordCard, { WordCardProps } from './WordCard';
+import PropsPanel, { PropsPanelProps } from './PropsPanel'
 import 'react-sliding-pane/dist/react-sliding-pane.css';
+import DecksPanel, { DecksPanelProps } from './DecksPanel';
 
 export interface CardListProps extends CardListDispatchProps, CardListStateProps, RouteComponentProps<{}> {}
 
 export interface CardListStateProps {
   title: string;
-  deck: CardDeck;
+  decks: CardDeck[];
+  selectedDeck: CardDeck;
 }
 
 export interface CardListDispatchProps {
@@ -19,6 +21,7 @@ export interface CardListDispatchProps {
 }
 
 type CardListState = {
+  currentDeck: CardDeck;
   selectedCard: Card | null;
 }
 
@@ -26,6 +29,7 @@ class CardList extends React.Component<CardListProps, CardListState> {
   public constructor(props: CardListProps) {
     super(props);
     this.state = {
+      currentDeck: this.props.selectedDeck,
       selectedCard: null
     };
   }
@@ -35,23 +39,24 @@ class CardList extends React.Component<CardListProps, CardListState> {
   }
 
   public render() {
+    let currentPropsPanelProps: PropsPanelProps = {
+      color: 'green',
+      deck: this.state.currentDeck,
+      card: this.state.selectedCard
+    }
+
+    let currentDecksPanelProps: DecksPanelProps = {
+      color: 'green',
+      activeDeck: this.state.currentDeck,
+      decks: this.props.decks,
+      selectDeck: () => {}
+    }
     return (
       <div className="CardList">
-        {this.rootElement}
-        <SlidingPane 
-            className='some-custom-class'
-            overlayClassName='some-custom-overlay-class'
-            isOpen={ this.state.selectedCard }
-            title='Hey, it is optional pane title.  I can be React component too.'
-            form='right'
-            width='400px'
-            subtitle='Optional subtitle.'
-            onRequestClose={ () => {
-                // triggered on "<" on left top click or on outside click
-                this.setState({ selectedCard: null });
-            } }>
-            <div></div>
-        </SlidingPane>
+        <DecksPanel />
+        <PropsPanel {...currentPropsPanelProps}>
+          {this.rootElement}
+        </PropsPanel>
       </div>
     );
   }
@@ -61,12 +66,12 @@ class CardList extends React.Component<CardListProps, CardListState> {
       card: card,
       handleCardClick: () => {this.setState({selectedCard: card});}
     };
-    return <div className="wordcard"><WordCard {...props}/></div>;
+    return <WordCard {...props}/>;
   };
 
   private rootElement = (
     <div className="cards">
-      {this.props.deck.cards.map(this.generateCard)}
+      {this.props.selectedDeck.cards.map(this.generateCard)}
     </div>
   );
 

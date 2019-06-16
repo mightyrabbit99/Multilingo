@@ -7,9 +7,10 @@ import { IState } from '../reducers/states';
 import { Action as ReduxAction } from 'redux';
 
 const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
-  title: state.main.title,
-  decks: state.main.decks,
-  selectedDeck: state.main.selectedDeck
+  color: state.cardlist.color
+  title: state.cardlist.title,
+  decks: state.cardlist.decks,
+  selectedDeck: state.cardlist.selectedDeck
 });
 
 const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>
