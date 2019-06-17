@@ -1,9 +1,7 @@
 import * as React from "react";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router";
 
-import Main from "../containers/MainContainer";
-import Fab from "../components/Fab";
-import NotFound from "../components/NotFound";
+import CardListContainer from '../containers/CardListContainer';
 
 import LoginBar, { defaultLoginBarProps } from "./LoginBar";
 
@@ -28,9 +26,10 @@ class Application extends React.Component<IApplicationProps, {}> {
   public render() {
     return (
       <div className="Application">
+				<div id="screenFiller" style={{position: 'fixed', top: 0, right: 0, bottom: 0, left: 0}} />
         <LoginBar {...defaultLoginBarProps} />
         <div className="Application_main">
-          <Fab />
+          <CardListContainer />
           {/*<Switch>
             <Route path="/main" component={toMain(this.props)} />
             <Route exact={true} path="/" render={this.redirectToMain} />
@@ -49,6 +48,5 @@ class Application extends React.Component<IApplicationProps, {}> {
  *  1. If the user is logged in, render the Academy component
  *  2. If the user is not logged in, redirect to /login
  */
-const toMain = (props: IApplicationProps) => () => <Main />;
 
 export default Application;

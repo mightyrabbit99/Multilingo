@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Segment } from 'semantic-ui-react';
 import { Card as GlossaryCard } from '../../extension/types';
 
 export type WordCardProps = {
@@ -10,7 +10,7 @@ export type WordCardProps = {
 class WordCard extends React.Component<WordCardProps, {}> {
     public render() {
         return (
-            <div className="card">
+            <Segment className="card">
                 <Grid divided="vertically" padded>
                     <Grid.Row>
                         <Grid.Column width={2}>
@@ -37,7 +37,7 @@ class WordCard extends React.Component<WordCardProps, {}> {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-            </div>
+            </Segment>
         );
     }
 }

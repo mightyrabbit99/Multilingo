@@ -1,14 +1,16 @@
-import * as React from 'react';
-import { RouteComponentProps} from 'react-router';
+import * as React from "react";
+import { RouteComponentProps } from "react-router";
 
-import { CardDeck } from '../../extension/cards';
-import { Card } from '../../extension/types';
-import WordCard, { WordCardProps } from './WordCard';
-import PropsPanel, { PropsPanelProps } from './PropsPanel'
-import 'react-sliding-pane/dist/react-sliding-pane.css';
-import DecksPanel, { DecksPanelProps } from './DecksPanel';
+import { CardDeck } from "../../extension/cards";
+import { Card } from "../../extension/types";
+import WordCard, { WordCardProps } from "./WordCard";
+import PropsPanel, { PropsPanelProps } from "./PropsPanel";
+import DecksPanel, { DecksPanelProps } from "./DecksPanel";
 
-export interface CardListProps extends CardListDispatchProps, CardListStateProps, RouteComponentProps<{}> {}
+export interface CardListProps
+  extends CardListDispatchProps,
+    CardListStateProps,
+    RouteComponentProps<{}> {}
 
 export interface CardListStateProps {
   title: string;
@@ -22,41 +24,42 @@ export interface CardListDispatchProps {
 
 type CardListState = {
   currentDeck: CardDeck;
-  selectedCard: Card | null;
-}
+  selectedCard: Card | undefined;
+};
 
 class CardList extends React.Component<CardListProps, CardListState> {
   public constructor(props: CardListProps) {
     super(props);
     this.state = {
       currentDeck: this.props.selectedDeck,
-      selectedCard: null
+      selectedCard: undefined
     };
   }
 
-  public componentDidMount() {
-
-  }
+  public componentDidMount() {}
 
   public render() {
     let currentPropsPanelProps: PropsPanelProps = {
-      color: 'green',
+      color: "green",
       deck: this.state.currentDeck,
       card: this.state.selectedCard
-    }
+    };
 
     let currentDecksPanelProps: DecksPanelProps = {
-      color: 'green',
+      color: "green",
       activeDeck: this.state.currentDeck,
       decks: this.props.decks,
       selectDeck: () => {}
-    }
+    };
     return (
       <div className="CardList">
-        <DecksPanel />
-        <PropsPanel {...currentPropsPanelProps}>
-          {this.rootElement}
-        </PropsPanel>
+        <DecksPanel {...currentDecksPanelProps}>
+          <div className="workspace">
+            <PropsPanel {...currentPropsPanelProps}>
+              {this.rootElement}
+            </PropsPanel>
+          </div>
+        </DecksPanel>
       </div>
     );
   }
@@ -64,19 +67,18 @@ class CardList extends React.Component<CardListProps, CardListState> {
   private generateCard = (card: Card) => {
     let props: WordCardProps = {
       card: card,
-      handleCardClick: () => {this.setState({selectedCard: card});}
+      handleCardClick: () => {
+        this.setState({ selectedCard: card });
+      }
     };
-    return <WordCard {...props}/>;
+    return <WordCard {...props} />;
   };
 
   private rootElement = (
-    <div className="cards">
+    <div className="cards" style={{position: 'fixed', top: 0, right: 0, bottom: 0, left: 0}} >
       {this.props.selectedDeck.cards.map(this.generateCard)}
     </div>
   );
-
 }
-
-
 
 export default CardList;

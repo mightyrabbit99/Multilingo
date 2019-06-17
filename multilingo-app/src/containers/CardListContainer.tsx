@@ -2,18 +2,18 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import Main, { MainDispatchProps, MainStateProps } from '../components/main';
+import CardList, { CardListDispatchProps, CardListStateProps } from '../components/cardlist';
 import { IState } from '../reducers/states';
 import { Action as ReduxAction } from 'redux';
 
-const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
-  color: state.cardlist.color
-  title: state.cardlist.title,
-  decks: state.cardlist.decks,
-  selectedDeck: state.cardlist.selectedDeck
+const mapStateToProps: MapStateToProps<CardListStateProps, {}, IState> = state => ({
+  color: state.main.colour,
+  title: 'asas',
+  decks: state.cards.decks,
+  selectedDeck: state.cards.selectedDeck
 });
 
-const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>
+const mapDispatchToProps: MapDispatchToProps<CardListDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>
   bindActionCreators<any, any>(
     {
       logout: () => {}
@@ -21,4 +21,4 @@ const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (dispatch:
     dispatch
   );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CardList));

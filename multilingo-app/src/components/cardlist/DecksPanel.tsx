@@ -53,12 +53,8 @@ class DecksPanel extends React.Component<DecksPanelProps, DecksPanelState> {
     };
     return (
       <div className="decksPanel">
-        <div className="title">
-          <h1>Decks</h1>
-        </div>
-        <Sidebar.Pushable as={Segment.Group} raised>
+        <Sidebar.Pushable as={Segment.Group} style={{width:"100vw", height:"100vh"}}>
           <Sidebar
-            as={Menu}
             animation='overlay'
             icon='labeled'
             inverted

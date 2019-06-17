@@ -1,22 +1,20 @@
 // import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
-import {CardDeck, sampleDeck} from '../extension/cards';
+import { CardDeck, sampleDeck } from '../extension/cards';
 
 export interface IState {
   readonly main: IMainState;
-  readonly cardlist: ICardListState;
+  readonly cards: ICardsState;
   readonly test: ITestState;
-  readonly result: IResultState;
-  readonly user: IUserState;
 }
 
 export interface IMainState {
-  title: string;
-  decks: CardDeck[];
-  selectedDeck: CardDeck | null;
+	colour: string;
+	user: IUserState
 }
 
-export interface ICardListState {
-
+export interface ICardsState {
+  decks: CardDeck[];
+  selectedDeck: CardDeck;
 }
 
 export interface ITestState {
@@ -31,24 +29,22 @@ export interface IUserState {
 
 }
 
-const defaultMain: IMainState = {
-  title: "aaa",
-  decks: sampleDeck(),
-  selectedDeck: null
-};
-
 const defaultUserState: IUserState = {};
 
-const defaultCardListState: ICardListState = {};
+export const defaultCardsState: ICardsState = {
+	decks: sampleDeck(),
+  selectedDeck: sampleDeck()[0]
+};
 
-const defaultTestState: ITestState = {};
+export const defaultTestState: ITestState = {};
 
-const defaultResultState: IResultState = {};
+export const defaultMain: IMainState = {
+	colour: 'green',
+	user: defaultUserState
+};
 
 export const defaultState: IState = {
   main: defaultMain,
-  cardlist: defaultCardListState,
-  test: defaultTestState,
-  result: defaultResultState,
-  user: defaultUserState
+  cards: defaultCardsState,
+  test: defaultTestState
 }
