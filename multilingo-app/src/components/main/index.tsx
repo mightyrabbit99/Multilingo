@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { RouteComponentProps} from 'react-router';
+import { RouteComponentProps } from 'react-router';
+
 
 import { CardDeck } from '../../extension/cards';
 import Deck, { DeckProps } from './Deck';
@@ -12,7 +13,9 @@ export interface MainStateProps {
 }
 
 export interface MainDispatchProps {
-  logout: () => void;
+	push: (s: string) => void;
+	logout: () => void;
+	handleSelectDeck: (deck: CardDeck) => void;
 }
 
 type MainState = {
@@ -22,12 +25,15 @@ type MainState = {
 class Main extends React.Component<MainProps, MainState> {
 
   public render() {
-    const generateDeck = (deck: CardDeck) => {
+    const generateDeck = (deck: CardDeck, i: number) => {
       let props: DeckProps = {
         deck: deck,
-        handleDeckClick: () => {}
+        handleDeckClick: () => {
+					this.props.handleSelectDeck(deck);
+					this.props.push('/cardlist');
+				}
       };
-      return <Deck {...props}/>;
+      return <Deck key={i} {...props}/>;
     };
     
     const rootElement = (deck: CardDeck[]) => (

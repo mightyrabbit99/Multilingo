@@ -11,8 +11,7 @@ class Deck extends React.Component<DeckProps, {}> {
     public render() {
         const carddeck = this.props.deck.info;
         return (
-            <div className={"deck" + carddeck.name}>
-                <Card onclick={this.props.handleDeckClick}>
+                <Card className={"deck" + carddeck.name} onClick={this.props.handleDeckClick}>
                     <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
                     <Card.Content>
                         <Card.Header>{carddeck.name}</Card.Header>
@@ -26,7 +25,6 @@ class Deck extends React.Component<DeckProps, {}> {
                             High Score: {carddeck.lastResult}
                     </Card.Content>
                 </Card>
-            </div>
         );
     }
 }

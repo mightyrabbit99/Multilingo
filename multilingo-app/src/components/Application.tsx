@@ -1,9 +1,11 @@
 import * as React from "react";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router";
 
-import CardListContainer from '../containers/CardListContainer';
+import Main from '../containers/MainContainer';
+import CardList from '../containers/CardListContainer';
 
 import LoginBar, { defaultLoginBarProps } from "./LoginBar";
+import { CardDeck, defaultDeck } from "../extension/cards";
 
 export interface IApplicationProps
   extends IDispatchProps,
@@ -13,35 +15,46 @@ export interface IApplicationProps
 export interface IStateProps {
   accessToken: string;
   role: string;
-  title: string;
+	title: string;
+	selectedDeck: CardDeck | undefined;
 }
 
 export interface IDispatchProps {
-  handleLogOut: () => void;
+  handleClearSelectedDeck: () => void;
 }
 
 class Application extends React.Component<IApplicationProps, {}> {
-  public componentDidMount() {}
+  public componentDidMount() {
+	}
 
   public render() {
     return (
       <div className="Application">
-				<div id="screenFiller" style={{position: 'fixed', top: 0, right: 0, bottom: 0, left: 0}} />
         <LoginBar {...defaultLoginBarProps} />
-        <div className="Application_main">
-          <CardListContainer />
-          {/*<Switch>
+          <Switch>
             <Route path="/main" component={toMain(this.props)} />
+						<Route path="/cardlist" component={toCardList(this.props)} />
             <Route exact={true} path="/" render={this.redirectToMain} />
-            <Route component={NotFound} />
-          </Switch>*/}
-        </div>
+          </Switch>
       </div>
     );
   }
 
   private redirectToMain = () => <Redirect to="/main" />;
 }
+
+const toMain = (props: IApplicationProps) => { 
+	console.log(props);
+	return () => <Main />;
+}
+
+const toCardList = (props: IApplicationProps) => {
+	console.log(props);
+	return props.selectedDeck === defaultDeck
+		? () => <Redirect to='/main'/>
+		: () => <CardList/>
+}
+
 
 /**
  * A user routes to /academy,

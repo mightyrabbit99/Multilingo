@@ -6,20 +6,20 @@ export type ControlBarLocation = "Main" | "CardList";
 export type ControlBarProps = {
   location: ControlBarLocation;
 	color: string;
-	handleClick: () => void;
+	handleShowAddDeckPanel: () => void;
 };
 
 export const defaultControlBarProps: ControlBarProps = {
   location: "Main",
 	color: "blue",
-	handleClick: () => {}
+	handleShowAddDeckPanel: () => {}
 };
 
 const ControlBar: React.SFC<ControlBarProps> = props => {
     return props.location === "Main" 
     ? (
       <Icon
-        onClick={props.handleClick}
+        onClick={props.handleShowAddDeckPanel}
         style={{
           position: "absolute",
           bottom: "5%",
@@ -40,7 +40,7 @@ const ControlBar: React.SFC<ControlBarProps> = props => {
         >
           <Grid.Column className='controlbutton' key='1'>
             <Icon
-              onClick={props.handleClick}
+              onClick={props.handleShowAddDeckPanel}
               style={{
                 position: "absolute",
                 bottom: "5%",
@@ -55,7 +55,7 @@ const ControlBar: React.SFC<ControlBarProps> = props => {
           </Grid.Column>
           <Grid.Column className='controlbutton' key='2'>
             <Icon
-              onClick={props.handleClick}
+              onClick={props.handleShowAddDeckPanel}
               style={{
                 position: "absolute",
                 bottom: "5%",

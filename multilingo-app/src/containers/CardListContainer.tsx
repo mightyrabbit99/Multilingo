@@ -9,8 +9,8 @@ import { Action as ReduxAction } from 'redux';
 const mapStateToProps: MapStateToProps<CardListStateProps, {}, IState> = state => ({
   color: state.main.colour,
   title: 'asas',
-  decks: state.cards.decks,
-  selectedDeck: state.cards.selectedDeck
+  decks: state.session.decks,
+  selectedDeck: state.session.selectedDeck
 });
 
 const mapDispatchToProps: MapDispatchToProps<CardListDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>

@@ -4,8 +4,7 @@ import { RouteComponentProps } from "react-router";
 import { CardDeck } from "../../extension/cards";
 import { Card } from "../../extension/types";
 import WordCard, { WordCardProps } from "./WordCard";
-import PropsPanel, { PropsPanelProps } from "./PropsPanel";
-import DecksPanel, { DecksPanelProps } from "./DecksPanel";
+import WordListPushablePanels, { WordListPushablePanelsProps } from "./WordListPushablePanels";
 
 export interface CardListProps
   extends CardListDispatchProps,
@@ -23,6 +22,8 @@ export interface CardListDispatchProps {
 }
 
 type CardListState = {
+	addDeckPanelVisible: boolean;
+	decksPanelVisible: boolean;
   currentDeck: CardDeck;
   selectedCard: Card | undefined;
 };
@@ -31,6 +32,8 @@ class CardList extends React.Component<CardListProps, CardListState> {
   public constructor(props: CardListProps) {
     super(props);
     this.state = {
+			addDeckPanelVisible: false,
+			decksPanelVisible: true,
       currentDeck: this.props.selectedDeck,
       selectedCard: undefined
     };
@@ -39,27 +42,17 @@ class CardList extends React.Component<CardListProps, CardListState> {
   public componentDidMount() {}
 
   public render() {
-    let currentPropsPanelProps: PropsPanelProps = {
-      color: "green",
-      deck: this.state.currentDeck,
-      card: this.state.selectedCard
-    };
-
-    let currentDecksPanelProps: DecksPanelProps = {
+    let currentPushablePanelProps: WordListPushablePanelsProps = {
       color: "green",
       activeDeck: this.state.currentDeck,
-      decks: this.props.decks,
-      selectDeck: () => {}
+			decks: this.props.decks,
+      selectDeck: (deck: CardDeck) => {}
     };
     return (
-      <div className="CardList">
-        <DecksPanel {...currentDecksPanelProps}>
-          <div className="workspace">
-            <PropsPanel {...currentPropsPanelProps}>
-              {this.rootElement}
-            </PropsPanel>
-          </div>
-        </DecksPanel>
+      <div className="CardList" style={{height: window.screen.height * 80 / 100 + 'px'}}>
+        <WordListPushablePanels {...currentPushablePanelProps}>
+					{this.rootElement}
+        </WordListPushablePanels>
       </div>
     );
   }

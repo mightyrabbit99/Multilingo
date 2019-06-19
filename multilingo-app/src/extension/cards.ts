@@ -61,11 +61,14 @@ export class CardDeck {
     }
 }
 
-export function sampleDeck(): CardDeck[] {
+export function sampleDecks(): CardDeck[] {
     let ans = [];
     ans.push(new CardDeck("deck1"));
     ans.push(new CardDeck("deck2"));
     ans.push(new CardDeck("deck3"));
-    ans[0].addCard(createCard("a", ["haha"], ["shit"]));
+		ans[0].addCard(createCard("a", ["haha"], ["shit"]));
+		ans[0].addCard(createCard("a", ["haha"], ["shit"]));
     return ans;
 }
+
+export const defaultDeck: CardDeck = new CardDeck('___default');

@@ -23,16 +23,12 @@ export const defaultLoginBarProps: LoginBarProps = {
 const LoginBar: React.SFC<LoginBarProps> = props => {
   const { fixed } = props
   return (
-      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-          <Segment
-            textAlign="center"
+          <div
+						className='loginbar'
             style={{
-              padding: "0.2em 0em",
-              border: "0em",
-              background: "green",
-              marginBottom: "1em"
+							height: window.screen.height *6.5 / 100 + 'px',
+              background: "green"
             }}
-            vertical
           >
             <Menu
               inverted={!fixed}
@@ -45,7 +41,6 @@ const LoginBar: React.SFC<LoginBarProps> = props => {
                 style={{
                   color: "white",
                   textAlign: "center",
-                  margin: "auto",
                   fontFamily: "courier"
                 }}
               >
@@ -93,8 +88,7 @@ const LoginBar: React.SFC<LoginBarProps> = props => {
                 </Menu.Item>
               </Container>
             </Menu>
-          </Segment>
-      </Responsive>
+          </div>
     );
 }
 
