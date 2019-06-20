@@ -3,21 +3,14 @@ import {
   Button,
   Container,
   Menu,
-  Responsive,
-  Segment,
   Icon
 } from "semantic-ui-react";
 
 export type LoginBarProps = {
+	handleBackToMain: () => void;
   name: string[];
   activeIndex: number;
   fixed: boolean;
-};
-
-export const defaultLoginBarProps: LoginBarProps = {
-  name: ["Home", "MyDecks", "Play", "Profile"],
-  activeIndex: 0,
-  fixed: false
 };
 
 const LoginBar: React.SFC<LoginBarProps> = props => {
@@ -37,17 +30,16 @@ const LoginBar: React.SFC<LoginBarProps> = props => {
               size="large"
             >
               <h1
-                className="header"
+								className="header"
+								onClick={props.handleBackToMain}
                 style={{
                   color: "white",
                   textAlign: "center",
                   fontFamily: "courier"
                 }}
               >
-                <a href="a" style={{ color: "white" }}>
                   MultiLingo
                   <Icon name="language" style={{ marginLeft: "0.1em" }} />
-                </a>
               </h1>
 
               <Container>

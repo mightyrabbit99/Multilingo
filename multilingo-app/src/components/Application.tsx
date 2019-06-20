@@ -4,7 +4,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from "react-router";
 import Main from '../containers/MainContainer';
 import CardList from '../containers/CardListContainer';
 
-import LoginBar, { defaultLoginBarProps } from "./LoginBar";
+import LoginBar, { LoginBarProps } from "./LoginBar";
 import { CardDeck, defaultDeck } from "../extension/cards";
 
 export interface IApplicationProps
@@ -20,7 +20,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
-  handleClearSelectedDeck: () => void;
+  handleBackToMain: () => void;
 }
 
 class Application extends React.Component<IApplicationProps, {}> {
@@ -28,9 +28,15 @@ class Application extends React.Component<IApplicationProps, {}> {
 	}
 
   public render() {
+		const currentLoginBarProps: LoginBarProps = {
+			handleBackToMain: this.props.handleBackToMain,
+			name: ["Home", "MyDecks", "Play", "Profile"],
+			activeIndex: 0,
+			fixed: false,
+		};
     return (
       <div className="Application">
-        <LoginBar {...defaultLoginBarProps} />
+        <LoginBar {...currentLoginBarProps} />
           <Switch>
             <Route path="/main" component={toMain(this.props)} />
 						<Route path="/cardlist" component={toCardList(this.props)} />

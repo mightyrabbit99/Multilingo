@@ -13,7 +13,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import reducers from './reducers';
 import { defaultState, IState } from './reducers/states';
-// import mainSaga from './sagas';
+import mainSaga from './sagas';
 import { history as appHistory } from './utils/history';
 
 declare var __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: () => StoreEnhancer<IState>;
@@ -37,7 +37,7 @@ function createStore(history: History): Store<IState> {
     };
   const createdStore = _createStore(rootReducer, initialStore, enchancers);
 
-  //sagaMiddleware.run(mainSaga);
+  sagaMiddleware.run(mainSaga);
   return createdStore;
 }
 
