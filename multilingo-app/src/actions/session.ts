@@ -19,3 +19,10 @@ export const selectDeck = (deck: CardDeck = defaultDeck) => ({
 		selectedDeck: deck
 	}
 })
+
+export const addDeck = (name: string) => ({
+	type: actionTypes.ADD_DECK,
+	payload: {
+		deckName: name
+	}
+})

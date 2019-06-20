@@ -50,12 +50,10 @@ class Application extends React.Component<IApplicationProps, {}> {
 }
 
 const toMain = (props: IApplicationProps) => { 
-	console.log(props);
 	return () => <Main />;
 }
 
 const toCardList = (props: IApplicationProps) => {
-	console.log(props);
 	return props.selectedDeck === defaultDeck
 		? () => <Redirect to='/main'/>
 		: () => <CardList/>

@@ -17,6 +17,11 @@ function* sessionSaga(): SagaIterator {
 
 		// redirect to main
 		yield put(push('/main'));
+	});
+	
+	yield takeEvery(actionTypes.SELECT_DECK, function*(action) {
+		// redirect to cardlist
+		yield put(push('/cardlist'));
   });
 }
 

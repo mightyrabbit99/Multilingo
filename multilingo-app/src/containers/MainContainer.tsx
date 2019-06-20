@@ -1,24 +1,24 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-import { push } from 'connected-react-router';
 
 import Main, { MainDispatchProps, MainStateProps } from '../components/main';
 import { IState } from '../reducers/states';
 import { Action as ReduxAction } from 'redux';
-import { selectDeck } from '../actions';
+import { selectDeck, addDeck } from '../actions';
 
 const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
   title: 'state.main.title',
-  decks: state.session.decks,
+	decks: state.session.decks,
+	newDeck: state.session.newDeck
 });
 
 const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>
   bindActionCreators<any, any>(
     {
-			push,
 			logout: () => {},
-			handleSelectDeck: selectDeck
+			handleSelectDeck: selectDeck,
+			handleAddDeck: addDeck
     },
     dispatch
   );

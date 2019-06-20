@@ -17,7 +17,7 @@ const PropsPanel: React.SFC<PropsPanelProps> = props => {
 	const currentControlBarProps: ControlBarProps = {
 		location: "Main",
 		color: props.color,
-		handleShowAddDeckPanel: props.handleShowAddCardPanel
+		handleShowAddCardPanel: props.handleShowAddCardPanel
 	}
   return (
         <Sidebar

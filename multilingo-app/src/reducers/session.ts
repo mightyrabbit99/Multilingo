@@ -1,8 +1,12 @@
 import { Reducer } from 'redux';
 
 import {
-	SELECT_DECK
+	SELECT_DECK,
+	ADD_DECK, 
+	IAction
 } from '../actions/actionTypes'
+
+import { CardDeck } from '../extension/cards'
 
 import { defaultSessionState, ISessionState } from './states';
 
@@ -12,7 +16,13 @@ export const reducer: Reducer<ISessionState> = (state = defaultSessionState, act
 			return {
 				...state,
 				selectedDeck: action.payload.selectedDeck
-			}
+			};
+		
+		case ADD_DECK : 
+			return {
+				...state,
+				newDeck: new CardDeck(action.payload.deckName)
+			};
     default:
       return state;
   }

@@ -13,7 +13,8 @@ export interface IMainState {
 }
 
 export interface ISessionState {
-  decks: CardDeck[];
+	decks: CardDeck[];
+	newDeck: CardDeck | null;
   selectedDeck: CardDeck;
 }
 
@@ -33,6 +34,7 @@ const defaultUserState: IUserState = {};
 
 export const defaultSessionState: ISessionState = {
 	decks: sampleDecks(),
+	newDeck: null,
   selectedDeck: defaultDeck
 };
 
