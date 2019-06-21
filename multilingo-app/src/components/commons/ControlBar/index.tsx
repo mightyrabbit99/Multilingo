@@ -7,21 +7,36 @@ export type ControlBarProps = {
   location: ControlBarLocation;
   color: string;
   handleShowAddDeckPopUp?: () => void;
-	handleShowAddCardPanel?: () => void;
-	handleAddDeck?: (name: string) => void;
+  handleShowAddCardPanel?: () => void;
+  handleAddDeck?: (name: string) => void;
 };
 
 const ControlBar: React.SFC<ControlBarProps> = props => {
   const addDeckButton = (
+    /*
     <Button className="addDeck" onClick={props.handleShowAddDeckPopUp}>
       <Icon name="plus circle" size="huge" />
     </Button>
-	);
-	
-	const handleFormSubmit = (e: any, {name, value}: any) => {
-		console.log(name);
-		if(props.handleAddDeck) props.handleAddDeck(name);
-	}
+    */
+    <Icon
+      onClick={props.handleShowAddDeckPopUp}
+      style={{
+        position: "absolute",
+        bottom: "5%",
+        right: "5%",
+        borderRadius: "50%",
+        color: "green"
+      }}
+      name="plus circle"
+      size="huge"
+      link
+    />
+  );
+
+  const handleFormSubmit = (e: any, { name, value }: any) => {
+    console.log(name);
+    if (props.handleAddDeck) props.handleAddDeck(name);
+  };
 
   return (
     <div
@@ -49,10 +64,10 @@ const ControlBar: React.SFC<ControlBarProps> = props => {
             <Form className="adddeckform" onSubmit={handleFormSubmit}>
               <Form.Field>
                 <label>Deck Name</label>
-                <input placeholder="Deck Name" name='name'/>
+                <input placeholder="Deck Name" name="name" />
               </Form.Field>
-							<Button type='submit'>Add!</Button>
-						</Form>
+              <Button type="submit">Add!</Button>
+            </Form>
           </Modal.Description>
         </Modal.Content>
       </Modal>
