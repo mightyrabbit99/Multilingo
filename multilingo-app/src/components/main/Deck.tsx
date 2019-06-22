@@ -14,7 +14,7 @@ class Deck extends React.Component<DeckProps, {}> {
       <Card
         className={"deck" + carddeck.name}
         onClick={this.props.handleDeckClick}
-        style={{ margin: "1em auto 2em auto" }}
+        style={{ margin: "1em 3em 35em 3em" }}
       >
         <Image
           src="https://react.semantic-ui.com/images/avatar/large/matthew.png"

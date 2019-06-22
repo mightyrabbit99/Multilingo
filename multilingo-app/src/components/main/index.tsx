@@ -60,7 +60,13 @@ class Main extends React.Component<MainProps, MainState> {
 
     return (
       <div className="Main" style={{ display: "inline" }}>
-        <div className="Application_main">
+        <div
+          className="Application_main"
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap"
+          }}
+        >
           {this.props.decks.map(generateDeck)}
         </div>
         {controlBar()}
