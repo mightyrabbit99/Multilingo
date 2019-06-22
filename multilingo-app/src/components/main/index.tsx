@@ -1,40 +1,42 @@
-import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
+import * as React from "react";
+import { RouteComponentProps } from "react-router";
 
+import { CardDeck } from "../../extension/cards";
+import Deck, { DeckProps } from "./Deck";
+import ControlBar, { ControlBarProps } from "../commons/ControlBar";
 
-import { CardDeck } from '../../extension/cards';
-import Deck, { DeckProps } from './Deck';
-import ControlBar, { ControlBarProps } from '../commons/ControlBar';
-
-export interface MainProps extends MainDispatchProps, MainStateProps, RouteComponentProps<{}> {}
+export interface MainProps
+  extends MainDispatchProps,
+    MainStateProps,
+    RouteComponentProps<{}> {}
 
 export interface MainStateProps {
   title: string;
-	decks: CardDeck[];
-	newDeck: CardDeck | null;
+  decks: CardDeck[];
+  newDeck: CardDeck | null;
 }
 
 export interface MainDispatchProps {
-	logout: () => void;
-	handleSelectDeck: (deck: CardDeck) => void;
-	handleAddDeck: (name: string) => void;
+  logout: () => void;
+  handleSelectDeck: (deck: CardDeck) => void;
+  handleAddDeck: (name: string) => void;
 }
 
 type MainState = {
-    selectedDeck: CardDeck;
-}
+  selectedDeck: CardDeck;
+};
 
 class Main extends React.Component<MainProps, MainState> {
-	constructor(props: MainProps) {
-		super(props);
-		(window as any).decks = props.decks;
-	}
+  constructor(props: MainProps) {
+    super(props);
+    (window as any).decks = props.decks;
+  }
 
-	componentWillReceiveProps(nextProps: MainProps) {
+  componentWillReceiveProps(nextProps: MainProps) {
     if (nextProps.newDeck) {
       this.props.decks.unshift(nextProps.newDeck);
-		}
-		console.log("willmount");
+    }
+    console.log("willmount");
   }
 
   public render() {
@@ -43,31 +45,28 @@ class Main extends React.Component<MainProps, MainState> {
         deck: deck,
         handleDeckClick: () => this.props.handleSelectDeck(deck)
       };
-      return <Deck key={i} {...props}/>;
-		};
-		
-		const controlBar = () => {
-			let props: ControlBarProps = {
-				location: 'Main',
-				color: 'green',
-				handleShowAddDeckPopUp: () => {},
-				handleAddDeck: this.props.handleAddDeck
-			}
-			return <ControlBar {...props} />;
-		}
-    
+      return <Deck key={i} {...props} />;
+    };
+
+    const controlBar = () => {
+      let props: ControlBarProps = {
+        location: "Main",
+        color: "green",
+        handleShowAddDeckPopUp: () => {},
+        handleAddDeck: this.props.handleAddDeck
+      };
+      return <ControlBar {...props} />;
+    };
+
     return (
-      <div className="Main" style={{display: 'inline'}}>
+      <div className="Main" style={{ display: "inline" }}>
         <div className="Application_main">
           {this.props.decks.map(generateDeck)}
         </div>
-				{controlBar()}
+        {controlBar()}
       </div>
     );
   }
-
 }
-
-
 
 export default Main;

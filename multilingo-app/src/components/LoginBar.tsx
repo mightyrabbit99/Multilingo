@@ -1,49 +1,41 @@
 import * as React from "react";
-import {
-  Button,
-  Container,
-  Menu,
-  Icon
-} from "semantic-ui-react";
+import { Button, Container, Menu, Icon } from "semantic-ui-react";
 
 export type LoginBarProps = {
-	handleBackToMain: () => void;
+  handleBackToMain: () => void;
   name: string[];
   activeIndex: number;
   fixed: boolean;
 };
 
 const LoginBar: React.SFC<LoginBarProps> = props => {
-  const { fixed } = props
+  const { fixed } = props;
   return (
-          <div
-						className='loginbar'
-            style={{
-							height: window.screen.height *6.5 / 100 + 'px',
-              background: "green"
-            }}
-          >
-            <Menu
-              inverted={!fixed}
-              pointing={!fixed}
-              secondary={!fixed}
-              size="large"
-            >
-              <h1
-								className="header"
-								onClick={props.handleBackToMain}
-                style={{
-                  color: "white",
-                  textAlign: "center",
-                  fontFamily: "courier"
-                }}
-              >
-                  MultiLingo
-                  <Icon name="language" style={{ marginLeft: "0.1em" }} />
-              </h1>
+    <div
+      className="loginbar"
+      style={{
+        height: (window.screen.height * 6.5) / 100 + "px",
+        background: "green"
+      }}
+    >
+      <Menu inverted={!fixed} pointing={!fixed} secondary={!fixed} size="large">
+        <h1
+          className="header"
+          onClick={props.handleBackToMain}
+          style={{
+            color: "white",
+            fontFamily: "courier",
+            marginBottom: "auto",
+            marginTop: "auto",
+            marginLeft: "1em"
+          }}
+        >
+          MultiLingo
+          <Icon name="language" style={{ marginLeft: "0.2em" }} />
+        </h1>
 
-              <Container>
-                {/*props.name.map((name, id) => {
+        <Container>
+          {/*props.name.map((name, id) => {
                   const active =
                     this.state.activeIndex === this.state.name.indexOf(name)
                       ? "active"
@@ -64,24 +56,24 @@ const LoginBar: React.SFC<LoginBarProps> = props => {
                   );
                 })*/}
 
-                <Menu.Item position="right">
-                  <Button as="a" inverted={!fixed}>
-                    Log in
-                    <Icon name="user" style={{ marginLeft: "0.3em" }} />
-                  </Button>
-                  <Button
-                    as="a"
-                    inverted={!fixed}
-                    primary={fixed}
-                    style={{ marginLeft: "0.5em" }}
-                  >
-                    Sign Up
-                  </Button>
-                </Menu.Item>
-              </Container>
-            </Menu>
-          </div>
-    );
-}
+          <Menu.Item position="right">
+            <Button as="a" inverted={!fixed}>
+              Log in
+              <Icon name="user" style={{ marginLeft: "0.3em" }} />
+            </Button>
+            <Button
+              as="a"
+              inverted={!fixed}
+              primary={fixed}
+              style={{ marginLeft: "0.5em" }}
+            >
+              Sign Up
+            </Button>
+          </Menu.Item>
+        </Container>
+      </Menu>
+    </div>
+  );
+};
 
 export default LoginBar;
