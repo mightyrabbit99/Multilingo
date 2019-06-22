@@ -1,5 +1,5 @@
 // import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
-import { CardDeck, sampleDecks, defaultDeck } from '../extension/cards';
+import { CardDeck, sampleDecks, defaultDeck } from "../extension/cards";
 
 export interface IState {
   readonly main: IMainState;
@@ -8,45 +8,39 @@ export interface IState {
 }
 
 export interface IMainState {
-	colour: string;
-	user: IUserState
+  colour: string;
+  user: IUserState;
 }
 
 export interface ISessionState {
-	decks: CardDeck[];
-	newDeck: CardDeck | null;
+  decks: CardDeck[];
+  newDeck: CardDeck | null;
   selectedDeck: CardDeck;
 }
 
-export interface ITestState {
+export interface ITestState {}
 
-}
+export interface IResultState {}
 
-export interface IResultState {
-
-}
-
-export interface IUserState {
-
-}
+export interface IUserState {}
 
 const defaultUserState: IUserState = {};
 
 export const defaultSessionState: ISessionState = {
-	decks: sampleDecks(),
-	newDeck: null,
+  decks: sampleDecks(),
+  newDeck: null,
   selectedDeck: defaultDeck
 };
 
 export const defaultTestState: ITestState = {};
 
 export const defaultMain: IMainState = {
-	colour: 'green',
-	user: defaultUserState
+  colour: "green",
+  user: defaultUserState
 };
 
 export const defaultState: IState = {
   main: defaultMain,
   session: defaultSessionState,
   test: defaultTestState
-}
+};
