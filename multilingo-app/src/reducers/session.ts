@@ -1,6 +1,11 @@
 import { Reducer } from "redux";
 
-import { SELECT_DECK, ADD_DECK, IAction } from "../actions/actionTypes";
+import {
+  SELECT_DECK,
+  ADD_DECK,
+  IAction,
+  RECEIVE_DECKS_DATA
+} from "../actions/actionTypes";
 
 import { CardDeck } from "../extension/cards";
 
@@ -15,6 +20,12 @@ export const reducer: Reducer<ISessionState> = (
       return {
         ...state,
         selectedDeck: action.payload.selectedDeck
+      };
+
+    case RECEIVE_DECKS_DATA:
+      return {
+        ...state,
+        decks: action.payload.decks
       };
 
     case ADD_DECK:

@@ -2,6 +2,7 @@
 
 import * as actionTypes from "./actionTypes";
 import { CardDeck, defaultDeck } from "../extension/cards";
+import { type } from "os";
 
 export const logOut = () => ({
   type: actionTypes.LOG_OUT
@@ -24,3 +25,12 @@ export const addDeck = (name: string) => ({
     deckName: name
   }
 });
+
+export const receiveDecksData = (data: CardDeck[]) => {
+  return {
+    type: actionTypes.RECEIVE_DECKS_DATA,
+    payload: {
+      decks: data
+    }
+  };
+};

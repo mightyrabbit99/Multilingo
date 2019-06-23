@@ -1,12 +1,13 @@
-import { Action as ReduxAction } from 'redux';
+import { Action as ReduxAction } from "redux";
 
 export interface IAction extends ReduxAction {
-    payload: any;
-  }
+  payload: any;
+}
 
 /** Session */
-export const LOG_OUT = 'LOG_OUT';
-export const LOG_IN = 'LOG_IN';
-export const BACK_TO_MAIN = 'BACK_TO_MAIN';
-export const SELECT_DECK = 'SELECT_DECK';
-export const ADD_DECK = 'ADD_DECK';
+export const LOG_OUT = "LOG_OUT";
+export const LOG_IN = "LOG_IN";
+export const BACK_TO_MAIN = "BACK_TO_MAIN";
+export const SELECT_DECK = "SELECT_DECK";
+export const ADD_DECK = "ADD_DECK";
+export const RECEIVE_DECKS_DATA = "RECEIVE_DECKS_DATA";

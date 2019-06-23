@@ -20,6 +20,7 @@ export interface MainDispatchProps {
   logout: () => void;
   handleSelectDeck: (deck: CardDeck) => void;
   handleAddDeck: (name: string) => void;
+  receiveDecks: (decks: CardDeck[]) => void;
 }
 
 type MainState = {
@@ -37,6 +38,10 @@ class Main extends React.Component<MainProps, MainState> {
       this.props.decks.unshift(nextProps.newDeck);
     }
     console.log("willmount");
+  }
+
+  componentDidMount() {
+    this.props.receiveDecks([]);
   }
 
   public render() {

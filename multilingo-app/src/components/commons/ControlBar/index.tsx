@@ -34,8 +34,8 @@ const ControlBar: React.SFC<ControlBarProps> = props => {
   );
 
   const handleFormSubmit = (e: any, { name, value }: any) => {
-    console.log(name);
-    if (props.handleAddDeck) props.handleAddDeck(name);
+    e.preventDefault();
+    if (props.handleAddDeck) props.handleAddDeck(e.target.name.value);
   };
 
   return (
@@ -64,7 +64,7 @@ const ControlBar: React.SFC<ControlBarProps> = props => {
             <Form className="adddeckform" onSubmit={handleFormSubmit}>
               <Form.Field>
                 <label>Deck Name</label>
-                <input placeholder="Deck Name" name="name" />
+                <Form.Input placeholder="Deck Name" name="name" />
               </Form.Field>
               <Button type="submit">Add!</Button>
             </Form>
