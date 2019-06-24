@@ -25,7 +25,7 @@ type CardListState = {
 	addDeckPanelVisible: boolean;
 	decksPanelVisible: boolean;
   currentDeck: CardDeck;
-  selectedCard: Card | undefined;
+  selectedCard?: Card;
 };
 
 class CardList extends React.Component<CardListProps, CardListState> {

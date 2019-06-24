@@ -1,14 +1,15 @@
 import * as React from "react";
 import { Button, Container, Menu, Icon } from "semantic-ui-react";
 
-export type LoginBarProps = {
+export type NavigationBarProps = {
+	handleToLogin: () => void;
   handleBackToMain: () => void;
   name: string[];
   activeIndex: number;
   fixed: boolean;
 };
 
-const LoginBar: React.SFC<LoginBarProps> = props => {
+const LoginBar: React.SFC<NavigationBarProps> = props => {
   const { fixed } = props;
   return (
     <div
@@ -16,7 +17,7 @@ const LoginBar: React.SFC<LoginBarProps> = props => {
       style={{
         height: (window.screen.height * 6.5) / 100 + "px",
         background: "green"
-      }}
+			}}
     >
       <Menu inverted={!fixed} pointing={!fixed} secondary={!fixed} size="large">
         <h1
@@ -57,7 +58,7 @@ const LoginBar: React.SFC<LoginBarProps> = props => {
                 })*/}
 
           <Menu.Item position="right">
-            <Button as="a" inverted={!fixed}>
+            <Button as="a" inverted={!fixed} onClick={props.handleToLogin}>
               Log in
               <Icon name="user" style={{ marginLeft: "0.3em" }} />
             </Button>

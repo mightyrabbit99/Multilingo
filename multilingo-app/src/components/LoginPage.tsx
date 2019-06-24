@@ -1,7 +1,17 @@
 import * as React from "react";
 import { Button, Form } from "semantic-ui-react";
 
-export interface LoginPageProps {}
+import { RouteComponentProps } from 'react-router';
+
+export interface LoginPageProps extends LoginPageStateProps, LoginPageDispatchProps, RouteComponentProps<{}> {}
+
+export interface LoginPageStateProps {
+
+}
+
+export interface LoginPageDispatchProps {
+	handleLogin: () => void;
+}
 
 export interface LoginPageState {}
 

@@ -100,7 +100,7 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
           <input
             placeholder="Description"
             name="description"
-            value={name}
+            value={currentCard.description}
             onChange={onChangeGenerator("description")}
           />
         </Form.Field>
@@ -158,15 +158,15 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
           currentCard: thisprop.currentCard.copyCard(),
           currentDeck: thisprop.currentDeck
         };
-        return this.cardform(() => thisprop.amendCurrentCard(this.state.currentCard));
+        return this.cardform(() => {if(thisprop.amendCurrentCard)thisprop.amendCurrentCard(this.state.currentCard)});
       }
       case "Adddeck": {
 				const thisprop = this.props.formprop as AddDeckFormProps
         this.state = {
-          currentCard: null,
+          currentCard: CardDef.defaultCard,
           currentDeck: CardDef.createDeck("", "")
         };
-        return this.deckform(() => thisprop.addNewDeck(this.state.currentDeck));
+        return this.deckform(() => {if(thisprop.addNewDeck) thisprop.addNewDeck(this.state.currentDeck)});
       }
       case "Settings": {
         return <div className="SettingsForm" />;

@@ -10,7 +10,8 @@ const mapStateToProps: MapStateToProps<CardListStateProps, {}, IState> = state =
   color: state.main.colour,
   title: 'asas',
   decks: state.session.decks,
-  selectedDeck: state.session.selectedDeck
+	selectedDeck: state.session.selectedDeck,
+	selectedCard: state.session.selectedCard
 });
 
 const mapDispatchToProps: MapDispatchToProps<CardListDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>

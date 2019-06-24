@@ -77,7 +77,7 @@ function createMCQ(cards: Card[], questioned: Card = popRandom(cards), noOfOptio
     }
   }
 }
-
+/*
 export function createRandomQuestion(cards: Card[], type: QuestionType): Question {
   switch(type) {
     case QuestionType.MCQ : {
@@ -93,9 +93,9 @@ export function createRandomQuestion(cards: Card[], type: QuestionType): Questio
 
     }
   }
-  return undefined;
+  return null;
 }
-
+*/
 function popRandom<T>(array: T[]): T {
   return array.splice(Math.floor(Math.random() * array.length), 1)[0];
 }

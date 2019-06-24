@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Grid, Segment } from 'semantic-ui-react';
-import { Card as GlossaryCard } from '../../extension/types';
+import { Card as GlossaryCard } from '../../extension/cards';
 
 export type WordCardProps = {
     card: GlossaryCard;

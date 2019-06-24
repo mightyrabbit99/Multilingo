@@ -1,14 +1,14 @@
 import * as React from "react";
-import { CardDeck, Card} from "../../extension/cards";
+import { CardDeck, Card } from "../../extension/cards";
 import PropsPanel, { PropsPanelProps } from "./PropsPanel";
 import { Sidebar, Menu, Segment, Header, Ref, Container } from "semantic-ui-react";
 import FillForm, { FillFormProps } from "../commons/FillForm";
 
 export type WordListPushablePanelsProps = {
-	color: string;
-	decks: CardDeck[];
-	activeDeck: CardDeck;
-	activeCard: Card;
+  color: string;
+  decks: CardDeck[];
+  activeDeck: CardDeck;
+  activeCard?: Card;
   selectDeck: (deck: CardDeck) => void;
 };
 
@@ -16,11 +16,11 @@ type PushablePanelsState = {
   color: string;
   visible: boolean;
   segmentRef: any;
+  activeDeck: CardDeck;
 };
 
 interface DecksPanelProps extends PushablePanelsState {
   decks: CardDeck[];
-  activeDeck: CardDeck;
   handleChangeDeck: (deck: CardDeck) => void;
   createDecksPanelShowHandler: (hide: boolean) => () => void;
 }
@@ -75,11 +75,14 @@ const DecksPanel: React.SFC<DecksPanelProps> = props => {
 };
 
 const AddCardPanel: React.FC<AddCardPanelProps> = props => {
-	const { visible, segmentRef, createAddCardPanelShowHandler } = props;
-	const fillformprops: FillFormProps = {
-		type: "Addcard",
-		submitCardToDeck: 
-	}
+  const { visible, segmentRef, createAddCardPanelShowHandler } = props;
+  const fillformprops: FillFormProps = {
+    type: "Addcard",
+    formprop: {
+      currentDeck: props.activeDeck,
+      submitCardToDeck: props.handleAddCard
+    }
+  };
   return (
     <Sidebar
       animation="overlay"
@@ -92,7 +95,10 @@ const AddCardPanel: React.FC<AddCardPanelProps> = props => {
       visible={visible}
       width="wide"
     >
-      <FillForm type="Addcard" />
+      <FillForm
+        type="Addcard"
+        formprop={{ currentDeck: props.activeDeck, submitCardToDeck: (card: Card) => {} }}
+      />
     </Sidebar>
   );
 };
@@ -106,7 +112,8 @@ class WordListPushablePanels extends React.Component<
     const pushableState: PushablePanelsState = {
       color: this.props.color,
       visible: false,
-      segmentRef: React.createRef()
+			segmentRef: React.createRef(),
+			activeDeck: this.props.activeDeck
     };
     this.state = {
       decksPanel: {

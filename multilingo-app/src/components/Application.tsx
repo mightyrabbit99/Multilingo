@@ -4,8 +4,9 @@ import { Redirect, Route, RouteComponentProps, Switch } from "react-router";
 import Main from '../containers/MainContainer';
 import CardList from '../containers/CardListContainer';
 
-import LoginBar, { LoginBarProps } from "./LoginBar";
+import NavigationBar, { NavigationBarProps } from "./NavigationBar";
 import { CardDeck, defaultDeck } from "../extension/cards";
+import LoginPage from "./LoginPage";
 
 export interface IApplicationProps
   extends IDispatchProps,
@@ -20,7 +21,8 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
-  handleBackToMain: () => void;
+	handleBackToMain: () => void;
+	handleToLogin: () => void;
 }
 
 class Application extends React.Component<IApplicationProps, {}> {
@@ -28,7 +30,8 @@ class Application extends React.Component<IApplicationProps, {}> {
 	}
 
   public render() {
-		const currentLoginBarProps: LoginBarProps = {
+		const currentNavigationBarProps: NavigationBarProps = {
+			handleToLogin: this.props.handleToLogin,
 			handleBackToMain: this.props.handleBackToMain,
 			name: ["Home", "MyDecks", "Play", "Profile"],
 			activeIndex: 0,
@@ -36,10 +39,11 @@ class Application extends React.Component<IApplicationProps, {}> {
 		};
     return (
       <div className="Application">
-        <LoginBar {...currentLoginBarProps} />
+        <NavigationBar {...currentNavigationBarProps} />
           <Switch>
             <Route path="/main" component={toMain(this.props)} />
 						<Route path="/cardlist" component={toCardList(this.props)} />
+						<Route path="/login" component={LoginPage} />
             <Route exact={true} path="/" render={this.redirectToMain} />
           </Switch>
       </div>

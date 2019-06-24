@@ -16,39 +16,42 @@ export const CardType: { [s: string]: CardTypeType } = {
   Example: "Example"
 };
 
+const initialCardInfo = {
+  lastRevised: 0,
+  lastResult: 0,
+  correct: 0,
+  wrong: 0,
+  asked: 0
+};
+
 export class Card {
-  constructor(
-    category: string,
-    front: string,
-    back: string,
-    type: CardTypeType = CardType.Explanation
-  ) {
+  constructor(category: string, front: string, back: string, type: CardTypeType = CardType.Explanation) {
     this.category = category;
     this.front = front;
     this.back = back;
     this.type = type;
     this.originalCard = null;
+    this.dateAdded = Date.now();
   }
   private originalCard: Card | null;
   public dateAdded: number;
-  public comments: Comment[];
-  public description: string;
+  public comments: Comment[] = [];
+  public description: string = "";
   public info: {
     lastRevised: number;
     lastResult: number;
     correct: number;
     wrong: number;
     asked: number;
-  };
+    [key: string]: any;
+  } = initialCardInfo;
   public category: string;
   public type: CardTypeType;
   public front: string;
   public back: string;
   public equals(anotherCard: Card): boolean {
     return (
-      this.front === anotherCard.front &&
-      this.back === anotherCard.back &&
-      this.type === anotherCard.type
+      this.front === anotherCard.front && this.back === anotherCard.back && this.type === anotherCard.type
     );
   }
 
@@ -69,6 +72,8 @@ export class Card {
     this.originalCard.category = this.category;
     return true;
   }
+
+  [key: string]: any;
 }
 
 /**
@@ -120,6 +125,7 @@ export class CardDeck {
     name: string;
     category: string;
     dateAdded: number;
+    [key: string]: any;
   };
   public cards: Card[];
   private collection: CardCollection = {
@@ -127,9 +133,7 @@ export class CardDeck {
     byCategory: {}
   };
   constructor(name: string, category: string = "") {
-    this.info.name = name;
-    this.info.category = category;
-    this.info.dateAdded = Date.now();
+    this.info = { name: name, category: category, dateAdded: Date.now() };
     this.cards = [];
   }
 
@@ -153,11 +157,7 @@ export class CardDeck {
   }
 }
 
-export function createDeck(
-  name: string,
-  category: string,
-  ...cards: Card[]
-): CardDeck {
+export function createDeck(name: string, category: string, ...cards: Card[]): CardDeck {
   let deck = new CardDeck(name, category);
   cards.forEach((value: Card) => deck.addCard(value));
   return deck;

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Container, Sidebar } from "semantic-ui-react";
-import { CardDeck } from "../../extension/cards";
-import { Card } from "../../extension/types";
+import { CardDeck, Card } from "../../extension/cards";
 import ControlBar, { ControlBarProps } from "../commons/ControlBar";
 
 export type PropsPanelProps = {

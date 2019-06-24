@@ -13,7 +13,8 @@ import rsf from "../backend/rsf";
 
 function* mainSaga() {
   yield fork(fetchDecksDataSaga);
-  yield* sessionSaga();
+	yield* sessionSaga();
+	yield* userSaga();
 }
 
 function* fetchDecksDataSaga() {
@@ -35,6 +36,13 @@ function* sessionSaga(): SagaIterator {
     // redirect to cardlist
     yield put(push("/cardlist"));
   });
+}
+
+function* userSaga(): SagaIterator {
+  yield takeEvery(actionTypes.GO_TO_LOGIN, function*(action) {
+    yield put(push("/login"));
+  });
+
 }
 
 export default mainSaga;

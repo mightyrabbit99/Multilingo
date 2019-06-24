@@ -15,3 +15,6 @@ export const ADD_CARD_TO_SELECTED_DECK = "ADD_CARD_TO_SELECTED_DECK";
 
 /** Backend */
 export const RECEIVE_DECKS_DATA = "RECEIVE_DECKS_DATA";
+
+/** User */
+export const GO_TO_LOGIN = "GO_TO_LOGIN";
