@@ -1,10 +1,9 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch, Action as ReduxAction } from 'redux';
 
 import Main, { MainDispatchProps, MainStateProps } from '../components/main';
 import { IState } from '../reducers/states';
-import { Action as ReduxAction } from 'redux';
 import { selectDeck, addDeck } from '../actions';
 
 const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({

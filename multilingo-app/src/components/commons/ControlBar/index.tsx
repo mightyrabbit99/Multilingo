@@ -11,7 +11,12 @@ export type ControlBarProps = {
   handleAddDeck?: (name: string) => void;
 };
 
-const ControlBar: React.SFC<ControlBarProps> = props => {
+type ControlBarState = {
+	formDetail: any;
+}
+
+class ControlBar extends React.Component<ControlBarProps, ControlBarState>  {
+	render() {
   const addDeckButton = (
     /*
     <Button className="addDeck" onClick={props.handleShowAddDeckPopUp}>
@@ -19,7 +24,7 @@ const ControlBar: React.SFC<ControlBarProps> = props => {
     </Button>
     */
     <Icon
-      onClick={props.handleShowAddDeckPopUp}
+      onClick={this.props.handleShowAddDeckPopUp}
       style={{
         position: "absolute",
         bottom: "5%",
@@ -31,11 +36,11 @@ const ControlBar: React.SFC<ControlBarProps> = props => {
       size="huge"
       link
     />
-  );
+  ); 
 
   const handleFormSubmit = (e: any, { name, value }: any) => {
     console.log(name);
-    if (props.handleAddDeck) props.handleAddDeck(name);
+    if (this.props.handleAddDeck) this.props.handleAddDeck(name);
   };
 
   return (
@@ -72,7 +77,7 @@ const ControlBar: React.SFC<ControlBarProps> = props => {
         </Modal.Content>
       </Modal>
     </div>
-  );
+  )}
 };
 
 export default ControlBar;
