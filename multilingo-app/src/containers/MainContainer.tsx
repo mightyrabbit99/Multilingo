@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch, Action as ReduxAction } from 'redux';
 
 import Main, { MainDispatchProps, MainStateProps } from '../components/main';
 import { IState } from '../reducers/states';
-import { selectDeck, addDeck } from '../actions';
+import { selectDeck, addDeck, receiveDecksData } from '../actions';
 
 const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
   title: "state.main.title",

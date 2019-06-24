@@ -25,12 +25,3 @@ export const addDeck = (name: string) => ({
     deckName: name
   }
 });
-
-export const receiveDecksData = (data: CardDeck[]) => {
-  return {
-    type: actionTypes.RECEIVE_DECKS_DATA,
-    payload: {
-      decks: data
-    }
-  };
-};
