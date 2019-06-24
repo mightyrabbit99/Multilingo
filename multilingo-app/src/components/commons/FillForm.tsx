@@ -16,7 +16,8 @@ type AddCardFormProps = {
 };
 
 type ChangeCardProps = {
-  currentCard: CardDef.Card;
+	currentCard: CardDef.Card;
+	currentDeck: CardDef.CardDeck;
   amendCurrentCard: (newCard: CardDef.Card) => void;
 };
 
@@ -24,12 +25,17 @@ type AddDeckFormProps = {
   addNewDeck?: (deck: CardDef.CardDeck) => void;
 };
 
-export type FillFormProps =
+type FormProps =
   | AddCardFormProps
   | AddDeckFormProps
   | ChangeCardProps
   | SettingsFormProps
-  | TestSettingsProps;
+	| TestSettingsProps;
+	
+export type FillFormProps = {
+	type: FormType;
+	formprop: FormProps;
+}
 
 type FillFormState = {
   currentDeck: CardDef.CardDeck;
@@ -137,27 +143,30 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
   }
 
   render() {
-    switch(typeof this.props) {
+    switch(this.props.type) {
       case "Addcard": {
+				const thisprop = this.props.formprop as AddCardFormProps
         this.state = {
           currentCard: CardDef.createCard("", "", ""),
-          currentDeck: this.props.currentDeck
+          currentDeck: thisprop.currentDeck
         };
-        return this.cardform(() => this.props.submitCardToDeck(this.state.currentCard));
+        return this.cardform(() => thisprop.submitCardToDeck(this.state.currentCard));
       }
       case "Changecard": {
+				const thisprop = this.props.formprop as ChangeCardProps
         this.state = {
-          currentCard: this.props.currentCard.copyCard(),
-          currentDeck: this.props.currentDeck
+          currentCard: thisprop.currentCard.copyCard(),
+          currentDeck: thisprop.currentDeck
         };
-        return this.cardform(() => this.props.amendCurrentCard(this.state.currentCard));
+        return this.cardform(() => thisprop.amendCurrentCard(this.state.currentCard));
       }
       case "Adddeck": {
+				const thisprop = this.props.formprop as AddDeckFormProps
         this.state = {
           currentCard: null,
           currentDeck: CardDef.createDeck("", "")
         };
-        return this.deckform(() => this.props.addNewDeck(this.state.currentDeck));
+        return this.deckform(() => thisprop.addNewDeck(this.state.currentDeck));
       }
       case "Settings": {
         return <div className="SettingsForm" />;
