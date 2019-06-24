@@ -1,10 +1,10 @@
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { withRouter } from 'react-router';
-import { bindActionCreators, Dispatch, Action as ReduxAction } from 'redux';
+import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
+import { withRouter } from "react-router";
+import { bindActionCreators, Dispatch, Action as ReduxAction } from "redux";
 
-import Main, { MainDispatchProps, MainStateProps } from '../components/main';
-import { IState } from '../reducers/states';
-import { selectDeck, addDeck, receiveDecksData } from '../actions';
+import Main, { MainDispatchProps, MainStateProps } from "../components/main";
+import { IState } from "../reducers/states";
+import { selectDeck, addDeck, receiveDecksData } from "../actions";
 
 const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
   title: "state.main.title",
@@ -12,9 +12,7 @@ const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
   newDeck: state.session.newDeck
 });
 
-const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (
-  dispatch: Dispatch<ReduxAction>
-) =>
+const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>
   bindActionCreators<any, any>(
     {
       logout: () => {},

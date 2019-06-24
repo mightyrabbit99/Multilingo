@@ -1,13 +1,5 @@
 import { SagaIterator } from "redux-saga";
-import {
-  call,
-  put,
-  race,
-  select,
-  take,
-  takeEvery,
-  fork
-} from "redux-saga/effects";
+import { call, put, race, select, take, takeEvery, fork } from "redux-saga/effects";
 
 import { push } from "connected-react-router";
 

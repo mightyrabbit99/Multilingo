@@ -1,8 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 
-import { CardDeck } from "../../extension/cards";
-import { Card } from "../../extension/types";
+import { CardDeck, Card } from "../../extension/cards";
 import WordCard, { WordCardProps } from "./WordCard";
 import WordListPushablePanels, { WordListPushablePanelsProps } from "./WordListPushablePanels";
 
@@ -14,7 +13,8 @@ export interface CardListProps
 export interface CardListStateProps {
   title: string;
   decks: CardDeck[];
-  selectedDeck: CardDeck;
+	selectedDeck: CardDeck;
+	selectedCard: Card;
 }
 
 export interface CardListDispatchProps {
@@ -35,7 +35,7 @@ class CardList extends React.Component<CardListProps, CardListState> {
 			addDeckPanelVisible: false,
 			decksPanelVisible: true,
       currentDeck: this.props.selectedDeck,
-      selectedCard: undefined
+      selectedCard: this.props.selectedCard
     };
   }
 
@@ -44,8 +44,9 @@ class CardList extends React.Component<CardListProps, CardListState> {
   public render() {
     let currentPushablePanelProps: WordListPushablePanelsProps = {
       color: "green",
-      activeDeck: this.state.currentDeck,
 			decks: this.props.decks,
+			activeDeck: this.state.currentDeck,
+			activeCard: this.state.selectedCard,
       selectDeck: (deck: CardDeck) => {}
     };
     return (

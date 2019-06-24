@@ -1,8 +1,7 @@
 //import { ActionCreator } from 'redux';
 
 import * as actionTypes from "./actionTypes";
-import { CardDeck, defaultDeck } from "../extension/cards";
-import { type } from "os";
+import { Card, CardDeck, defaultDeck } from "../extension/cards";
 
 export const logOut = () => ({
   type: actionTypes.LOG_OUT
@@ -11,6 +10,9 @@ export const logOut = () => ({
 export const backToMain = () => ({
   type: actionTypes.BACK_TO_MAIN
 });
+
+
+/** Deck */
 
 export const selectDeck = (deck: CardDeck = defaultDeck) => ({
   type: actionTypes.SELECT_DECK,
@@ -25,3 +27,12 @@ export const addDeck = (name: string) => ({
     deckName: name
   }
 });
+
+/** Card */
+
+export const addCardToDeck = (card: Card) => ({
+	type: actionTypes.ADD_CARD_TO_SELECTED_DECK,
+	payload: {
+		card: card
+	}
+})
