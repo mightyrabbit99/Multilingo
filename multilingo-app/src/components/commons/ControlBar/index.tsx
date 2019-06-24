@@ -38,9 +38,9 @@ class ControlBar extends React.Component<ControlBarProps, ControlBarState>  {
     />
   ); 
 
-  const handleFormSubmit = (e: any, { name, value }: any) => {
-    console.log(name);
-    if (this.props.handleAddDeck) this.props.handleAddDeck(name);
+  const handleFormSubmit = (e: any) => {
+    e.preventDefault();
+    if (this.props.handleAddDeck) this.props.handleAddDeck(e.target.name.value);
   };
 
   return (
@@ -69,7 +69,7 @@ class ControlBar extends React.Component<ControlBarProps, ControlBarState>  {
             <Form className="adddeckform" onSubmit={handleFormSubmit}>
               <Form.Field>
                 <label>Deck Name</label>
-                <input placeholder="Deck Name" name="name" />
+                <Form.Input placeholder="Deck Name" name="name" />
               </Form.Field>
               <Button type="submit">Add!</Button>
             </Form>

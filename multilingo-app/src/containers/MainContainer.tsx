@@ -7,19 +7,27 @@ import { IState } from '../reducers/states';
 import { selectDeck, addDeck } from '../actions';
 
 const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
-  title: 'state.main.title',
-	decks: state.session.decks,
-	newDeck: state.session.newDeck
+  title: "state.main.title",
+  decks: state.session.decks,
+  newDeck: state.session.newDeck
 });
 
-const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>
+const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (
+  dispatch: Dispatch<ReduxAction>
+) =>
   bindActionCreators<any, any>(
     {
-			logout: () => {},
-			handleSelectDeck: selectDeck,
-			handleAddDeck: addDeck
+      logout: () => {},
+      handleSelectDeck: selectDeck,
+      handleAddDeck: addDeck,
+      receiveDecks: receiveDecksData
     },
     dispatch
   );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Main)
+);
