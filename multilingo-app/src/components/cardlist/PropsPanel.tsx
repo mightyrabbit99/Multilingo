@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Container, Sidebar } from "semantic-ui-react";
 import { CardDeck, Card } from "../../extension/cards";
-import ControlBar, { ControlBarProps } from "../commons/ControlBar";
+import ControlBar, { CardListControlBarProps } from "../commons/ControlBar";
 
 export type PropsPanelProps = {
   color: string;
@@ -12,9 +12,9 @@ export type PropsPanelProps = {
 
 //const PropsPanelLocation = 'Main';
 
-const PropsPanel: React.SFC<PropsPanelProps> = props => {
-	const currentControlBarProps: ControlBarProps = {
-		location: "Main",
+const PropsPanel: React.FC<PropsPanelProps> = props => {
+	const currentControlBarProps: CardListControlBarProps = {
+		location: "CardList",
 		color: props.color,
 		handleShowAddCardPanel: props.handleShowAddCardPanel
 	}
@@ -24,8 +24,6 @@ const PropsPanel: React.SFC<PropsPanelProps> = props => {
           animation='push'
           direction='right'
           icon="labeled"
-          inverted
-          vertical
           visible={true}
           width='wide'
         >

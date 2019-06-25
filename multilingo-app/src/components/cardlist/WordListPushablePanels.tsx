@@ -1,28 +1,34 @@
 import * as React from "react";
 import { CardDeck, Card } from "../../extension/cards";
 import PropsPanel, { PropsPanelProps } from "./PropsPanel";
-import { Sidebar, Menu, Segment, Header, Ref, Container } from "semantic-ui-react";
+import { Sidebar, Menu, Segment, Header, Icon } from "semantic-ui-react";
 import FillForm, { FillFormProps } from "../commons/FillForm";
 
 export type WordListPushablePanelsProps = {
   color: string;
-  decks: CardDeck[];
   activeDeck: CardDeck;
-  activeCard?: Card;
-  selectDeck: (deck: CardDeck) => void;
+  activeCard: Card;
+  decksPanel: {
+    decks: CardDeck[];
+    visible: boolean;
+    selectDeck: (deck: CardDeck) => void;
+  };
+  addCardPanel: {
+    visible: boolean;
+    addCardToDeck: (card: Card) => void;
+  };
 };
 
 type PushablePanelsState = {
   color: string;
   visible: boolean;
-  segmentRef: any;
   activeDeck: CardDeck;
 };
 
 interface DecksPanelProps extends PushablePanelsState {
   decks: CardDeck[];
   handleChangeDeck: (deck: CardDeck) => void;
-  createDecksPanelShowHandler: (hide: boolean) => () => void;
+  createDecksPanelShowHandler: (show?: boolean) => () => void;
 }
 
 interface AddCardPanelProps extends PushablePanelsState {
@@ -38,18 +44,17 @@ export type WordListPushablePanelsState = {
 };
 
 const DecksPanel: React.SFC<DecksPanelProps> = props => {
-  const { visible, segmentRef, createDecksPanelShowHandler } = props;
-  const createDeckTabs = (deck: CardDeck) => {
+  const { visible, createDecksPanelShowHandler } = props;
+  const createDeckTabs = (deck: CardDeck, i: number) => {
     const selected = deck === props.activeDeck;
     const onClickHandler = () => props.handleChangeDeck(deck);
     return (
       <div
         className={selected ? "decktab selected" : "decktab normal"}
         style={{ backgroundColor: selected ? props.color : props.color }}
+        key={i}
       >
-        <Menu.Item as="a" onClick={onClickHandler}>
-          {deck.info.name}
-        </Menu.Item>
+        <Menu.Item onClick={onClickHandler}>{deck.info.name}</Menu.Item>
       </div>
     );
   };
@@ -59,9 +64,7 @@ const DecksPanel: React.SFC<DecksPanelProps> = props => {
       animation="push"
       icon="labeled"
       direction="left"
-      inverted
       onHide={createDecksPanelShowHandler(false)}
-      vertical
       visible={visible}
       width="thin"
       style={{ marginRight: "10px" }}
@@ -69,36 +72,28 @@ const DecksPanel: React.SFC<DecksPanelProps> = props => {
       <Segment>
         <Header as="h3">Decks</Header>
       </Segment>
-      {props.decks.map(createDeckTabs)}
+      <Menu className="decksMenu">{props.decks.map(createDeckTabs)}</Menu>
     </Sidebar>
   );
 };
 
 const AddCardPanel: React.FC<AddCardPanelProps> = props => {
-  const { visible, segmentRef, createAddCardPanelShowHandler } = props;
+  const { visible, createAddCardPanelShowHandler } = props;
   const fillformprops: FillFormProps = {
     type: "Addcard",
-    formprop: {
-      currentDeck: props.activeDeck,
-      submitCardToDeck: props.handleAddCard
-    }
+    currentDeck: props.activeDeck,
+    submitCardToDeck: props.handleAddCard
   };
   return (
     <Sidebar
       animation="overlay"
       icon="labeled"
       direction="right"
-      inverted
       onHide={createAddCardPanelShowHandler(false)}
-      vertical
-      target={segmentRef}
       visible={visible}
       width="wide"
     >
-      <FillForm
-        type="Addcard"
-        formprop={{ currentDeck: props.activeDeck, submitCardToDeck: (card: Card) => {} }}
-      />
+      <FillForm {...fillformprops} />
     </Sidebar>
   );
 };
@@ -112,17 +107,16 @@ class WordListPushablePanels extends React.Component<
     const pushableState: PushablePanelsState = {
       color: this.props.color,
       visible: false,
-			segmentRef: React.createRef(),
-			activeDeck: this.props.activeDeck
+      activeDeck: this.props.activeDeck
     };
     this.state = {
       decksPanel: {
         ...pushableState,
-        visible: true,
+        visible: this.props.decksPanel.visible,
         activeDeck: this.props.activeDeck,
-        decks: this.props.decks,
+        decks: this.props.decksPanel.decks,
         handleChangeDeck: (deck: CardDeck) => this.setState({ ...this.state, selectedDeck: deck }),
-        createDecksPanelShowHandler: (show: boolean) => () =>
+        createDecksPanelShowHandler: (show: boolean = !this.state.decksPanel.visible) => () =>
           this.setState({
             ...this.state,
             decksPanel: {
@@ -133,8 +127,8 @@ class WordListPushablePanels extends React.Component<
       },
       addCardPanel: {
         ...pushableState,
-        handleAddCard: (card: Card) => this.props.activeDeck.addCard(card),
-        createAddCardPanelShowHandler: (show: boolean) => () =>
+        handleAddCard: this.props.addCardPanel.addCardToDeck,
+        createAddCardPanelShowHandler: (show: boolean = !this.state.addCardPanel.visible) => () =>
           this.setState({
             ...this.state,
             addCardPanel: {
@@ -147,22 +141,12 @@ class WordListPushablePanels extends React.Component<
       selectedCard: undefined
     };
   }
-
-  public createAddCardPanelShowHandler = (show: boolean) => () =>
-    this.setState({
-      ...this.state,
-      addCardPanel: {
-        ...this.state.addCardPanel,
-        visible: show
-      }
-    });
-
   render() {
     let currentPropsPanelProps: PropsPanelProps = {
       color: "green",
       deck: this.props.activeDeck,
       card: this.state.selectedCard,
-      handleShowAddCardPanel: this.createAddCardPanelShowHandler(true)
+      handleShowAddCardPanel: this.state.addCardPanel.createAddCardPanelShowHandler(true)
     };
     return (
       <Sidebar.Pushable
@@ -176,7 +160,27 @@ class WordListPushablePanels extends React.Component<
 
         <Sidebar.Pusher dimmed={this.state.addCardPanel.visible}>
           <PropsPanel {...currentPropsPanelProps} />
-          {this.props.children}
+          <div
+            style={{
+              display: "table",
+              width: window.screen.width + "px",
+              height: (window.screen.height * 80) / 100 + "px"
+            }}
+          >
+            <div
+              className="decksPanelCaller"
+              onClick={this.state.decksPanel.createDecksPanelShowHandler()}
+              style={{ height: (window.screen.height * 80) / 100 + "px", width: "5%", float: "left"}}
+            >
+              <Icon angle right size="tiny" />
+            </div>
+						<div
+							className="CardList content"
+							style={{ height: (window.screen.height * 80) / 100 + "px", width: "90%", float: "left" }}
+          	>
+							{this.props.children}
+						</div>
+          </div>
         </Sidebar.Pusher>
       </Sidebar.Pushable>
     );

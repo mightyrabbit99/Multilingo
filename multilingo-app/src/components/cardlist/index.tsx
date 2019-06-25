@@ -5,74 +5,78 @@ import { CardDeck, Card } from "../../extension/cards";
 import WordCard, { WordCardProps } from "./WordCard";
 import WordListPushablePanels, { WordListPushablePanelsProps } from "./WordListPushablePanels";
 
-export interface CardListProps
-  extends CardListDispatchProps,
-    CardListStateProps,
-    RouteComponentProps<{}> {}
+export interface CardListProps extends CardListDispatchProps, CardListStateProps, RouteComponentProps<{}> {}
 
 export interface CardListStateProps {
   title: string;
   decks: CardDeck[];
-	selectedDeck: CardDeck;
-	selectedCard: Card;
+  selectedDeck: CardDeck;
+  selectedCard: Card;
+  newCard: Card | null;
 }
 
 export interface CardListDispatchProps {
-  logout: () => void;
+	addCardToDeck: (card: Card) => void;
+	selectDeck: (deck: CardDeck) => void;
 }
 
 type CardListState = {
-	addDeckPanelVisible: boolean;
-	decksPanelVisible: boolean;
+  addCardPanelVisible: boolean;
+  decksPanelVisible: boolean;
   currentDeck: CardDeck;
-  selectedCard?: Card;
+  selectedCard: Card;
 };
 
 class CardList extends React.Component<CardListProps, CardListState> {
   public constructor(props: CardListProps) {
     super(props);
     this.state = {
-			addDeckPanelVisible: false,
-			decksPanelVisible: true,
+      addCardPanelVisible: false,
+      decksPanelVisible: true,
       currentDeck: this.props.selectedDeck,
       selectedCard: this.props.selectedCard
     };
   }
 
-  public componentDidMount() {}
+  public componentWillReceiveProps(newProps: CardListProps) {
+    if (newProps.newCard) {
+      this.state.currentDeck.addCard(newProps.newCard);
+    }
+  }
 
   public render() {
+    console.log("cardlist render");
+    const generateCard = (card: Card, i: number) => {
+      let props: WordCardProps = {
+        card: card,
+        handleCardClick: () => {
+          this.setState({ selectedCard: card });
+        }
+      };
+      return <WordCard {...props} key={i} />;
+    };
     let currentPushablePanelProps: WordListPushablePanelsProps = {
-      color: "green",
-			decks: this.props.decks,
+			color: "green",
 			activeDeck: this.state.currentDeck,
 			activeCard: this.state.selectedCard,
-      selectDeck: (deck: CardDeck) => {}
+			decksPanel: {
+				decks: this.props.decks,
+				visible: this.state.decksPanelVisible,
+				selectDeck: this.props.selectDeck
+			},
+			addCardPanel: {
+				visible: this.state.addCardPanelVisible,
+				addCardToDeck: this.props.addCardToDeck
+			}
     };
     return (
-      <div className="CardList" style={{height: window.screen.height * 80 / 100 + 'px'}}>
+      <div className="CardList" style={{ height: (window.screen.height * 80) / 100 + "px" }}>
         <WordListPushablePanels {...currentPushablePanelProps}>
-					{this.rootElement}
+          {this.props.selectedDeck.cards.map(generateCard)}
         </WordListPushablePanels>
       </div>
     );
   }
-
-  private generateCard = (card: Card) => {
-    let props: WordCardProps = {
-      card: card,
-      handleCardClick: () => {
-        this.setState({ selectedCard: card });
-      }
-    };
-    return <WordCard {...props} />;
-  };
-
-  private rootElement = (
-    <div className="cards" style={{position: 'fixed', top: 0, right: 0, bottom: 0, left: 0}} >
-      {this.props.selectedDeck.cards.map(this.generateCard)}
-    </div>
-  );
 }
 
 export default CardList;

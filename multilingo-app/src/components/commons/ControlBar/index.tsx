@@ -1,83 +1,87 @@
 import * as React from "react";
 import { Icon, Modal, Button, Image, Header, Form } from "semantic-ui-react";
 
+import FillForm, { FillFormProps } from "../FillForm";
+
+import { CardDeck, Card } from '../../../extension/cards';
+
 export type ControlBarLocation = "Main" | "CardList";
 
-export type ControlBarProps = {
-  location: ControlBarLocation;
-  color: string;
-  handleShowAddDeckPopUp?: () => void;
-  handleShowAddCardPanel?: () => void;
-  handleAddDeck?: (name: string) => void;
-};
-
-type ControlBarState = {
-	formDetail: any;
+export type CardListControlBarProps = {
+	location: "CardList";
+	color: string;
+	card?: Card;
+	handleShowAddCardPanel: () => void;
 }
 
-class ControlBar extends React.Component<ControlBarProps, ControlBarState>  {
-	render() {
-  const addDeckButton = (
-    /*
-    <Button className="addDeck" onClick={props.handleShowAddDeckPopUp}>
-      <Icon name="plus circle" size="huge" />
-    </Button>
-    */
-    <Icon
-      onClick={this.props.handleShowAddDeckPopUp}
-      style={{
-        position: "absolute",
-        bottom: "5%",
-        right: "5%",
-        borderRadius: "50%",
-        color: "green"
-      }}
-      name="plus circle"
-      size="huge"
-      link
-    />
-  ); 
+export type MainControlBarProps = {
+	location: "Main";
+	color: string;
+	handleAddDeck: (deck: CardDeck) => void;
+}
 
-  const handleFormSubmit = (e: any) => {
-    e.preventDefault();
-    if (this.props.handleAddDeck) this.props.handleAddDeck(e.target.name.value);
-  };
+export type ControlBarProps = MainControlBarProps | CardListControlBarProps;
 
-  return (
-    <div
-      className="button-array"
-      style={{
-        position: "fixed",
-        margin: "2em",
-        bottom: "0px",
-        right: "0px",
-        animation:
-          "1.5s ease-in-out 0s infinite normal none running back-to-docs",
-        zIndex: 6
-      }}
-    >
-      <Modal trigger={addDeckButton}>
-        <Modal.Header>Add New Deck</Modal.Header>
-        <Modal.Content image>
-          <Image
-            wrapped
-            size="medium"
-            src="https://react.semantic-ui.com/images/avatar/large/rachel.png"
-          />
-          <Modal.Description>
-            <Header>Add a deck</Header>
-            <Form className="adddeckform" onSubmit={handleFormSubmit}>
-              <Form.Field>
-                <label>Deck Name</label>
-                <Form.Input placeholder="Deck Name" name="name" />
-              </Form.Field>
-              <Button type="submit">Add!</Button>
-            </Form>
-          </Modal.Description>
-        </Modal.Content>
-      </Modal>
-    </div>
-  )}
-};
+class ControlBar extends React.Component<ControlBarProps, {}> {
+  render() {
+		const handleAddButtonOnClick = () => {
+			if(this.props.location === "CardList") {
+				this.props.handleShowAddCardPanel();
+			}
+		}
+    const addButton = (
+      <Icon
+        onClick={handleAddButtonOnClick}
+        style={{
+          position: "absolute",
+          bottom: "5%",
+          right: "5%",
+          borderRadius: "50%",
+          color: "green"
+        }}
+        name="plus circle"
+        size="huge"
+        link
+      />
+    );
+
+		switch(this.props.location) {
+			case "Main" : {
+				const thisprop: MainControlBarProps = (this.props as MainControlBarProps);
+				const currentformprop: FillFormProps = {
+					type: "Adddeck",
+					addNewDeck: thisprop.handleAddDeck
+				}
+				return (
+					<div
+						className="button-array"
+						style={{
+							position: "fixed",
+							margin: "2em",
+							bottom: "0px",
+							right: "0px",
+							animation: "1.5s ease-in-out 0s infinite normal none running back-to-docs",
+							zIndex: 6
+						}}
+					>
+						<Modal trigger={addButton}>
+							<Modal.Header>Add New Deck</Modal.Header>
+							<Modal.Content image>
+								<Image wrapped size="medium" src="https://react.semantic-ui.com/images/avatar/large/rachel.png" />
+								<Modal.Description>
+									<Header>Add a deck</Header>
+									<FillForm {...currentformprop}/>
+								</Modal.Description>
+							</Modal.Content>
+						</Modal>
+					</div>
+				);
+			}
+			case "CardList" : {
+				return addButton;
+			}
+		}
+  }
+}
 
 export default ControlBar;

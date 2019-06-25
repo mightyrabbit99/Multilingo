@@ -12,7 +12,7 @@ import { CardDeck } from "../extension/cards";
 import rsf from "../backend/rsf";
 
 function* mainSaga() {
-  yield fork(fetchDecksDataSaga);
+  //yield fork(fetchDecksDataSaga);
 	yield* sessionSaga();
 	yield* userSaga();
 }
@@ -35,7 +35,8 @@ function* sessionSaga(): SagaIterator {
   yield takeEvery(actionTypes.SELECT_DECK, function*(action) {
     // redirect to cardlist
     yield put(push("/cardlist"));
-  });
+	});
+
 }
 
 function* userSaga(): SagaIterator {

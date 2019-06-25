@@ -1,23 +1,27 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch, Action as ReduxAction } from 'redux';
 
 import CardList, { CardListDispatchProps, CardListStateProps } from '../components/cardlist';
 import { IState } from '../reducers/states';
-import { Action as ReduxAction } from 'redux';
+import { addCardToDeck, selectDeck } from '../actions/session';
+
+import { Card } from '../extension/cards'
 
 const mapStateToProps: MapStateToProps<CardListStateProps, {}, IState> = state => ({
   color: state.main.colour,
   title: 'asas',
   decks: state.session.decks,
 	selectedDeck: state.session.selectedDeck,
-	selectedCard: state.session.selectedCard
+	selectedCard: state.session.selectedCard,
+	newCard: state.session.newCard
 });
 
 const mapDispatchToProps: MapDispatchToProps<CardListDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>
   bindActionCreators<any, any>(
     {
-      logout: () => {}
+			addCardToDeck: addCardToDeck,
+			selectDeck: selectDeck
     },
     dispatch
   );

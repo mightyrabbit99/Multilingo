@@ -21,18 +21,19 @@ export const selectDeck = (deck: CardDeck = defaultDeck) => ({
   }
 });
 
-export const addDeck = (name: string) => ({
+export const addDeck = (deck: CardDeck) => ({
   type: actionTypes.ADD_DECK,
   payload: {
-    deckName: name
+    deck: deck
   }
 });
 
 /** Card */
 
-export const addCardToDeck = (card: Card) => ({
+export const addCardToDeck = (card: Card) => {
+	return ({
 	type: actionTypes.ADD_CARD_TO_SELECTED_DECK,
 	payload: {
 		card: card
 	}
-})
+});}

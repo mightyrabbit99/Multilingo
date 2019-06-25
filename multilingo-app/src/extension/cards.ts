@@ -9,12 +9,7 @@ import { Comment } from "./questions";
  * Cards with the same back can combine to from a single card with multiple front.
  */
 
-type CardTypeType = "Explanation" | "Example";
-
-export const CardType: { [s: string]: CardTypeType } = {
-  Explanation: "Explanation",
-  Example: "Example"
-};
+type CardType = "Explanation" | "Example";
 
 const initialCardInfo = {
   lastRevised: 0,
@@ -25,7 +20,7 @@ const initialCardInfo = {
 };
 
 export class Card {
-  constructor(category: string, front: string, back: string, type: CardTypeType = CardType.Explanation) {
+  constructor(category: string, front: string, back: string, type: CardType = "Explanation") {
     this.category = category;
     this.front = front;
     this.back = back;
@@ -46,7 +41,7 @@ export class Card {
     [key: string]: any;
   } = initialCardInfo;
   public category: string;
-  public type: CardTypeType;
+  public type: CardType;
   public front: string;
   public back: string;
   public equals(anotherCard: Card): boolean {
@@ -84,7 +79,7 @@ export const exampleExplCard1: Card = createCard(
   "Animal name",
   "<n> A female deer",
   "Doe",
-  CardType.Explanation
+  "Explanation"
 );
 
 /**
@@ -95,7 +90,7 @@ export const exampleExampleCard: Card = createCard(
   "Animal name",
   "I have a pet doe",
   "Doe",
-  CardType.Example
+  "Example"
 );
 
 /**
@@ -111,7 +106,7 @@ export function createCard(
   category: string,
   front: string,
   back: string,
-  type: CardTypeType = "Explanation"
+  type: CardType = "Explanation"
 ): Card {
   return new Card(category, front, back, type);
 }
@@ -137,6 +132,9 @@ export class CardDeck {
     this.cards = [];
   }
 
+	public isEmpty(): boolean {
+		return this.info.name === "" && this.info.category === "";
+	}
   public addCard(card: Card) {
     if (this.cards.includes(card)) return;
     if (this.collection.byCategory[card.type] === undefined) {
@@ -185,3 +183,5 @@ export function sampleDecks(): CardDeck[] {
   ans[2].addCard(createCard("a", "haha", "shit"));
   return ans;
 }
+
+export const demonstrationDecks: CardDeck[] = sampleDecks();

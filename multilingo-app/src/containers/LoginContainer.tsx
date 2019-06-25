@@ -16,6 +16,7 @@ const mapStateToProps: MapStateToProps<LoginPageStateProps, {}, IState> = state 
 const mapDispatchToProps: MapDispatchToProps<LoginPageDispatchProps, {}> = (dispatch: Dispatch<ReduxAction>) =>
   bindActionCreators<any, any>(
     {
+			
     },
     dispatch
 	);

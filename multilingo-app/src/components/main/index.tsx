@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router";
 
 import { CardDeck } from "../../extension/cards";
 import Deck, { DeckProps } from "./Deck";
-import ControlBar, { ControlBarProps } from "../commons/ControlBar";
+import ControlBar, { MainControlBarProps } from "../commons/ControlBar";
 
 export interface MainProps
   extends MainDispatchProps,
@@ -19,12 +19,12 @@ export interface MainStateProps {
 export interface MainDispatchProps {
   logout: () => void;
   handleSelectDeck: (deck: CardDeck) => void;
-  handleAddDeck: (name: string) => void;
+  handleAddDeck: (deck: CardDeck) => void;
   receiveDecks: (decks: CardDeck[]) => void;
 }
 
 type MainState = {
-  selectedDeck: CardDeck;
+	selectedDeck: CardDeck;
 };
 
 class Main extends React.Component<MainProps, MainState> {
@@ -33,18 +33,12 @@ class Main extends React.Component<MainProps, MainState> {
     (window as any).decks = props.decks;
   }
 
-  componentWillReceiveProps(nextProps: MainProps) {
-    if (nextProps.newDeck) {
-      this.props.decks.unshift(nextProps.newDeck);
-    }
-    console.log("willmount");
-  }
-
   componentDidMount() {
-    this.props.receiveDecks([]);
+    //this.props.receiveDecks([]);
   }
 
   public render() {
+		console.log("main render");
     const generateDeck = (deck: CardDeck, i: number) => {
       let props: DeckProps = {
         deck: deck,
@@ -54,10 +48,9 @@ class Main extends React.Component<MainProps, MainState> {
     };
 
     const controlBar = () => {
-      let props: ControlBarProps = {
+      let props: MainControlBarProps = {
         location: "Main",
         color: "green",
-        handleShowAddDeckPopUp: () => {},
         handleAddDeck: this.props.handleAddDeck
       };
       return <ControlBar {...props} />;

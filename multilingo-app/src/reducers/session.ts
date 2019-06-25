@@ -4,7 +4,8 @@ import {
   SELECT_DECK,
   ADD_DECK,
   IAction,
-  RECEIVE_DECKS_DATA
+  RECEIVE_DECKS_DATA,
+	ADD_CARD_TO_SELECTED_DECK
 } from "../actions/actionTypes";
 
 import { CardDeck } from "../extension/cards";
@@ -28,10 +29,16 @@ export const reducer: Reducer<ISessionState> = (
         decks: action.payload.decks
       };
 
-    case ADD_DECK:
+		case ADD_DECK: 
+			state.decks.unshift(action.payload.deck);
       return {
         ...state,
-        newDeck: new CardDeck(action.payload.deckName)
+        newDeck: action.payload.deck
+			};
+		case ADD_CARD_TO_SELECTED_DECK:
+      return {
+        ...state,
+        newCard: action.payload.card
       };
     default:
       return state;

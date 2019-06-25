@@ -4,38 +4,38 @@ import { Form } from "semantic-ui-react";
 
 import * as CardDef from "../../extension/cards";
 
-export type FormType = "Adddeck" | "Addcard" | "Changecard" | "Settings" | "TestSetting";
+type SettingsFormProps = {
+  type: "Settings";
+};
 
-type SettingsFormProps = {};
-
-type TestSettingsProps = {};
+type TestSettingsProps = {
+  type: "Testsetting";
+};
 
 type AddCardFormProps = {
+  type: "Addcard";
   currentDeck: CardDef.CardDeck;
   submitCardToDeck: (card: CardDef.Card) => void;
 };
 
 type ChangeCardProps = {
-	currentCard: CardDef.Card;
-	currentDeck: CardDef.CardDeck;
+  type: "Changecard";
+  currentCard: CardDef.Card;
+  currentDeck: CardDef.CardDeck;
   amendCurrentCard: (newCard: CardDef.Card) => void;
 };
 
 type AddDeckFormProps = {
-  addNewDeck?: (deck: CardDef.CardDeck) => void;
+  type: "Adddeck";
+  addNewDeck: (deck: CardDef.CardDeck) => void;
 };
 
-type FormProps =
+export type FillFormProps =
   | AddCardFormProps
   | AddDeckFormProps
   | ChangeCardProps
   | SettingsFormProps
-	| TestSettingsProps;
-	
-export type FillFormProps = {
-	type: FormType;
-	formprop: FormProps;
-}
+  | TestSettingsProps;
 
 type FillFormState = {
   currentDeck: CardDef.CardDeck;
@@ -43,14 +43,46 @@ type FillFormState = {
 };
 
 class FillForm extends React.Component<FillFormProps, FillFormState> {
+  constructor(props: FillFormProps) {
+    super(props);
+    switch (this.props.type) {
+      case "Addcard": {
+        this.state = {
+          currentCard: CardDef.createCard("", "", ""),
+          currentDeck: (this.props as AddCardFormProps).currentDeck
+        };
+        break;
+      }
+      case "Changecard": {
+        this.state = {
+          currentCard: (this.props as ChangeCardProps).currentCard.copyCard(),
+          currentDeck: (this.props as ChangeCardProps).currentDeck
+        };
+        break;
+      }
+      case "Adddeck": {
+        this.state = {
+          currentCard: CardDef.defaultCard,
+          currentDeck: CardDef.createDeck("", "")
+        };
+        break;
+      }
+    }
+    this.cardform = this.cardform.bind(this);
+    this.deckform = this.deckform.bind(this);
+  }
   private cardform(onSubmit: () => void) {
     let { currentCard } = this.state;
     let exampleCard = CardDef.exampleExplCard1;
     let setCardProp = (prop: string, newVal: any) => {
-      this.state.currentCard[prop] = newVal;
-      this.setState(this.state);
+      this.setState(state => {
+        state.currentCard[prop] = newVal;
+        return state;
+      });
     };
-    let onChangeGenerator = (field: string) => (e: any) => setCardProp(field, e.target.value);
+    let textOnChangeGenerator = (field: string) => (e: any) => {
+      setCardProp(field, e.currentTarget.value);
+    };
     return (
       <Form onSubmit={onSubmit}>
         <Form.Field>
@@ -59,7 +91,7 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
             placeholder={"Category e.g. " + exampleCard.category}
             name="category"
             value={currentCard.category}
-            onChange={onChangeGenerator("category")}
+            onChange={textOnChangeGenerator("category")}
           />
         </Form.Field>
         <Form.Field>
@@ -68,7 +100,7 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
             placeholder={"Front e.g. " + exampleCard.front}
             name="front"
             value={currentCard.front}
-            onChange={onChangeGenerator("front")}
+            onChange={textOnChangeGenerator("front")}
           />
         </Form.Field>
         <Form.Field>
@@ -77,22 +109,22 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
             placeholder={"Back e.g. " + exampleCard.back}
             name="back"
             value={currentCard.back}
-            onChange={onChangeGenerator("back")}
+            onChange={textOnChangeGenerator("back")}
           />
         </Form.Field>
         <Form.Group inline>
           <label>Type</label>
           <Form.Radio
             label="Explanation"
-            value={CardDef.CardType.Explanation}
-            checked={currentCard.type === CardDef.CardType.Explanation}
-            onChange={onChangeGenerator("type")}
+            name="Explanation"
+            checked={currentCard.type === "Explanation"}
+            onChange={(e: any) => setCardProp("type", "Explanation")}
           />
           <Form.Radio
             label="Example"
-            value={CardDef.CardType.Example}
-            checked={currentCard.type === CardDef.CardType.Example}
-            onChange={onChangeGenerator("type")}
+            name="Example"
+            checked={currentCard.type === "Example"}
+            onChange={(e: any) => setCardProp("type", "Example")}
           />
         </Form.Group>
         <Form.Field>
@@ -101,7 +133,7 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
             placeholder="Description"
             name="description"
             value={currentCard.description}
-            onChange={onChangeGenerator("description")}
+            onChange={textOnChangeGenerator("description")}
           />
         </Form.Field>
         <Form.Button content="Submit" />
@@ -113,7 +145,7 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
     let { currentDeck } = this.state;
     let exampleDeck = CardDef.exampleDeck;
     let setDeckProp = (prop: string, newVal: any) => {
-      this.state.currentDeck.info[prop] = newVal;
+      currentDeck.info[prop] = newVal;
       this.setState(this.state);
     };
     let onChangeGenerator = (field: string) => (e: any) => setDeckProp(field, e.target.value);
@@ -143,35 +175,33 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
   }
 
   render() {
-    switch(this.props.type) {
+    switch (this.props.type) {
       case "Addcard": {
-				const thisprop = this.props.formprop as AddCardFormProps
-        this.state = {
-          currentCard: CardDef.createCard("", "", ""),
-          currentDeck: thisprop.currentDeck
-        };
-        return this.cardform(() => thisprop.submitCardToDeck(this.state.currentCard));
+        const thisprop = this.props as AddCardFormProps;
+        return this.cardform(() => {
+					if(!this.state.currentCard.isEmpty()) {
+						thisprop.submitCardToDeck(this.state.currentCard);
+						this.setState({...this.state, currentCard: CardDef.createCard("","","")});
+					}
+				});
       }
       case "Changecard": {
-				const thisprop = this.props.formprop as ChangeCardProps
-        this.state = {
-          currentCard: thisprop.currentCard.copyCard(),
-          currentDeck: thisprop.currentDeck
-        };
-        return this.cardform(() => {if(thisprop.amendCurrentCard)thisprop.amendCurrentCard(this.state.currentCard)});
+        const thisprop = this.props as ChangeCardProps;
+        return this.cardform(() => thisprop.amendCurrentCard(this.state.currentCard));
       }
       case "Adddeck": {
-				const thisprop = this.props.formprop as AddDeckFormProps
-        this.state = {
-          currentCard: CardDef.defaultCard,
-          currentDeck: CardDef.createDeck("", "")
-        };
-        return this.deckform(() => {if(thisprop.addNewDeck) thisprop.addNewDeck(this.state.currentDeck)});
+        const thisprop = this.props as AddDeckFormProps;
+        return this.deckform(() => {
+					if(!this.state.currentDeck.isEmpty()) {
+						thisprop.addNewDeck(this.state.currentDeck);
+						this.setState({...this.state, currentDeck: CardDef.createDeck("", "")});
+					}
+				});
       }
       case "Settings": {
         return <div className="SettingsForm" />;
       }
-      case "TestSetting": {
+      case "Testsetting": {
         return <div className="TestSettingsForm" />;
       }
     }
