@@ -72,7 +72,7 @@ const DecksPanel: React.SFC<DecksPanelProps> = props => {
       <Segment>
         <Header as="h3">Decks</Header>
       </Segment>
-      <Menu className="decksMenu">{props.decks.map(createDeckTabs)}</Menu>
+      <Menu className="decksMenu" vertical fluid>{props.decks.map(createDeckTabs)}</Menu>
     </Sidebar>
   );
 };
@@ -115,7 +115,7 @@ class WordListPushablePanels extends React.Component<
         visible: this.props.decksPanel.visible,
         activeDeck: this.props.activeDeck,
         decks: this.props.decksPanel.decks,
-        handleChangeDeck: (deck: CardDeck) => this.setState({ ...this.state, selectedDeck: deck }),
+        handleChangeDeck: this.props.decksPanel.selectDeck,
         createDecksPanelShowHandler: (show: boolean = !this.state.decksPanel.visible) => () =>
           this.setState({
             ...this.state,
@@ -172,7 +172,7 @@ class WordListPushablePanels extends React.Component<
               onClick={this.state.decksPanel.createDecksPanelShowHandler()}
               style={{ height: (window.screen.height * 80) / 100 + "px", width: "5%", float: "left"}}
             >
-              <Icon angle right size="tiny" />
+              <Icon angle right size="tiny" color="black" />
             </div>
 						<div
 							className="CardList content"

@@ -75,9 +75,13 @@ export class Card {
  * Examples of explanation card
  */
 
-export const exampleExplCard1: Card = createCard(
+export const exampleExplCard1: Card = createCard("Animal name", "<n> A female deer", "Doe", "Explanation");
+
+export const exampleExplCard2: Card = createCard(
   "Animal name",
-  "<n> A female deer",
+	"Deer (singular and plural) are the hoofed ruminant mammals forming the family Cervidae. The two main"
+	+ " groups of deer are the Cervinae, including the muntjac, the elk (wapiti), the fallow deer, and the "
+	+ "chital; and the Capreolinae, including the reindeer (caribou), the roe deer, and the moose.",
   "Doe",
   "Explanation"
 );
@@ -86,12 +90,7 @@ export const exampleExplCard1: Card = createCard(
  * Example of an example card
  */
 
-export const exampleExampleCard: Card = createCard(
-  "Animal name",
-  "I have a pet doe",
-  "Doe",
-  "Example"
-);
+export const exampleExampleCard: Card = createCard("Animal name", "I have a pet doe", "Doe", "Example");
 
 /**
  * Card is categorised by category and word to simplify search
@@ -132,9 +131,9 @@ export class CardDeck {
     this.cards = [];
   }
 
-	public isEmpty(): boolean {
-		return this.info.name === "" && this.info.category === "";
-	}
+  public isEmpty(): boolean {
+    return this.info.name === "" && this.info.category === "";
+  }
   public addCard(card: Card) {
     if (this.cards.includes(card)) return;
     if (this.collection.byCategory[card.type] === undefined) {
@@ -177,10 +176,9 @@ defaultDeck.addCard(defaultCard);
 export function sampleDecks(): CardDeck[] {
   let ans = [];
   ans.push(exampleDeck);
-  ans.push(defaultDeck);
-  ans.push(new CardDeck("deck3"));
-  ans[2].addCard(createCard("a", "haha", "shit"));
-  ans[2].addCard(createCard("a", "haha", "shit"));
+  ans.push(new CardDeck("deck2"));
+  ans[1].addCard(createCard("a", "haha", "shit"));
+  ans[1].addCard(createCard("a", "haha", "shit"));
   return ans;
 }
 

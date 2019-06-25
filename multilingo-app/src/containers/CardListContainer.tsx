@@ -6,8 +6,6 @@ import CardList, { CardListDispatchProps, CardListStateProps } from '../componen
 import { IState } from '../reducers/states';
 import { addCardToDeck, selectDeck } from '../actions/session';
 
-import { Card } from '../extension/cards'
-
 const mapStateToProps: MapStateToProps<CardListStateProps, {}, IState> = state => ({
   color: state.main.colour,
   title: 'asas',
