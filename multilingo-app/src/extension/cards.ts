@@ -20,7 +20,12 @@ const initialCardInfo = {
 };
 
 export class Card {
-  constructor(category: string, front: string, back: string, type: CardType = "Explanation") {
+  constructor(
+    category: string,
+    front: string,
+    back: string,
+    type: CardType = "Explanation"
+  ) {
     this.category = category;
     this.front = front;
     this.back = back;
@@ -46,7 +51,9 @@ export class Card {
   public back: string;
   public equals(anotherCard: Card): boolean {
     return (
-      this.front === anotherCard.front && this.back === anotherCard.back && this.type === anotherCard.type
+      this.front === anotherCard.front &&
+      this.back === anotherCard.back &&
+      this.type === anotherCard.type
     );
   }
 
@@ -75,13 +82,18 @@ export class Card {
  * Examples of explanation card
  */
 
-export const exampleExplCard1: Card = createCard("Animal name", "<n> A female deer", "Doe", "Explanation");
+export const exampleExplCard1: Card = createCard(
+  "Animal name",
+  "<n> A female deer",
+  "Doe",
+  "Explanation"
+);
 
 export const exampleExplCard2: Card = createCard(
   "Animal name",
-	"Deer (singular and plural) are the hoofed ruminant mammals forming the family Cervidae. The two main"
-	+ " groups of deer are the Cervinae, including the muntjac, the elk (wapiti), the fallow deer, and the "
-	+ "chital; and the Capreolinae, including the reindeer (caribou), the roe deer, and the moose.",
+  "Deer (singular and plural) are the hoofed ruminant mammals forming the family Cervidae. The two main" +
+    " groups of deer are the Cervinae, including the muntjac, the elk (wapiti), the fallow deer, and the " +
+    "chital; and the Capreolinae, including the reindeer (caribou), the roe deer, and the moose.",
   "Doe",
   "Explanation"
 );
@@ -90,7 +102,12 @@ export const exampleExplCard2: Card = createCard(
  * Example of an example card
  */
 
-export const exampleExampleCard: Card = createCard("Animal name", "I have a pet doe", "Doe", "Example");
+export const exampleExampleCard: Card = createCard(
+  "Animal name",
+  "I have a pet doe",
+  "Doe",
+  "Example"
+);
 
 /**
  * Card is categorised by category and word to simplify search
@@ -154,7 +171,11 @@ export class CardDeck {
   }
 }
 
-export function createDeck(name: string, category: string, ...cards: Card[]): CardDeck {
+export function createDeck(
+  name: string,
+  category: string,
+  ...cards: Card[]
+): CardDeck {
   let deck = new CardDeck(name, category);
   cards.forEach((value: Card) => deck.addCard(value));
   return deck;
