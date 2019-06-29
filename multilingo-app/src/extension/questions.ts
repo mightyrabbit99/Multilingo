@@ -1,4 +1,5 @@
 import {Card, createCard } from './cards'
+import { forStatement } from '@babel/types';
 //QNAs
 
 export enum QuestionType {
@@ -13,14 +14,20 @@ export type Comment = {
 };
 
 export class Answer {
-	constructor(origin: Card, checkAnswer?: (ans: string) => boolean) {
+	constructor(origin: Card, checkAnswer: (ans: string) => boolean) {
 		this.origin = origin;
-		this.checkAnswer = checkAnswer;
+		this.getMark = ((ans: string) => {
+			this.marked = true;
+			return checkAnswer(ans);
+		}).bind(this);
+		this.getAnsCard = () => this.marked ? origin : null;
+		this.marked = false;
 	}
 	origin: Card;
-  tips?: string;
-	checkAnswer: (answer: string) => boolean;
-	getMark: (ans: string) => number;
+	tips?: string;
+	marked: boolean;
+	getMark: (ans: string) => boolean;
+	getAnsCard: () => Card | null;
 };
 
 function shuffle<T>(array: T[]) {
@@ -95,19 +102,24 @@ export class Question {
 	option?: string[];
 	questionCard: Card;
   question: string | string[] = '';
-  answer: Answer;
+	answer: Answer;
 };
 
 type QuestionGeneratorSettings = {
 	SameCategory: boolean;
 	cards: Card[];
-	MCQ?: {
+	MCQ: {
+		noOfQuestion: number;
 		noOfOption: number;
 	}
-	Fillinblanks?: {
+	Fillinblanks: {
+		noOfQuestion: number;
 		Withoptions: boolean;
 		noOfOption?: number;
 		Casesensitive: boolean;
+	}
+	Rearrange : {
+		noOfQuestion: number;
 	}
 	[particulars: string]: any;
 }
@@ -146,7 +158,26 @@ export class QuestionGenerator {
 	}
 
 	generateQuestions(): Question[] {
-
+		let ques: Question[] = [];
+		let { MCQ, Fillinblanks, Rearrange, cards } = this.settings;
+		let totalNo = MCQ.noOfQuestion + Fillinblanks.noOfQuestion + Rearrange.noOfQuestion;
+		if(totalNo <= cards.length) {
+			for(let i = 0; i < totalNo; i++) {
+				let card = cards[i];
+				cards.splice(i, 1);
+				let options = [];
+				for(let j = 0; j < MCQ.noOfOption; j++) {
+					let idx = Math.round(Math.random() * cards.length);
+					options.push(cards[idx]);
+					cards.splice(idx, 1);
+				}
+				for(let card in options) {
+					options.push(card);
+				}				
+				ques.push(this.makeMCQ(card, options));
+			}
+		}
+		return ques;
 	}
 
 }

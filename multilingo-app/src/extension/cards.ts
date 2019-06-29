@@ -80,16 +80,7 @@ export class Card {
  * Examples of explanation card
  */
 
-<<<<<<< HEAD
 export const exampleExplCard1: Card = createCard("Animal name", "<n> A female deer", "Doe", CardType.Expl);
-=======
-export const exampleExplCard1: Card = createCard(
-  "Animal name",
-  "<n> A female deer",
-  "Doe",
-  "Explanation"
-);
->>>>>>> 4c66f84d6c632ee54e0230f8849869ce9cc8beba
 
 export const exampleExplCard2: Card = createCard(
   "Animal name",
@@ -104,16 +95,7 @@ export const exampleExplCard2: Card = createCard(
  * Example of an example card
  */
 
-<<<<<<< HEAD
 export const exampleExampleCard: Card = createCard("Animal name", "I have a pet doe", "Doe", CardType.Ex);
-=======
-export const exampleExampleCard: Card = createCard(
-  "Animal name",
-  "I have a pet doe",
-  "Doe",
-  "Example"
-);
->>>>>>> 4c66f84d6c632ee54e0230f8849869ce9cc8beba
 
 /**
  * Card is categorised by category and word to simplify search
