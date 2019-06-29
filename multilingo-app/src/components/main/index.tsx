@@ -24,7 +24,7 @@ export interface MainDispatchProps {
 }
 
 type MainState = {
-	selectedDeck: CardDeck;
+  selectedDeck: CardDeck;
 };
 
 class Main extends React.Component<MainProps, MainState> {
@@ -38,7 +38,7 @@ class Main extends React.Component<MainProps, MainState> {
   }
 
   public render() {
-		console.log("main render");
+    console.log("main render");
     const generateDeck = (deck: CardDeck, i: number) => {
       let props: DeckProps = {
         deck: deck,
@@ -65,6 +65,15 @@ class Main extends React.Component<MainProps, MainState> {
             flexWrap: "wrap"
           }}
         >
+          {this.props.decks.length === 0 ? (
+            <img
+              src="https://i.imgur.com/kvZ0fst.png"
+              style={{
+                margin: "auto"
+              }}
+            />
+          ) : null}
+
           {this.props.decks.map(generateDeck)}
         </div>
         {controlBar()}
