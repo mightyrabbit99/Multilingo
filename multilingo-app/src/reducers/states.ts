@@ -1,5 +1,11 @@
 // import { WorkspaceLocation, WorkspaceLocations } from '../actions/workspaces';
-import { CardDeck, defaultDeck, Card, defaultCard, demonstrationDecks } from "../extension/cards";
+import {
+  CardDeck,
+  defaultDeck,
+  Card,
+  defaultCard,
+  demonstrationDecks
+} from "../extension/cards";
 
 export interface IState {
   readonly main: IMainState;
@@ -15,9 +21,9 @@ export interface IMainState {
 export interface ISessionState {
   decks: CardDeck[];
   newDeck: CardDeck | null;
-	selectedDeck: CardDeck;
-	newCard: Card | null;
-	selectedCard: Card;
+  selectedDeck: CardDeck;
+  newCard: Card | null;
+  selectedCard: Card;
 }
 
 export interface ITestState {}
@@ -29,11 +35,11 @@ export interface IUserState {}
 const defaultUserState: IUserState = {};
 
 export const defaultSessionState: ISessionState = {
-  decks: demonstrationDecks,
+  decks: [],
   newDeck: null,
-	selectedDeck: defaultDeck,
-	newCard: null,
-	selectedCard: defaultCard
+  selectedDeck: defaultDeck,
+  newCard: null,
+  selectedCard: defaultCard
 };
 
 export const defaultTestState: ITestState = {};

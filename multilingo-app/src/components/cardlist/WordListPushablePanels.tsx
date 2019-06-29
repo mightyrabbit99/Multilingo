@@ -47,7 +47,9 @@ const DecksPanel: React.SFC<DecksPanelProps> = props => {
       <Segment>
         <Header as="h3">Decks</Header>
       </Segment>
-      <Menu className="decksMenu" vertical fluid>{props.decks.map(createDeckTabs)}</Menu>
+      <Menu className="decksMenu" vertical fluid>
+        {props.decks.map(createDeckTabs)}
+      </Menu>
     </Sidebar>
   );
 };
@@ -97,7 +99,6 @@ export type WordListPushablePanelsProps = {
   };
 };
 
-
 type WordListPushablePanelsState = {
   selectedCard?: Card;
   decksPanel: DecksPanelProps;
@@ -123,7 +124,9 @@ class WordListPushablePanels extends React.Component<
         activeDeck: this.props.activeDeck,
         decks: this.props.decksPanel.decks,
         handleChangeDeck: this.props.decksPanel.selectDeck,
-        createDecksPanelShowHandler: (show: boolean = !this.state.decksPanel.visible) => () =>
+        createDecksPanelShowHandler: (
+          show: boolean = !this.state.decksPanel.visible
+        ) => () =>
           this.setState({
             ...this.state,
             decksPanel: {
@@ -135,7 +138,9 @@ class WordListPushablePanels extends React.Component<
       addCardPanel: {
         ...pushableState,
         handleAddCard: this.props.addCardPanel.addCardToDeck,
-        createAddCardPanelShowHandler: (show: boolean = !this.state.addCardPanel.visible) => () =>
+        createAddCardPanelShowHandler: (
+          show: boolean = !this.state.addCardPanel.visible
+        ) => () =>
           this.setState({
             ...this.state,
             addCardPanel: {
@@ -153,14 +158,19 @@ class WordListPushablePanels extends React.Component<
       color: "green",
       deck: this.props.activeDeck,
       card: this.state.selectedCard,
-      handleShowAddCardPanel: this.state.addCardPanel.createAddCardPanelShowHandler(true)
+      handleShowAddCardPanel: this.state.addCardPanel.createAddCardPanelShowHandler(
+        true
+      )
     };
     return (
       <Sidebar.Pushable
         className="Panels"
         as={Segment.Group}
         position="fixed"
-        style={{ width: window.screen.width + "px", height: (window.screen.height * 80) / 100 + "px" }}
+        style={{
+          width: window.screen.width + "px",
+          height: (window.screen.height * 80) / 100 + "px"
+        }}
       >
         <DecksPanel {...this.state.decksPanel} />
         <AddCardPanel {...this.state.addCardPanel} />
@@ -177,16 +187,34 @@ class WordListPushablePanels extends React.Component<
             <div
               className="decksPanelCaller"
               onClick={this.state.decksPanel.createDecksPanelShowHandler()}
-              style={{ height: (window.screen.height * 80) / 100 + "px", width: "5%", float: "left"}}
+              style={{
+                height: (window.screen.height * 80) / 100 + "px",
+                width: "1%",
+                float: "left",
+                backgroundColor: this.state.decksPanel.visible
+                  ? "white"
+                  : "green"
+              }}
+            />
+            <div
+              className="extra"
+              onClick={this.state.decksPanel.createDecksPanelShowHandler()}
+              style={{
+                height: (window.screen.height * 80) / 100 + "px",
+                width: "2.5%",
+                float: "left"
+              }}
+            />
+            <div
+              className="CardList content"
+              style={{
+                height: (window.screen.height * 80) / 100 + "px",
+                width: "90%",
+                float: "left"
+              }}
             >
-              <Icon name="angle right" size="tiny" color="black" />
+              {this.props.children}
             </div>
-						<div
-							className="CardList content"
-							style={{ height: (window.screen.height * 80) / 100 + "px", width: "90%", float: "left" }}
-          	>
-							{this.props.children}
-						</div>
           </div>
         </Sidebar.Pusher>
       </Sidebar.Pushable>
