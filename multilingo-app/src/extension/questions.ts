@@ -1,4 +1,4 @@
-import {Card, createCard } from './cards'
+import {Card, createCard, defaultCard } from './cards'
 import { forStatement } from '@babel/types';
 //QNAs
 
@@ -62,7 +62,7 @@ export class Question {
 			this.question = (question as string);
 		}
 		if(options && options[0] instanceof Card) {
-			this.option = options.map((item: Card) => item.back);
+			this.option = (options as Card[]).map((item: Card) => item.back);
 		}
 		this.type = type;
 		this.answer = answer;
@@ -100,7 +100,7 @@ export class Question {
   type: QuestionType;
 	difficulty: number = 0;
 	option?: string[];
-	questionCard: Card;
+	questionCard: Card = defaultCard;
   question: string | string[] = '';
 	answer: Answer;
 };
@@ -165,16 +165,14 @@ export class QuestionGenerator {
 			for(let i = 0; i < totalNo; i++) {
 				let card = cards[i];
 				cards.splice(i, 1);
-				let options = [];
+				let thisoptions: Card[] = [];
 				for(let j = 0; j < MCQ.noOfOption; j++) {
 					let idx = Math.round(Math.random() * cards.length);
-					options.push(cards[idx]);
+					thisoptions.push(cards[idx]);
 					cards.splice(idx, 1);
 				}
-				for(let card in options) {
-					options.push(card);
-				}				
-				ques.push(this.makeMCQ(card, options));
+				thisoptions.forEach((card: Card) => cards.push(card));				
+				ques.push(this.makeMCQ(card, thisoptions));
 			}
 		}
 		return ques;
