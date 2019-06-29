@@ -49,7 +49,9 @@ export class Card {
   public back: string;
   public equals(anotherCard: Card): boolean {
     return (
-      this.front === anotherCard.front && this.back === anotherCard.back && this.type === anotherCard.type
+      this.front === anotherCard.front &&
+      this.back === anotherCard.back &&
+      this.type === anotherCard.type
     );
   }
 
@@ -78,13 +80,22 @@ export class Card {
  * Examples of explanation card
  */
 
+<<<<<<< HEAD
 export const exampleExplCard1: Card = createCard("Animal name", "<n> A female deer", "Doe", CardType.Expl);
+=======
+export const exampleExplCard1: Card = createCard(
+  "Animal name",
+  "<n> A female deer",
+  "Doe",
+  "Explanation"
+);
+>>>>>>> 4c66f84d6c632ee54e0230f8849869ce9cc8beba
 
 export const exampleExplCard2: Card = createCard(
   "Animal name",
-	"Deer (singular and plural) are the hoofed ruminant mammals forming the family Cervidae. The two main"
-	+ " groups of deer are the Cervinae, including the muntjac, the elk (wapiti), the fallow deer, and the "
-	+ "chital; and the Capreolinae, including the reindeer (caribou), the roe deer, and the moose.",
+  "Deer (singular and plural) are the hoofed ruminant mammals forming the family Cervidae. The two main" +
+    " groups of deer are the Cervinae, including the muntjac, the elk (wapiti), the fallow deer, and the " +
+    "chital; and the Capreolinae, including the reindeer (caribou), the roe deer, and the moose.",
   "Doe",
   CardType.Expl
 );
@@ -93,7 +104,16 @@ export const exampleExplCard2: Card = createCard(
  * Example of an example card
  */
 
+<<<<<<< HEAD
 export const exampleExampleCard: Card = createCard("Animal name", "I have a pet doe", "Doe", CardType.Ex);
+=======
+export const exampleExampleCard: Card = createCard(
+  "Animal name",
+  "I have a pet doe",
+  "Doe",
+  "Example"
+);
+>>>>>>> 4c66f84d6c632ee54e0230f8849869ce9cc8beba
 
 /**
  * Card is categorised by category and word to simplify search
@@ -157,7 +177,11 @@ export class CardDeck {
   }
 }
 
-export function createDeck(name: string, category: string, ...cards: Card[]): CardDeck {
+export function createDeck(
+  name: string,
+  category: string,
+  ...cards: Card[]
+): CardDeck {
   let deck = new CardDeck(name, category);
   cards.forEach((value: Card) => deck.addCard(value));
   return deck;
