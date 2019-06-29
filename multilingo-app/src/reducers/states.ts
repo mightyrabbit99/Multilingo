@@ -6,6 +6,8 @@ import {
   defaultCard,
   demonstrationDecks
 } from "../extension/cards";
+import { TestPaperView } from "../components/test";
+import { QuestionGeneratorSettings, QuestionGenerator, Question } from "../extension/questions";
 
 export interface IState {
   readonly main: IMainState;
@@ -26,7 +28,11 @@ export interface ISessionState {
   selectedCard: Card;
 }
 
-export interface ITestState {}
+export interface ITestState {
+	view: TestPaperView;
+	settings: QuestionGeneratorSettings;
+	getQuestions: (deck: CardDeck, settings: QuestionGeneratorSettings) => Question[];
+}
 
 export interface IResultState {}
 
@@ -35,14 +41,33 @@ export interface IUserState {}
 const defaultUserState: IUserState = {};
 
 export const defaultSessionState: ISessionState = {
-  decks: [],
+  decks: demonstrationDecks,
   newDeck: null,
   selectedDeck: defaultDeck,
   newCard: null,
   selectedCard: defaultCard
 };
 
-export const defaultTestState: ITestState = {};
+export const defaultTestState: ITestState = {
+	view: TestPaperView.viewWhole,
+	settings: {
+		SameCategory: true,
+		cards: defaultDeck.cards,
+		MCQ: {
+			noOfQuestion: 4,
+			noOfOption: 4,
+		},
+		Fillinblanks: {
+			noOfQuestion: 0,
+			Withoptions: false,
+			Casesensitive: false,
+		},
+		Rearrange : {
+			noOfQuestion: 0
+		}
+	},
+	getQuestions: (deck: CardDeck, settings: QuestionGeneratorSettings) => (new QuestionGenerator(settings)).generateQuestions()
+};
 
 export const defaultMain: IMainState = {
   colour: "green",

@@ -3,6 +3,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from "react-router";
 
 import Main from '../containers/MainContainer';
 import CardList from '../containers/CardListContainer';
+import Test from '../containers/TestContainer';
 
 import NavigationBar, { NavigationBarProps } from "./NavigationBar";
 import { CardDeck, defaultDeck } from "../extension/cards";
@@ -43,6 +44,7 @@ class Application extends React.Component<IApplicationProps, {}> {
           <Switch>
             <Route path="/main" component={toMain(this.props)} />
 						<Route path="/cardlist" component={toCardList(this.props)} />
+						<Route path="/test" component={toTest(this.props)} />
 						<Route path="/login" component={LoginPage} />
             <Route exact={true} path="/" render={this.redirectToMain} />
           </Switch>
@@ -61,6 +63,12 @@ const toCardList = (props: IApplicationProps) => {
 	return props.selectedDeck === defaultDeck
 		? () => <Redirect to='/main'/>
 		: () => <CardList/>
+}
+
+const toTest = (props: IApplicationProps) => {
+	return props.selectedDeck === defaultDeck
+		? () => <Redirect to='/main'/>
+		: () => <Test/>
 }
 
 

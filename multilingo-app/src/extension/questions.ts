@@ -1,5 +1,4 @@
-import {Card, createCard, defaultCard } from './cards'
-import { forStatement } from '@babel/types';
+import {Card, defaultCard } from './cards'
 //QNAs
 
 export enum QuestionType {
@@ -17,17 +16,19 @@ export class Answer {
 	constructor(origin: Card, checkAnswer: (ans: string) => boolean) {
 		this.origin = origin;
 		this.getMark = ((ans: string) => {
+			this.userAns = ans;
 			this.marked = true;
 			return checkAnswer(ans);
 		}).bind(this);
-		this.getAnsCard = () => this.marked ? origin : null;
+		this.getAnsCard = () => this.marked ? origin : defaultCard;
 		this.marked = false;
 	}
 	origin: Card;
 	tips?: string;
 	marked: boolean;
+	userAns: string = "";
 	getMark: (ans: string) => boolean;
-	getAnsCard: () => Card | null;
+	getAnsCard: () => Card;
 };
 
 function shuffle<T>(array: T[]) {
@@ -105,7 +106,7 @@ export class Question {
 	answer: Answer;
 };
 
-type QuestionGeneratorSettings = {
+export type QuestionGeneratorSettings = {
 	SameCategory: boolean;
 	cards: Card[];
 	MCQ: {
