@@ -116,13 +116,15 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
           <label>Type</label>
           <Form.Radio
             label="Explanation"
-            name="Explanation"
-            checked={currentCard.type === "Explanation"}
-            onChange={(e: any) => setCardProp("type", "Explanation")}
+						name="Explanation"
+						value={CardDef.CardType.Expl}
+            checked={currentCard.type === CardDef.CardType.Expl}
+            onChange={(e: any) => setCardProp("type", CardDef.CardType.Expl)}
           />
           <Form.Radio
             label="Example"
-            name="Example"
+						name="Example"
+						value={CardDef.CardType.Expl}
             checked={currentCard.type === "Example"}
             onChange={(e: any) => setCardProp("type", "Example")}
           />

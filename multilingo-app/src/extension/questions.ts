@@ -7,95 +7,146 @@ export enum QuestionType {
   Rearrange = "Rearrange"
 }
 
-export type Question = {
-  type: QuestionType;
-  difficulty: number;
-  question: string;
-  answer: Answer;
-  info?: string;
-  questionedCard: Card;
-};
-
-export type Answer = {
-  tips?: string;
-  options?: Option;
-  checkAnswer: (answer: string) => boolean;
-  answer?: string;
-};
-
-export type Option = {
-  allOptions: string[];
-  cards: Card[];
-};
-
 export type Comment = {
   date: number;
   content: string;
 };
 
-const sampleMCQ: Question = {
-  type: QuestionType.MCQ,
-  difficulty: 0,
-  question: "aaa",
-  answer: {
-    options: {
-      allOptions: ["options"],
-      cards: []
-    },
-    checkAnswer: (answer: string) => answer === "sss"
-  },
-  questionedCard: createCard("type", "front", "back")
+export class Answer {
+	constructor(origin: Card, checkAnswer?: (ans: string) => boolean) {
+		this.origin = origin;
+		this.checkAnswer = checkAnswer;
+	}
+	origin: Card;
+  tips?: string;
+	checkAnswer: (answer: string) => boolean;
+	getMark: (ans: string) => number;
+};
+
+function shuffle<T>(array: T[]) {
+	for(let i = 0; i < array.length; i++) {
+		let pos = Math.floor(Math.random() * array.length);
+		let temp = array[pos];
+		array[pos] = array[i];
+		array[i] = temp;
+	}
 }
 
-function createMCQ(cards: Card[], questioned: Card = popRandom(cards), noOfOptions: number = 4): Question {
-  if(noOfOptions > cards.length || noOfOptions < 1) {
-    return sampleMCQ;
-  } else {
-    let cardsCopy = cards.slice();
-    let options = [questioned.back[0]];
-    let optionCards = [questioned];
-    if(cardsCopy.includes(questioned)) {
-      cardsCopy.splice(cardsCopy.indexOf(questioned), 1);
-    }
-    for(let i = 1; i < noOfOptions; i++) {
-      let chosen = popRandom(cardsCopy);
-      options.push(chosen.back[0]);
-      optionCards.push(chosen);
-    }
-    return {
-      type: QuestionType.MCQ,
-      difficulty: 0,
-      question: questioned.front,
-      answer: {
-        options: {
-          allOptions: options,
-          cards: optionCards
-        },
-        checkAnswer: (answer: string) => answer === questioned.back[0]
-      },
-      questionedCard: questioned
-    }
-  }
+function shuffleArray<T> (array: T[]): T[] {
+	const n = array.length;
+	const half = Math.floor(n / 2);
+	const left = array.slice(0, half);
+	const right = array.slice(half, array.length);
+	shuffle(left);
+	shuffle(right);
+	const res = [];
+	for(let i = 0; i < half; i++) {
+		res[2 * i] = left[i];
+		res[2 * i + 1] = right[i];
+	}
+	return res;
 }
-/*
-export function createRandomQuestion(cards: Card[], type: QuestionType): Question {
-  switch(type) {
-    case QuestionType.MCQ : {
-      return createMCQ(cards);
-    }
-    case QuestionType.Fillinblanks : {
 
-    }
-    case QuestionType.Rearrange : {
+export class Question {
+	constructor(type: QuestionType, question: Card | string, answer: Answer, options?: (Card | string)[]) {
+		if(question instanceof Card) {
+			this.questionCard = question;
+		} else {
+			this.question = (question as string);
+		}
+		if(options && options[0] instanceof Card) {
+			this.option = options.map((item: Card) => item.back);
+		}
+		this.type = type;
+		this.answer = answer;
+		this.getQues = this.getQues.bind(this);
+	}
 
-    }
-    default: {
+	getQues(): string | string[] {
+		if(!this.question) {
+			switch(this.type) {
+				case QuestionType.MCQ : {
+					this.question = 
+						this.questionCard.type === "Explanation" 
+							?	this.questionCard.front
+							: this.questionCard.front.replace(this.questionCard.back, "__________");
+					break;
+				}
+				case QuestionType.Fillinblanks : {
+					if(this.questionCard.type === "Example") {
+						this.question = this.questionCard.front.replace(this.questionCard.back, "__________");
+					}
+					break;
+				}
+				case QuestionType.Rearrange : {
+					if(this.questionCard.type === "Example") {
+						const textArray: string[] = this.questionCard.front.split(" ");
+						this.question = shuffleArray(textArray);
+					}
+					break;
+				}
+			}
+		}
+		return this.question;
+	}
 
-    }
-  }
-  return null;
+  type: QuestionType;
+	difficulty: number = 0;
+	option?: string[];
+	questionCard: Card;
+  question: string | string[] = '';
+  answer: Answer;
+};
+
+type QuestionGeneratorSettings = {
+	SameCategory: boolean;
+	cards: Card[];
+	MCQ?: {
+		noOfOption: number;
+	}
+	Fillinblanks?: {
+		Withoptions: boolean;
+		noOfOption?: number;
+		Casesensitive: boolean;
+	}
+	[particulars: string]: any;
 }
-*/
+
 function popRandom<T>(array: T[]): T {
-  return array.splice(Math.floor(Math.random() * array.length), 1)[0];
+	return array.splice(Math.floor(Math.random() * array.length), 1)[0];
+}
+
+export class QuestionGenerator {
+	constructor(settings: QuestionGeneratorSettings) {
+		this.settings = settings 
+		this.makeMCQ = this.makeMCQ.bind(this);
+		this.makeFillInBlanks = this.makeFillInBlanks.bind(this)
+	}
+	private settings: QuestionGeneratorSettings;
+
+	makeMCQ(questionCard: Card, optionCard: Card[]) {
+		const ans = new Answer(questionCard, (ans: string) => ans === questionCard.back)
+		return new Question(QuestionType.MCQ, questionCard, ans, optionCard);
+	}
+
+	makeFillInBlanks(questionCard: Card, optionCard: Card[]) {
+		if(questionCard.type !== "Example") {
+			return;
+		}
+		const ans = new Answer(questionCard, (ans: string) => ans === questionCard.front)
+		return new Question(QuestionType.Fillinblanks, questionCard, ans, optionCard);
+	}
+
+	makeRearrange(questionCard: Card) {
+		if(questionCard.type !== "Example") {
+			return;
+		}
+		const ans = new Answer(questionCard, (ans: string) => ans === questionCard.front)
+		return new Question(QuestionType.Rearrange, questionCard, ans);
+	}
+
+	generateQuestions(): Question[] {
+
+	}
+
 }

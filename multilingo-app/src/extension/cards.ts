@@ -9,7 +9,10 @@ import { Comment } from "./questions";
  * Cards with the same back can combine to from a single card with multiple front.
  */
 
-type CardType = "Explanation" | "Example";
+export enum CardType {
+	Expl = "Explanation",
+	Ex ="Example"
+}
 
 const initialCardInfo = {
   lastRevised: 0,
@@ -20,7 +23,7 @@ const initialCardInfo = {
 };
 
 export class Card {
-  constructor(category: string, front: string, back: string, type: CardType = "Explanation") {
+  constructor(category: string, front: string, back: string, type: CardType = CardType.Expl) {
     this.category = category;
     this.front = front;
     this.back = back;
@@ -75,7 +78,7 @@ export class Card {
  * Examples of explanation card
  */
 
-export const exampleExplCard1: Card = createCard("Animal name", "<n> A female deer", "Doe", "Explanation");
+export const exampleExplCard1: Card = createCard("Animal name", "<n> A female deer", "Doe", CardType.Expl);
 
 export const exampleExplCard2: Card = createCard(
   "Animal name",
@@ -83,14 +86,14 @@ export const exampleExplCard2: Card = createCard(
 	+ " groups of deer are the Cervinae, including the muntjac, the elk (wapiti), the fallow deer, and the "
 	+ "chital; and the Capreolinae, including the reindeer (caribou), the roe deer, and the moose.",
   "Doe",
-  "Explanation"
+  CardType.Expl
 );
 
 /**
  * Example of an example card
  */
 
-export const exampleExampleCard: Card = createCard("Animal name", "I have a pet doe", "Doe", "Example");
+export const exampleExampleCard: Card = createCard("Animal name", "I have a pet doe", "Doe", CardType.Ex);
 
 /**
  * Card is categorised by category and word to simplify search
@@ -105,7 +108,7 @@ export function createCard(
   category: string,
   front: string,
   back: string,
-  type: CardType = "Explanation"
+  type: CardType = CardType.Expl
 ): Card {
   return new Card(category, front, back, type);
 }

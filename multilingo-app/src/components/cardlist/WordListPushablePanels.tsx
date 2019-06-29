@@ -4,44 +4,19 @@ import PropsPanel, { PropsPanelProps } from "./PropsPanel";
 import { Sidebar, Menu, Segment, Header, Icon } from "semantic-ui-react";
 import FillForm, { FillFormProps } from "../commons/FillForm";
 
-export type WordListPushablePanelsProps = {
-  color: string;
-  activeDeck: CardDeck;
-  activeCard: Card;
-  decksPanel: {
-    decks: CardDeck[];
-    visible: boolean;
-    selectDeck: (deck: CardDeck) => void;
-  };
-  addCardPanel: {
-    visible: boolean;
-    addCardToDeck: (card: Card) => void;
-  };
-};
-
 type PushablePanelsState = {
   color: string;
   visible: boolean;
   activeDeck: CardDeck;
 };
 
+/** Decks Panel */
+
 interface DecksPanelProps extends PushablePanelsState {
   decks: CardDeck[];
   handleChangeDeck: (deck: CardDeck) => void;
   createDecksPanelShowHandler: (show?: boolean) => () => void;
 }
-
-interface AddCardPanelProps extends PushablePanelsState {
-  handleAddCard: (card: Card) => void;
-  createAddCardPanelShowHandler: (hide: boolean) => () => void;
-}
-
-export type WordListPushablePanelsState = {
-  selectedCard?: Card;
-  decksPanel: DecksPanelProps;
-  addCardPanel: AddCardPanelProps;
-  selectedDeck: CardDeck;
-};
 
 const DecksPanel: React.SFC<DecksPanelProps> = props => {
   const { visible, createDecksPanelShowHandler } = props;
@@ -77,6 +52,13 @@ const DecksPanel: React.SFC<DecksPanelProps> = props => {
   );
 };
 
+/** AddCard Panel */
+
+interface AddCardPanelProps extends PushablePanelsState {
+  handleAddCard: (card: Card) => void;
+  createAddCardPanelShowHandler: (hide: boolean) => () => void;
+}
+
 const AddCardPanel: React.FC<AddCardPanelProps> = props => {
   const { visible, createAddCardPanelShowHandler } = props;
   const fillformprops: FillFormProps = {
@@ -96,6 +78,31 @@ const AddCardPanel: React.FC<AddCardPanelProps> = props => {
       <FillForm {...fillformprops} />
     </Sidebar>
   );
+};
+
+/** Wordlist Pushable Panels!!! */
+
+export type WordListPushablePanelsProps = {
+  color: string;
+  activeDeck: CardDeck;
+  activeCard: Card;
+  decksPanel: {
+    decks: CardDeck[];
+    visible: boolean;
+    selectDeck: (deck: CardDeck) => void;
+  };
+  addCardPanel: {
+    visible: boolean;
+    addCardToDeck: (card: Card) => void;
+  };
+};
+
+
+type WordListPushablePanelsState = {
+  selectedCard?: Card;
+  decksPanel: DecksPanelProps;
+  addCardPanel: AddCardPanelProps;
+  selectedDeck: CardDeck;
 };
 
 class WordListPushablePanels extends React.Component<
@@ -172,7 +179,7 @@ class WordListPushablePanels extends React.Component<
               onClick={this.state.decksPanel.createDecksPanelShowHandler()}
               style={{ height: (window.screen.height * 80) / 100 + "px", width: "5%", float: "left"}}
             >
-              <Icon angle right size="tiny" color="black" />
+              <Icon name="angle right" size="tiny" color="black" />
             </div>
 						<div
 							className="CardList content"
