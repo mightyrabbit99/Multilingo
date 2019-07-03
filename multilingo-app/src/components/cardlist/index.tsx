@@ -18,6 +18,7 @@ export interface CardListStateProps {
 export interface CardListDispatchProps {
 	addCardToDeck: (card: Card) => void;
 	selectDeck: (deck: CardDeck) => void;
+	handleToTest: () => void;
 }
 
 type CardListState = {
@@ -59,6 +60,7 @@ class CardList extends React.Component<CardListProps, CardListState> {
 			color: "green",
 			activeDeck: this.state.currentDeck,
 			activeCard: this.state.selectedCard,
+			handleToTest: this.props.handleToTest,
 			decksPanel: {
 				decks: this.props.decks,
 				visible: this.state.decksPanelVisible,

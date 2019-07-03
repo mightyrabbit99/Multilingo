@@ -5,9 +5,7 @@ import {
   Segment,
   Grid,
   Divider,
-  Header,
   Icon,
-  Search
 } from "semantic-ui-react";
 
 import { RouteComponentProps } from "react-router";

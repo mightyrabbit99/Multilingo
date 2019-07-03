@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Icon, Modal, Button, Image, Header, Form } from "semantic-ui-react";
+import { Icon, Modal, Image, Header} from "semantic-ui-react";
 
 import FillForm, { FillFormProps } from "../FillForm";
 
@@ -12,6 +12,7 @@ export type CardListControlBarProps = {
 	color: string;
 	card?: Card;
 	handleShowAddCardPanel: () => void;
+	handleTest: () => void;
 }
 
 export type MainControlBarProps = {
@@ -29,11 +30,35 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
 				this.props.handleShowAddCardPanel();
 			}
 		}
+
+		const handleTestButtonOnClick = () => {
+			if(this.props.location === "CardList") {
+				this.props.handleTest();
+			}
+		}
+		const testButton = (
+      <Icon
+        onClick={handleTestButtonOnClick}
+        style={{
+					position: "absolute",
+					padding: "5px",
+          bottom: "5%",
+          right: "20%",
+          borderRadius: "50%",
+          color: "green"
+        }}
+        name="chess"
+        size="huge"
+        link
+      />
+		);
+		
     const addButton = (
       <Icon
         onClick={handleAddButtonOnClick}
         style={{
-          position: "absolute",
+					position: "absolute",
+					padding: "5px",
           bottom: "5%",
           right: "5%",
           borderRadius: "50%",
@@ -78,7 +103,12 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
 				);
 			}
 			case "CardList" : {
-				return addButton;
+				return (
+					<div>
+						{addButton}
+						{testButton}
+					</div>
+				);
 			}
 		}
   }

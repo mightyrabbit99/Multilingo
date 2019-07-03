@@ -30,6 +30,11 @@ function* sessionSaga(): SagaIterator {
 
     // redirect to main
     yield put(push("/main"));
+	});
+	
+	yield takeEvery(actionTypes.TO_TEST, function*(action) {
+    // redirect to main
+    yield put(push("/test"));
   });
 
   yield takeEvery(actionTypes.SELECT_DECK, function*(action) {

@@ -10,8 +10,8 @@ import { Comment } from "./questions";
  */
 
 export enum CardType {
-	Expl = "Explanation",
-	Ex ="Example"
+  Expl = "Explanation",
+  Ex = "Example"
 }
 
 const initialCardInfo = {
@@ -49,9 +49,7 @@ export class Card {
   public back: string;
   public equals(anotherCard: Card): boolean {
     return (
-      this.front === anotherCard.front &&
-      this.back === anotherCard.back &&
-      this.type === anotherCard.type
+      this.front === anotherCard.front && this.back === anotherCard.back && this.type === anotherCard.type
     );
   }
 
@@ -91,6 +89,20 @@ export const exampleExplCard2: Card = createCard(
   CardType.Expl
 );
 
+export const exampleExplCard3: Card = createCard(
+  "Animal name",
+  "The cutest animal in the world",
+  "Cat",
+  CardType.Expl
+);
+
+export const exampleExplCard4: Card = createCard(
+  "Animal name",
+  "Biggest Land Animal",
+  "Elephant",
+  CardType.Expl
+);
+
 /**
  * Example of an example card
  */
@@ -104,6 +116,7 @@ export const exampleExampleCard: Card = createCard("Animal name", "I have a pet 
 export type CardCollection = {
   byCategory: { [type: string]: Card[] };
   byBack: { [back: string]: Card[] };
+  byType: { Explanation: Card[]; Example: Card[] };
 };
 
 export function createCard(
@@ -127,9 +140,13 @@ export class CardDeck {
     [key: string]: any;
   };
   public cards: Card[];
-  private collection: CardCollection = {
+  public collection: CardCollection = {
     byBack: {},
-    byCategory: {}
+		byCategory: {},
+		byType: {
+			Explanation: [],
+			Example: []
+		}
   };
   constructor(name: string, category: string = "") {
     this.info = { name: name, category: category, dateAdded: Date.now() };
@@ -141,14 +158,19 @@ export class CardDeck {
   }
   public addCard(card: Card) {
     if (this.cards.includes(card)) return;
-    if (this.collection.byCategory[card.type] === undefined) {
-      this.collection.byCategory[card.type] = [];
+    if (this.collection.byCategory[card.category] === undefined) {
+      this.collection.byCategory[card.category] = [];
     }
     if (this.collection.byBack[card.back] === undefined) {
       this.collection.byBack[card.back] = [];
     }
-    this.collection.byCategory[card.type].unshift(card);
-    this.collection.byBack[card.back].unshift(card);
+    this.collection.byCategory[card.category].unshift(card);
+		this.collection.byBack[card.back].unshift(card);
+		if(card.type === CardType.Expl) {
+			this.collection.byType.Explanation.unshift(card);
+		} else {
+			this.collection.byType.Example.unshift(card);
+		}
     this.cards.push(card);
   }
 
@@ -159,11 +181,7 @@ export class CardDeck {
   }
 }
 
-export function createDeck(
-  name: string,
-  category: string,
-  ...cards: Card[]
-): CardDeck {
+export function createDeck(name: string, category: string, ...cards: Card[]): CardDeck {
   let deck = new CardDeck(name, category);
   cards.forEach((value: Card) => deck.addCard(value));
   return deck;
@@ -172,7 +190,10 @@ export function createDeck(
 export const exampleDeck: CardDeck = createDeck(
   "Chapter 3.5: Animals",
   "Biology",
-  exampleExplCard1,
+	exampleExplCard1,
+	exampleExplCard2,
+	exampleExplCard3,
+	exampleExplCard4,
   exampleExampleCard
 );
 
@@ -184,7 +205,8 @@ defaultDeck.addCard(defaultCard);
 
 export function sampleDecks(): CardDeck[] {
   let ans = [];
-  ans.push(exampleDeck);
+	ans.push(exampleDeck);
+	(window as any).example = exampleDeck;
   ans.push(new CardDeck("deck2"));
   ans[1].addCard(createCard("a", "haha", "shit"));
   ans[1].addCard(createCard("a", "haha", "shit"));

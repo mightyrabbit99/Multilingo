@@ -66,7 +66,7 @@ export const defaultTestState: ITestState = {
 			noOfQuestion: 0
 		}
 	},
-	getQuestions: (deck: CardDeck, settings: QuestionGeneratorSettings) => (new QuestionGenerator(settings)).generateQuestions()
+	getQuestions: (deck: CardDeck, settings: QuestionGeneratorSettings) => (new QuestionGenerator(settings)).generateQuestions(deck)
 };
 
 export const defaultMain: IMainState = {

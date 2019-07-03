@@ -13,15 +13,18 @@ const QuestionBlock: React.SFC<QuestionBlockProps> = props => {
   let mark = props.markQues;
   const genMCQQues = (question: string, options: string[]) => {
     const { userAns, getAnsCard } = props.question.answer;
-    const optionButtons = options.map((op: string) => {
+    const optionButtons = options.map((op: string, i: number) => {
       return (
         <Button
           onClick={() => mark(op)}
           style={{
             backgroundColor:
               userAns === op ? ((getAnsCard() !== defaultCard && getAnsCard().back === op) ? "green" : "red") : "grey"
-          }}
-        />
+					}}
+					key={i}
+        >
+					{op}
+				</Button>
       );
     });
     return (

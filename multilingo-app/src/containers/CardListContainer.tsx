@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch, Action as ReduxAction } from 'redux';
 
 import CardList, { CardListDispatchProps, CardListStateProps } from '../components/cardlist';
 import { IState } from '../reducers/states';
-import { addCardToDeck, selectDeck } from '../actions/session';
+import { addCardToDeck, selectDeck, toTest } from '../actions/session';
 
 const mapStateToProps: MapStateToProps<CardListStateProps, {}, IState> = state => ({
   color: state.main.colour,
@@ -19,7 +19,8 @@ const mapDispatchToProps: MapDispatchToProps<CardListDispatchProps, {}> = (dispa
   bindActionCreators<any, any>(
     {
 			addCardToDeck: addCardToDeck,
-			selectDeck: selectDeck
+			selectDeck: selectDeck,
+			handleToTest: toTest
     },
     dispatch
   );

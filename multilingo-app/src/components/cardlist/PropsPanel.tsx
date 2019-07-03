@@ -7,6 +7,7 @@ export type PropsPanelProps = {
   color: string;
 	deck: CardDeck;
 	handleShowAddCardPanel: () => void;
+	handleTest: () => void;
   card?: Card;
 };
 
@@ -16,7 +17,8 @@ const PropsPanel: React.FC<PropsPanelProps> = props => {
 	const currentControlBarProps: CardListControlBarProps = {
 		location: "CardList",
 		color: props.color,
-		handleShowAddCardPanel: props.handleShowAddCardPanel
+		handleShowAddCardPanel: props.handleShowAddCardPanel,
+		handleTest: props.handleTest
 	}
   return (
         <Sidebar

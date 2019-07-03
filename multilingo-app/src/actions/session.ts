@@ -11,6 +11,9 @@ export const backToMain = () => ({
   type: actionTypes.BACK_TO_MAIN
 });
 
+export const toTest = () => ({
+	type: actionTypes.TO_TEST
+});
 
 /** Deck */
 

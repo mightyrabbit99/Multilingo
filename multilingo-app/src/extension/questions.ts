@@ -1,4 +1,4 @@
-import {Card, defaultCard } from './cards'
+import {Card, defaultCard, CardDeck, demonstrationDecks } from './cards'
 //QNAs
 
 export enum QuestionType {
@@ -19,7 +19,7 @@ export class Answer {
 			this.userAns = ans;
 			this.marked = true;
 			return checkAnswer(ans);
-		}).bind(this);
+		});
 		this.getAnsCard = () => this.marked ? origin : defaultCard;
 		this.marked = false;
 	}
@@ -62,8 +62,12 @@ export class Question {
 		} else {
 			this.question = (question as string);
 		}
-		if(options && options[0] instanceof Card) {
-			this.option = (options as Card[]).map((item: Card) => item.back);
+		if(options) {
+			if(options[0] instanceof Card) {
+				this.option = (options as Card[]).map((item: Card) => item.back);
+			} else {
+				this.option = (options as string[]);
+			}
 		}
 		this.type = type;
 		this.answer = answer;
@@ -71,7 +75,7 @@ export class Question {
 	}
 
 	getQues(): string | string[] {
-		if(!this.question) {
+		if(this.question === '') {
 			switch(this.type) {
 				case QuestionType.MCQ : {
 					this.question = 
@@ -108,7 +112,6 @@ export class Question {
 
 export type QuestionGeneratorSettings = {
 	SameCategory: boolean;
-	cards: Card[];
 	MCQ: {
 		noOfQuestion: number;
 		noOfOption: number;
@@ -125,6 +128,22 @@ export type QuestionGeneratorSettings = {
 	[particulars: string]: any;
 }
 
+export const defaultGenSettings: QuestionGeneratorSettings = {
+	SameCategory: true,
+	MCQ: {
+		noOfQuestion: 2,
+		noOfOption: 2
+	},
+	Fillinblanks: {
+		noOfQuestion: 2,
+		Withoptions: false,
+		Casesensitive: false
+	},
+	Rearrange : {
+		noOfQuestion: 2
+	}
+}
+
 function popRandom<T>(array: T[]): T {
 	return array.splice(Math.floor(Math.random() * array.length), 1)[0];
 }
@@ -137,45 +156,46 @@ export class QuestionGenerator {
 	}
 	private settings: QuestionGeneratorSettings;
 
-	makeMCQ(questionCard: Card, optionCard: Card[]) {
+	makeMCQ(questionCard: Card, allOptions: string[]) {
+		let thisoptions: string[] = [];
+		let option: string;
+		let n = this.settings.MCQ.noOfOption;
+		for(let j = 0; (j < n) && (allOptions.length > j); j++) {
+			option = popRandom(allOptions);
+			if(questionCard.back === option) continue;
+			thisoptions.push(option);
+		}
+		thisoptions.push(questionCard.back);
+		thisoptions = shuffleArray(thisoptions);
 		const ans = new Answer(questionCard, (ans: string) => ans === questionCard.back)
-		return new Question(QuestionType.MCQ, questionCard, ans, optionCard);
+		return new Question(QuestionType.MCQ, questionCard, ans, thisoptions);
 	}
 
-	makeFillInBlanks(questionCard: Card, optionCard: Card[]) {
-		if(questionCard.type !== "Example") {
-			return;
-		}
+	makeFillInBlanks(questionCard: Card, optionCard: string[]) {
 		const ans = new Answer(questionCard, (ans: string) => ans === questionCard.front)
 		return new Question(QuestionType.Fillinblanks, questionCard, ans, optionCard);
 	}
 
 	makeRearrange(questionCard: Card) {
-		if(questionCard.type !== "Example") {
-			return;
-		}
 		const ans = new Answer(questionCard, (ans: string) => ans === questionCard.front)
 		return new Question(QuestionType.Rearrange, questionCard, ans);
 	}
 
-	generateQuestions(): Question[] {
+	generateQuestions(deck: CardDeck): Question[] {
 		let ques: Question[] = [];
-		let { MCQ, Fillinblanks, Rearrange, cards } = this.settings;
-		let totalNo = MCQ.noOfQuestion + Fillinblanks.noOfQuestion + Rearrange.noOfQuestion;
-		if(totalNo <= cards.length) {
-			for(let i = 0; i < totalNo; i++) {
-				let card = cards[i];
-				cards.splice(i, 1);
-				let thisoptions: Card[] = [];
-				for(let j = 0; j < MCQ.noOfOption; j++) {
-					let idx = Math.round(Math.random() * cards.length);
-					thisoptions.push(cards[idx]);
-					cards.splice(idx, 1);
-				}
-				thisoptions.forEach((card: Card) => cards.push(card));				
-				ques.push(this.makeMCQ(card, thisoptions));
-			}
+		let allCards = deck.cards.slice();
+		let exampleCards = deck.collection.byType.Example.slice();
+		let { MCQ, Fillinblanks, Rearrange } = this.settings;
+		for(let i = 0; i < MCQ.noOfQuestion; i++) {
+			ques.push(this.makeMCQ(popRandom(allCards), Object.keys(deck.collection.byBack)));
 		}
+		for(let i = 0; i < Fillinblanks.noOfQuestion; i++) {
+			ques.push(this.makeFillInBlanks(popRandom(exampleCards), Object.keys(deck.collection.byBack)));
+		}
+		for(let i = 0; i < Rearrange.noOfQuestion; i++) {
+			ques.push(this.makeRearrange(popRandom(exampleCards)));
+		}
+		shuffle(ques);
 		return ques;
 	}
 

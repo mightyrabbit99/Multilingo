@@ -3,12 +3,9 @@ import { Reducer } from "redux";
 import {
   SELECT_DECK,
   ADD_DECK,
-  IAction,
   RECEIVE_DECKS_DATA,
 	ADD_CARD_TO_SELECTED_DECK
 } from "../actions/actionTypes";
-
-import { CardDeck } from "../extension/cards";
 
 import { defaultSessionState, ISessionState } from "./states";
 

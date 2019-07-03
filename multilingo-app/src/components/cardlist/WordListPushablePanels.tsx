@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CardDeck, Card } from "../../extension/cards";
 import PropsPanel, { PropsPanelProps } from "./PropsPanel";
-import { Sidebar, Menu, Segment, Header, Icon } from "semantic-ui-react";
+import { Sidebar, Menu, Segment, Header } from "semantic-ui-react";
 import FillForm, { FillFormProps } from "../commons/FillForm";
 
 type PushablePanelsState = {
@@ -87,7 +87,8 @@ const AddCardPanel: React.FC<AddCardPanelProps> = props => {
 export type WordListPushablePanelsProps = {
   color: string;
   activeDeck: CardDeck;
-  activeCard: Card;
+	activeCard: Card;
+	handleToTest: () => void;
   decksPanel: {
     decks: CardDeck[];
     visible: boolean;
@@ -160,7 +161,8 @@ class WordListPushablePanels extends React.Component<
       card: this.state.selectedCard,
       handleShowAddCardPanel: this.state.addCardPanel.createAddCardPanelShowHandler(
         true
-      )
+			),
+			handleTest: this.props.handleToTest
     };
     return (
       <Sidebar.Pushable
@@ -169,7 +171,8 @@ class WordListPushablePanels extends React.Component<
         position="fixed"
         style={{
           width: window.screen.width + "px",
-          height: (window.screen.height * 80) / 100 + "px"
+					height: (window.screen.height * 81) / 100 + "px",
+					overflow: 'hidden'
         }}
       >
         <DecksPanel {...this.state.decksPanel} />
@@ -193,16 +196,8 @@ class WordListPushablePanels extends React.Component<
                 float: "left",
                 backgroundColor: this.state.decksPanel.visible
                   ? "white"
-                  : "green"
-              }}
-            />
-            <div
-              className="extra"
-              onClick={this.state.decksPanel.createDecksPanelShowHandler()}
-              style={{
-                height: (window.screen.height * 80) / 100 + "px",
-                width: "2.5%",
-                float: "left"
+									: "green",
+								overflow: 'hidden'
               }}
             />
             <div
@@ -210,7 +205,8 @@ class WordListPushablePanels extends React.Component<
               style={{
                 height: (window.screen.height * 80) / 100 + "px",
                 width: "90%",
-                float: "left"
+								float: "left",
+								overflow: 'hidden'
               }}
             >
               {this.props.children}

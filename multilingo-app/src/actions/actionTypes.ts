@@ -8,6 +8,7 @@ export interface IAction extends ReduxAction {
 export const LOG_OUT = "LOG_OUT";
 export const LOG_IN = "LOG_IN";
 export const BACK_TO_MAIN = "BACK_TO_MAIN";
+export const TO_TEST = "TO_TEST";
 export const SELECT_DECK = "SELECT_DECK";
 export const ADD_DECK = "ADD_DECK";
 export const SELECT_CARD = "SELECT_CARD";

@@ -42,7 +42,7 @@ class Test extends React.Component<TestProps, TestState> {
     return (
       <div className="test">
         {this.props.questions.map((val: Question, id: number) => (
-          <QuestionBlock {...{ question: val, markQues: markFunc(val, id) }} />
+          <QuestionBlock question={val} markQues={markFunc(val, id)} key={id} />
         ))}
       </div>
     );
