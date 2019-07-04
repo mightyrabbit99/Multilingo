@@ -1,4 +1,4 @@
-import {Card, defaultCard, CardDeck, demonstrationDecks } from './cards'
+import {Card, defaultCard, CardDeck, demonstrationDecks, CardType } from './cards'
 //QNAs
 
 export enum QuestionType {
@@ -33,7 +33,7 @@ export class Answer {
 
 function shuffle<T>(array: T[]) {
 	for(let i = 0; i < array.length; i++) {
-		let pos = Math.floor(Math.random() * array.length);
+		let pos = Math.floor(Math.random() * (array.length - i)) + i;
 		let temp = array[pos];
 		array[pos] = array[i];
 		array[i] = temp;
@@ -79,19 +79,19 @@ export class Question {
 			switch(this.type) {
 				case QuestionType.MCQ : {
 					this.question = 
-						this.questionCard.type === "Explanation" 
+						this.questionCard.type === CardType.Expl
 							?	this.questionCard.front
 							: this.questionCard.front.replace(this.questionCard.back, "__________");
 					break;
 				}
 				case QuestionType.Fillinblanks : {
-					if(this.questionCard.type === "Example") {
+					if(this.questionCard.type === CardType.Ex) {
 						this.question = this.questionCard.front.replace(this.questionCard.back, "__________");
 					}
 					break;
 				}
 				case QuestionType.Rearrange : {
-					if(this.questionCard.type === "Example") {
+					if(this.questionCard.type === CardType.Ex) {
 						const textArray: string[] = this.questionCard.front.split(" ");
 						this.question = shuffleArray(textArray);
 					}
@@ -160,13 +160,16 @@ export class QuestionGenerator {
 		let thisoptions: string[] = [];
 		let option: string;
 		let n = this.settings.MCQ.noOfOption;
-		for(let j = 0; (j < n) && (allOptions.length > j); j++) {
+		for(let j = 1; (j < n) && (allOptions.length > j); j++) {
 			option = popRandom(allOptions);
-			if(questionCard.back === option) continue;
+			if(questionCard.back === option) {
+				j--;
+				continue;
+			}
 			thisoptions.push(option);
 		}
 		thisoptions.push(questionCard.back);
-		thisoptions = shuffleArray(thisoptions);
+		shuffle(thisoptions);
 		const ans = new Answer(questionCard, (ans: string) => ans === questionCard.back)
 		return new Question(QuestionType.MCQ, questionCard, ans, thisoptions);
 	}
@@ -196,6 +199,7 @@ export class QuestionGenerator {
 			ques.push(this.makeRearrange(popRandom(exampleCards)));
 		}
 		shuffle(ques);
+		(window as any).ques = ques;
 		return ques;
 	}
 

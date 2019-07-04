@@ -12,7 +12,7 @@ class Deck extends React.Component<DeckProps, {}> {
     const carddeck = this.props.deck.info;
     return (
       <Card
-        className={"deck" + carddeck.name}
+        className={"carddeck"}
         onClick={this.props.handleDeckClick}
         style={{ margin: "1em 3em 35em 3em" }}
       >

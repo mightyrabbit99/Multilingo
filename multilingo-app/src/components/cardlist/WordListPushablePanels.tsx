@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CardDeck, Card } from "../../extension/cards";
 import PropsPanel, { PropsPanelProps } from "./PropsPanel";
-import { Sidebar, Menu, Segment, Header } from "semantic-ui-react";
+import { Sidebar, Menu, Segment, Header, Container } from "semantic-ui-react";
 import FillForm, { FillFormProps } from "../commons/FillForm";
 
 type PushablePanelsState = {
@@ -166,29 +166,14 @@ class WordListPushablePanels extends React.Component<
     };
     return (
       <Sidebar.Pushable
-        className="Panels"
-        as={Segment.Group}
-        position="fixed"
-        style={{
-          width: window.screen.width + "px",
-					height: (window.screen.height * 81) / 100 + "px",
-					overflow: 'hidden'
-        }}
+				className="Panels"
       >
         <DecksPanel {...this.state.decksPanel} />
         <AddCardPanel {...this.state.addCardPanel} />
 
         <Sidebar.Pusher dimmed={this.state.addCardPanel.visible}>
-          <PropsPanel {...currentPropsPanelProps} />
-          <div
-            style={{
-              display: "table",
-              width: window.screen.width + "px",
-              height: (window.screen.height * 80) / 100 + "px"
-            }}
-          >
             <div
-              className="decksPanelCaller"
+              className="deckspanelcaller"
               onClick={this.state.decksPanel.createDecksPanelShowHandler()}
               style={{
                 height: (window.screen.height * 80) / 100 + "px",
@@ -200,18 +185,10 @@ class WordListPushablePanels extends React.Component<
 								overflow: 'hidden'
               }}
             />
-            <div
-              className="CardList content"
-              style={{
-                height: (window.screen.height * 80) / 100 + "px",
-                width: "90%",
-								float: "left",
-								overflow: 'hidden'
-              }}
-            >
-              {this.props.children}
-            </div>
-          </div>
+            <Container className='content'>
+							<PropsPanel {...currentPropsPanelProps} />
+							{this.props.children}
+            </Container>
         </Sidebar.Pusher>
       </Sidebar.Pushable>
     );

@@ -5,6 +5,8 @@ import { CardDeck } from "../../extension/cards";
 import { Question } from "../../extension/questions";
 import QuestionBlock from "./QuestionBlock";
 
+import { Container } from 'semantic-ui-react';
+
 export interface TestProps extends TestDispatchProps, TestStateProps, RouteComponentProps<{}> {}
 
 export interface TestStateProps {
@@ -40,11 +42,11 @@ class Test extends React.Component<TestProps, TestState> {
         return state;
       });
     return (
-      <div className="test">
+      <Container className="test" style={{ margin: 20 }}>
         {this.props.questions.map((val: Question, id: number) => (
           <QuestionBlock question={val} markQues={markFunc(val, id)} key={id} />
         ))}
-      </div>
+      </Container>
     );
   }
 }

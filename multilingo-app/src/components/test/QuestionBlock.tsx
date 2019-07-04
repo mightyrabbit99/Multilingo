@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Item, Button } from "semantic-ui-react";
+import { Button, Segment, Header } from "semantic-ui-react";
 
 import { Question } from "../../extension/questions";
 import { defaultCard } from "../../extension/cards";
@@ -19,25 +19,29 @@ const QuestionBlock: React.SFC<QuestionBlockProps> = props => {
           onClick={() => mark(op)}
           style={{
             backgroundColor:
-              userAns === op ? ((getAnsCard() !== defaultCard && getAnsCard().back === op) ? "green" : "red") : "grey"
-					}}
-					key={i}
+              userAns === op
+                ? getAnsCard() !== defaultCard && getAnsCard().back === op
+                  ? "green"
+                  : "red"
+                : "grey"
+          }}
+          key={i}
         >
-					{op}
-				</Button>
+          {op}
+        </Button>
       );
     });
     return (
-      <Item>
-        <Item.Content>
-          <Item.Header as="a">{question}</Item.Header>
-          <Item.Description>{optionButtons}</Item.Description>
-        </Item.Content>
-      </Item>
+      <div className="question">
+        <Segment attached="top">
+          <Header>{question}</Header>
+        </Segment>
+        <Segment attached="bottom">{optionButtons}</Segment>
+      </div>
     );
   };
 
-  return genMCQQues((props.question.getQues() as string), (props.question.option as string[]));
+  return genMCQQues(props.question.getQues() as string, props.question.option as string[]);
 };
 
 export default QuestionBlock;
