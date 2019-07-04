@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Rail } from "semantic-ui-react";
+import { Rail, Sticky, Segment } from "semantic-ui-react";
 import { CardDeck, Card } from "../../extension/cards";
 import ControlBar, { CardListControlBarProps } from "../commons/ControlBar";
 
@@ -8,7 +8,8 @@ export type PropsPanelProps = {
   deck: CardDeck;
   handleShowAddCardPanel: () => void;
   handleTest: () => void;
-  card?: Card;
+	card?: Card;
+	contextRef: any;
 };
 
 //const PropsPanelLocation = 'Main';
@@ -19,14 +20,16 @@ const PropsPanel: React.FC<PropsPanelProps> = props => {
     color: props.color,
     handleShowAddCardPanel: props.handleShowAddCardPanel,
     handleTest: props.handleTest
-  };
+	};
   return (
-    <Rail dividing position="right">
-      <div className="propspanel description">
+    <div className="propspanel">
+      <Sticky className="propspanel description" context={props.contextRef}>
+				<Segment>
         <p>This is the description of the decks and cards</p>
-      </div>
+				</Segment>
+      </Sticky>
       <ControlBar {...currentControlBarProps} />
-    </Rail>
+    </div>
   );
 };
 

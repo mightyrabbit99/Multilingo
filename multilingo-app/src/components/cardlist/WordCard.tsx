@@ -10,7 +10,7 @@ export type WordCardProps = {
 class WordCard extends React.Component<WordCardProps, {}> {
   public render() {
     return (
-      <Segment className="card">
+      <Segment className="wordcard" onClick={this.props.handleCardClick}>
         <Grid divided="vertically" padded stackable>
           <Grid.Row>
             <Grid.Column width={4}>

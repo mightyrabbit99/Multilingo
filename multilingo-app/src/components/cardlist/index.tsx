@@ -72,11 +72,9 @@ class CardList extends React.Component<CardListProps, CardListState> {
 			}
     };
     return (
-      <div className="CardList" style={{ height: (window.screen.height * 80) / 100 + "px" }}>
         <WordListPushablePanels {...currentPushablePanelProps}>
           {this.props.selectedDeck.cards.map(generateCard)}
         </WordListPushablePanels>
-      </div>
     );
   }
 }

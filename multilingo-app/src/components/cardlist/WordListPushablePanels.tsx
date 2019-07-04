@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CardDeck, Card } from "../../extension/cards";
 import PropsPanel, { PropsPanelProps } from "./PropsPanel";
-import { Sidebar, Menu, Segment, Header, Container } from "semantic-ui-react";
+import { Sidebar, Menu, Segment, Header, Grid, Ref } from "semantic-ui-react";
 import FillForm, { FillFormProps } from "../commons/FillForm";
 
 type PushablePanelsState = {
@@ -87,8 +87,8 @@ const AddCardPanel: React.FC<AddCardPanelProps> = props => {
 export type WordListPushablePanelsProps = {
   color: string;
   activeDeck: CardDeck;
-	activeCard: Card;
-	handleToTest: () => void;
+  activeCard: Card;
+  handleToTest: () => void;
   decksPanel: {
     decks: CardDeck[];
     visible: boolean;
@@ -125,9 +125,7 @@ class WordListPushablePanels extends React.Component<
         activeDeck: this.props.activeDeck,
         decks: this.props.decksPanel.decks,
         handleChangeDeck: this.props.decksPanel.selectDeck,
-        createDecksPanelShowHandler: (
-          show: boolean = !this.state.decksPanel.visible
-        ) => () =>
+        createDecksPanelShowHandler: (show: boolean = !this.state.decksPanel.visible) => () =>
           this.setState({
             ...this.state,
             decksPanel: {
@@ -139,9 +137,7 @@ class WordListPushablePanels extends React.Component<
       addCardPanel: {
         ...pushableState,
         handleAddCard: this.props.addCardPanel.addCardToDeck,
-        createAddCardPanelShowHandler: (
-          show: boolean = !this.state.addCardPanel.visible
-        ) => () =>
+        createAddCardPanelShowHandler: (show: boolean = !this.state.addCardPanel.visible) => () =>
           this.setState({
             ...this.state,
             addCardPanel: {
@@ -154,43 +150,50 @@ class WordListPushablePanels extends React.Component<
       selectedCard: undefined
     };
   }
+  contextRef = React.createRef();
   render() {
     let currentPropsPanelProps: PropsPanelProps = {
       color: "green",
       deck: this.props.activeDeck,
       card: this.state.selectedCard,
-      handleShowAddCardPanel: this.state.addCardPanel.createAddCardPanelShowHandler(
-        true
-			),
-			handleTest: this.props.handleToTest
+      handleShowAddCardPanel: this.state.addCardPanel.createAddCardPanelShowHandler(true),
+      handleTest: this.props.handleToTest,
+      contextRef: this.contextRef
     };
     return (
-      <Sidebar.Pushable
-				className="Panels"
-      >
-        <DecksPanel {...this.state.decksPanel} />
-        <AddCardPanel {...this.state.addCardPanel} />
-
-        <Sidebar.Pusher dimmed={this.state.addCardPanel.visible}>
-            <div
-              className="deckspanelcaller"
-              onClick={this.state.decksPanel.createDecksPanelShowHandler()}
-              style={{
-                height: (window.screen.height * 80) / 100 + "px",
-                width: "1%",
-                float: "left",
-                backgroundColor: this.state.decksPanel.visible
-                  ? "white"
-									: "green",
-								overflow: 'hidden'
-              }}
-            />
-            <Container className='content'>
-							<PropsPanel {...currentPropsPanelProps} />
-							{this.props.children}
-            </Container>
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
+      <Grid columns={2}>
+        <Grid.Column width={13}>
+          <Sidebar.Pushable className="panels">
+            <DecksPanel {...this.state.decksPanel} />
+            <AddCardPanel {...this.state.addCardPanel} />
+            <Sidebar.Pusher dimmed={this.state.addCardPanel.visible}>
+              <Grid columns={2}>
+                <Grid.Column width={1}>
+                  <div
+                    className="deckspanelcaller"
+                    onClick={this.state.decksPanel.createDecksPanelShowHandler()}
+                    style={{
+                      height: window.screen.height,
+                      width: "50%",
+                      float: "left",
+                      backgroundColor: this.state.decksPanel.visible ? "white" : "green",
+                      overflow: "hidden"
+                    }}
+                  />
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  <Ref innerRef={this.contextRef}>
+                    <Segment className="cardlist content">{this.props.children}</Segment>
+                  </Ref>
+                </Grid.Column>
+              </Grid>
+            </Sidebar.Pusher>
+          </Sidebar.Pushable>
+        </Grid.Column>
+        <Grid.Column width={2}>
+          <PropsPanel {...currentPropsPanelProps} />
+        </Grid.Column>
+      </Grid>
     );
   }
 }

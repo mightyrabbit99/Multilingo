@@ -38,7 +38,8 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
 		}
 		const testButton = (
       <Icon
-        onClick={handleTestButtonOnClick}
+				onClick={handleTestButtonOnClick}
+				className="controlbar button"
         style={{
 					position: "absolute",
 					padding: "5px",
@@ -80,14 +81,6 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
 				return (
 					<div
 						className="button-array"
-						style={{
-							position: "fixed",
-							margin: "2em",
-							bottom: "0px",
-							right: "0px",
-							animation: "1.5s ease-in-out 0s infinite normal none running back-to-docs",
-							zIndex: 6
-						}}
 					>
 						<Modal trigger={addButton}>
 							<Modal.Header>Add New Deck</Modal.Header>
@@ -104,7 +97,7 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
 			}
 			case "CardList" : {
 				return (
-					<div>
+					<div className="button-array">
 						{addButton}
 						{testButton}
 					</div>
