@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Rail, Sticky, Segment } from "semantic-ui-react";
+import { Sticky, Segment } from "semantic-ui-react";
 import { CardDeck, Card } from "../../extension/cards";
 import ControlBar, { CardListControlBarProps } from "../commons/ControlBar";
 
@@ -27,8 +27,8 @@ const PropsPanel: React.FC<PropsPanelProps> = props => {
 				<Segment>
         <p>This is the description of the decks and cards</p>
 				</Segment>
+				<ControlBar {...currentControlBarProps} />
       </Sticky>
-      <ControlBar {...currentControlBarProps} />
     </div>
   );
 };

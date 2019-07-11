@@ -70,9 +70,11 @@ const AddCardPanel: React.FC<AddCardPanelProps> = props => {
   };
   return (
     <Sidebar
+			as={Segment}
       animation="overlay"
       icon="labeled"
-      direction="right"
+			direction="left"
+			backgroundcolor="white"
       onHide={createAddCardPanelShowHandler(false)}
       visible={visible}
       width="wide"
@@ -167,30 +169,23 @@ class WordListPushablePanels extends React.Component<
             <DecksPanel {...this.state.decksPanel} />
             <AddCardPanel {...this.state.addCardPanel} />
             <Sidebar.Pusher dimmed={this.state.addCardPanel.visible}>
-              <Grid columns={2}>
-                <Grid.Column width={1}>
-                  <div
-                    className="deckspanelcaller"
-                    onClick={this.state.decksPanel.createDecksPanelShowHandler()}
-                    style={{
-                      height: window.screen.height,
-                      width: "50%",
-                      float: "left",
-                      backgroundColor: this.state.decksPanel.visible ? "white" : "green",
-                      overflow: "hidden"
-                    }}
-                  />
-                </Grid.Column>
-                <Grid.Column width={12}>
-                  <Ref innerRef={this.contextRef}>
-                    <Segment className="cardlist content">{this.props.children}</Segment>
-                  </Ref>
-                </Grid.Column>
-              </Grid>
+              <div
+                className="deckspanelcaller"
+                onClick={this.state.decksPanel.createDecksPanelShowHandler()}
+                style={{
+                  height: window.screen.height,
+                  width: "1%",
+                  float: "left",
+                  backgroundColor: this.state.decksPanel.visible ? "white" : "green"
+                }}
+              />
+              <Ref innerRef={this.contextRef}>
+                <div className="cardlist content" style={{marginLeft: "1%"}}>{this.props.children}</div>
+              </Ref>
             </Sidebar.Pusher>
           </Sidebar.Pushable>
         </Grid.Column>
-        <Grid.Column width={2}>
+        <Grid.Column width={3}>
           <PropsPanel {...currentPropsPanelProps} />
         </Grid.Column>
       </Grid>

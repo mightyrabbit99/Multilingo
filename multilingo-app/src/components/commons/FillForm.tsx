@@ -1,15 +1,19 @@
 import * as React from "react";
 
-import { Form } from "semantic-ui-react";
+import { Form, Header} from "semantic-ui-react";
 
 import * as CardDef from "../../extension/cards";
+import { QuestionGeneratorSettings, defaultGenSettings } from "../../extension/questions";
 
 type SettingsFormProps = {
   type: "Settings";
 };
 
 type TestSettingsProps = {
-  type: "Testsetting";
+	type: "Testsetting";
+	currentDeck: CardDef.CardDeck;
+	currentSettings: QuestionGeneratorSettings;
+	saveSettings: (settings: QuestionGeneratorSettings) => void;
 };
 
 type AddCardFormProps = {
@@ -39,7 +43,8 @@ export type FillFormProps =
 
 type FillFormState = {
   currentDeck: CardDef.CardDeck;
-  currentCard: CardDef.Card;
+	currentCard: CardDef.Card;
+	currentSettings: QuestionGeneratorSettings;
 };
 
 class FillForm extends React.Component<FillFormProps, FillFormState> {
@@ -49,28 +54,65 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
       case "Addcard": {
         this.state = {
           currentCard: CardDef.createCard("", "", ""),
-          currentDeck: (this.props as AddCardFormProps).currentDeck
+					currentDeck: (this.props as AddCardFormProps).currentDeck,
+					currentSettings: defaultGenSettings
         };
         break;
       }
       case "Changecard": {
         this.state = {
           currentCard: (this.props as ChangeCardProps).currentCard.copyCard(),
-          currentDeck: (this.props as ChangeCardProps).currentDeck
+					currentDeck: (this.props as ChangeCardProps).currentDeck,
+					currentSettings: defaultGenSettings
         };
         break;
       }
       case "Adddeck": {
         this.state = {
           currentCard: CardDef.defaultCard,
-          currentDeck: CardDef.createDeck("", "")
+					currentDeck: CardDef.createDeck("", ""),
+					currentSettings: defaultGenSettings
+        };
+        break;
+			}
+			case "Testsetting": {
+        this.state = {
+          currentCard: CardDef.defaultCard,
+					currentDeck: (this.props as TestSettingsProps).currentDeck,
+					currentSettings: defaultGenSettings
         };
         break;
       }
     }
     this.cardform = this.cardform.bind(this);
-    this.deckform = this.deckform.bind(this);
-  }
+		this.deckform = this.deckform.bind(this);
+		this.testsettingsform = this.testsettingsform.bind(this);
+	}
+
+	private testsettingsform(onSubmit: (settings: QuestionGeneratorSettings) => void) {
+		let { currentSettings } = this.state;
+		let setSettingsProp = (prop: string, field: string, newVal: any) => this.setState(state => {
+			state.currentSettings[prop][field] = newVal;
+			return state;
+		});
+		let onChangeGenerator = (typeOfQues: string, field: string) => (e: any) => setSettingsProp(typeOfQues, field,  e.target.value);
+		return (
+			<Form onSubmit={() => onSubmit(currentSettings)}>
+				{Object.keys(currentSettings).map((type: string) => (
+				<div>
+					<Header>{type}</Header>
+					{Object.keys(currentSettings[type]).map((field: string) => (
+						<Form.Field>
+							<label>{field}</label>
+							<input name={field} value={currentSettings[type][field]} onChange={onChangeGenerator(type, field)}/>
+						</Form.Field>
+					))}
+				</div>
+				))}
+			</Form>
+		)
+	}
+
   private cardform(onSubmit: () => void) {
     let { currentCard } = this.state;
     let exampleCard = CardDef.exampleExplCard1;
@@ -80,9 +122,8 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
         return state;
       });
     };
-    let textOnChangeGenerator = (field: string) => (e: any) => {
+    let textOnChangeGenerator = (field: string) => (e: any) =>
       setCardProp(field, e.currentTarget.value);
-    };
     return (
       <Form onSubmit={onSubmit}>
         <Form.Field>

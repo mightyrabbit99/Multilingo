@@ -2,6 +2,7 @@
 
 import * as actionTypes from "./actionTypes";
 import { Card, CardDeck, defaultDeck } from "../extension/cards";
+import { QuestionGeneratorSettings } from "../extension/questions";
 
 export const logOut = () => ({
   type: actionTypes.LOG_OUT
@@ -40,3 +41,14 @@ export const addCardToDeck = (card: Card) => {
 		card: card
 	}
 });}
+
+/** Test */
+
+export const saveTestSettings = (settings: QuestionGeneratorSettings) => {
+	return ({
+		type: actionTypes.SAVE_TEST_SETTINGS,
+		payload: {
+			settings: settings
+		}
+	});
+};

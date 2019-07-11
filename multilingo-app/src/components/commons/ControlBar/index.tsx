@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Icon, Modal, Image, Header} from "semantic-ui-react";
+import { Icon, Modal, Image, Header, Grid} from "semantic-ui-react";
 
 import FillForm, { FillFormProps } from "../FillForm";
 
 import { CardDeck, Card } from '../../../extension/cards';
+import { QuestionGeneratorSettings } from "../../../extension/questions";
 
 export type ControlBarLocation = "Main" | "CardList";
 
@@ -18,12 +19,28 @@ export type CardListControlBarProps = {
 export type MainControlBarProps = {
 	location: "Main";
 	color: string;
+	modalOpen: boolean;
 	handleAddDeck: (deck: CardDeck) => void;
 }
 
-export type ControlBarProps = MainControlBarProps | CardListControlBarProps;
+export type TestControlBarProps = {
+	location: "Test";
+	color: string;
+	currentDeck: CardDeck;
+	currentSettings: QuestionGeneratorSettings;
+	saveSettings: (settings: QuestionGeneratorSettings) => void;
+	modalOpen: boolean;
+}
 
-class ControlBar extends React.Component<ControlBarProps, {}> {
+export type ControlBarProps = MainControlBarProps | CardListControlBarProps | TestControlBarProps;
+
+class ControlBar extends React.Component<ControlBarProps, {modalopen: boolean;}> {
+	constructor(props: ControlBarProps) {
+		super(props);
+		this.state = {
+			modalopen: true
+		}
+	}
   render() {
 		const handleAddButtonOnClick = () => {
 			if(this.props.location === "CardList") {
@@ -74,15 +91,19 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
 		switch(this.props.location) {
 			case "Main" : {
 				const thisprop: MainControlBarProps = (this.props as MainControlBarProps);
+				const closeModal = () => this.setState({...this.state, modalopen: false});
 				const currentformprop: FillFormProps = {
 					type: "Adddeck",
-					addNewDeck: thisprop.handleAddDeck
+					addNewDeck: (deck: CardDeck) => {
+						thisprop.handleAddDeck(deck);
+						closeModal();
+					}
 				}
 				return (
 					<div
-						className="button-array"
+						className="buttonarray"
 					>
-						<Modal trigger={addButton}>
+						<Modal trigger={addButton} open={this.state.modalopen} onClose={closeModal}>
 							<Modal.Header>Add New Deck</Modal.Header>
 							<Modal.Content image>
 								<Image wrapped size="medium" src="https://react.semantic-ui.com/images/avatar/large/rachel.png" />
@@ -97,9 +118,38 @@ class ControlBar extends React.Component<ControlBarProps, {}> {
 			}
 			case "CardList" : {
 				return (
-					<div className="button-array">
-						{addButton}
-						{testButton}
+					<Grid className="buttonarray" columns={2}>
+						<Grid.Column width={2}>{addButton}</Grid.Column>
+						<Grid.Column width={2}>{testButton}</Grid.Column>
+					</Grid>
+				);
+			}
+			case "Test" : {
+				const thisprop: TestControlBarProps = (this.props as TestControlBarProps);
+				const closeModal = () => this.setState({...this.state, modalopen: false});
+				const currentformprop: FillFormProps = {
+					type: "Testsetting",
+					currentDeck: thisprop.currentDeck,
+					currentSettings: thisprop.currentSettings,
+					saveSettings: (settings: QuestionGeneratorSettings) => {
+						thisprop.saveSettings(settings);
+						closeModal();
+					}
+				}
+				return (
+					<div
+						className="buttonarray"
+					>
+						<Modal trigger={addButton} open={this.state.modalopen}>
+							<Modal.Header>Test Settings</Modal.Header>
+							<Modal.Content image>
+								<Image wrapped size="medium" src="https://react.semantic-ui.com/images/avatar/large/rachel.png" />
+								<Modal.Description>
+									<Header>Test settings</Header>
+									<FillForm {...currentformprop}/>
+								</Modal.Description>
+							</Modal.Content>
+						</Modal>
 					</div>
 				);
 			}

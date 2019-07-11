@@ -51,7 +51,8 @@ class Main extends React.Component<MainProps, MainState> {
       let props: MainControlBarProps = {
         location: "Main",
         color: "green",
-        handleAddDeck: this.props.handleAddDeck
+				handleAddDeck: this.props.handleAddDeck,
+				modalOpen: false
       };
       return <ControlBar {...props} />;
     };

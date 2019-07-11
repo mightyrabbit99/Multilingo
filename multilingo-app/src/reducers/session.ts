@@ -36,7 +36,7 @@ export const reducer: Reducer<ISessionState> = (
       return {
         ...state,
         newCard: action.payload.card
-      };
+			};
     default:
       return state;
   }
