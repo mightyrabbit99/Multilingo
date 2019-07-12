@@ -37,8 +37,18 @@ export type ControlBarProps = MainControlBarProps | CardListControlBarProps | Te
 class ControlBar extends React.Component<ControlBarProps, {modalopen: boolean;}> {
 	constructor(props: ControlBarProps) {
 		super(props);
-		this.state = {
-			modalopen: true
+		switch(this.props.location) {
+			case "Main" : {
+				this.state = {
+					modalopen: false
+				}
+				break;
+			}
+			case "Test" : {
+				this.state = {
+					modalopen: true
+				}
+			}
 		}
 	}
   render() {
@@ -91,19 +101,19 @@ class ControlBar extends React.Component<ControlBarProps, {modalopen: boolean;}>
 		switch(this.props.location) {
 			case "Main" : {
 				const thisprop: MainControlBarProps = (this.props as MainControlBarProps);
-				const closeModal = () => this.setState({...this.state, modalopen: false});
+				const dispModal = (open: boolean) => this.setState({...this.state, modalopen: open});
 				const currentformprop: FillFormProps = {
 					type: "Adddeck",
 					addNewDeck: (deck: CardDeck) => {
 						thisprop.handleAddDeck(deck);
-						closeModal();
+						dispModal(false);
 					}
 				}
 				return (
 					<div
 						className="buttonarray"
 					>
-						<Modal trigger={addButton} open={this.state.modalopen} onClose={closeModal}>
+						<Modal trigger={addButton} open={this.state.modalopen} onClose={() => dispModal(false)} onOpen={() => dispModal(true)}>
 							<Modal.Header>Add New Deck</Modal.Header>
 							<Modal.Content image>
 								<Image wrapped size="medium" src="https://react.semantic-ui.com/images/avatar/large/rachel.png" />
@@ -126,21 +136,21 @@ class ControlBar extends React.Component<ControlBarProps, {modalopen: boolean;}>
 			}
 			case "Test" : {
 				const thisprop: TestControlBarProps = (this.props as TestControlBarProps);
-				const closeModal = () => this.setState({...this.state, modalopen: false});
+				const dispModal = (open: boolean) => this.setState({...this.state, modalopen: open});
 				const currentformprop: FillFormProps = {
 					type: "Testsetting",
 					currentDeck: thisprop.currentDeck,
 					currentSettings: thisprop.currentSettings,
 					saveSettings: (settings: QuestionGeneratorSettings) => {
 						thisprop.saveSettings(settings);
-						closeModal();
+						dispModal(false);
 					}
 				}
 				return (
 					<div
 						className="buttonarray"
 					>
-						<Modal trigger={addButton} open={this.state.modalopen}>
+						<Modal trigger={addButton} open={this.state.modalopen} onOpen={() => dispModal(true)}>
 							<Modal.Header>Test Settings</Modal.Header>
 							<Modal.Content image>
 								<Image wrapped size="medium" src="https://react.semantic-ui.com/images/avatar/large/rachel.png" />

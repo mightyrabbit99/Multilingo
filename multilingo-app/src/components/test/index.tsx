@@ -38,11 +38,14 @@ class Test extends React.Component<TestProps, TestState> {
 			correct: [],
 			settings: props.questionSettings,
 			generator: new QuestionGenerator(props.questionSettings),
-    };
+		};
+		this.questions = this.state.generator.generateQuestions(this.props.deck);
 	}
 
+	private questions: Question[];
+
   public render() {
-    let questions = this.state.generator.generateQuestions(this.props.deck);
+    let { questions } = this;
 		const markFunc = (ques: Question, i: number) => (ans: string) =>
       this.setState(state => {
         state.correct[i] = ques.answer.getMark(ans);
@@ -53,7 +56,14 @@ class Test extends React.Component<TestProps, TestState> {
 			color: "green",
 			currentDeck: this.props.deck,
 			currentSettings: this.props.questionSettings,
-			saveSettings: this.props.saveSettings,
+			saveSettings: (settings: QuestionGeneratorSettings) => {
+				this.props.saveSettings(settings);
+				this.setState(state => {
+					let newGenerator = new QuestionGenerator(settings);
+					this.questions = newGenerator.generateQuestions(this.props.deck);
+					return {...state, settings: settings, generator: newGenerator};
+				});
+			},
 			modalOpen: true
 		};
 		return (

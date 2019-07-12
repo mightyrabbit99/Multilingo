@@ -59,16 +59,27 @@ class QuestionBlock extends React.Component<QuestionBlockProps, { form: any }> {
           return state;
         });
       const quesElem = options
-        ? null
-        : question.map((op: string, i: number) =>
+        ? question.map((op: string, i: number) =>
             i === question.length - 1 ? (
-              <Form.Field>
+              <Form.Field key={i}>
                 <label>{op}</label>
               </Form.Field>
             ) : (
-              <Form.Field>
+              <Form.Field key={i}>
                 <label>{op}</label>
-                <Input onCHange={handleOnChange(i)} />
+                <Input onChange={handleOnChange(i)} />
+              </Form.Field>
+            )
+          )
+        : question.map((op: string, i: number) =>
+            i === question.length - 1 ? (
+              <Form.Field key={i}>
+                <label>{op}</label>
+              </Form.Field>
+            ) : (
+              <Form.Field key={i}>
+                <label>{op}</label>
+                <Input onChange={handleOnChange(i)} />
               </Form.Field>
             )
           );
@@ -105,11 +116,18 @@ class QuestionBlock extends React.Component<QuestionBlockProps, { form: any }> {
       };
 
       const segmentTop = options ? (
-        <Form />
+        <Form onSubmit={handleOnSubmit}>
+          <Form.Group inline>{quesElem}</Form.Group>
+          <Button type="submit" style={{ align: "right" }}>
+            Submit
+          </Button>
+        </Form>
       ) : (
         <Form onSubmit={handleOnSubmit}>
           <Form.Group inline>{quesElem}</Form.Group>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" style={{ align: "right" }}>
+            Submit
+          </Button>
         </Form>
       );
       return (
@@ -120,14 +138,15 @@ class QuestionBlock extends React.Component<QuestionBlockProps, { form: any }> {
       );
     };
 
-		switch(props.question.type) {
-			case QuestionType.MCQ :
-				return genMCQQues(props.question.getQues() as string, props.question.option as string[]);
-			case QuestionType.Fillinblanks : 
-				return genFillInBlankQues(props.question.getQues() as string[], props.question.option);
-			default : 
-				return null;
-		}
+    switch (props.question.type) {
+      case QuestionType.MCQ:
+        return genMCQQues(props.question.getQues() as string, props.question.option as string[]);
+      case QuestionType.Fillinblanks:
+				console.log(props.question.getQues());
+        return genFillInBlankQues(props.question.getQues() as string[], props.question.option);
+      default:
+        return null;
+    }
   }
 }
 
