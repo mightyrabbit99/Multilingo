@@ -9,6 +9,25 @@ import { Comment } from "./questions";
  * Cards with the same back can combine to from a single card with multiple front.
  */
 
+export enum FaceType {
+	Front= "Front",
+	Back= "Back"
+}
+
+export class Face {
+	constructor(type: FaceType, text: string) {
+		this.text = text;
+		this.type = type;
+		this.getLinks = this.getLinks.bind(this);
+	}
+	type: FaceType;
+	text: string;
+	links: Face[] = [];
+	getLinks(): string[] {
+		return this.links.map((f: Face) => f.text);
+	}
+}
+
 export enum CardType {
   Expl = "Explanation",
   Ex = "Example"

@@ -153,12 +153,12 @@ export const defaultGenSettings: QuestionGeneratorSettings = {
     noOfOption: 2
   },
   Fillinblanks: {
-    noOfQuestion: 2,
+    noOfQuestion: 1,
     Withoptions: false,
     Casesensitive: false
   },
   Rearrange: {
-    noOfQuestion: 2
+    noOfQuestion: 0
   }
 };
 

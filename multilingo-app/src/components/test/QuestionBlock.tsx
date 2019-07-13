@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Segment, Header, Form, Input } from "semantic-ui-react";
+import { Button, Segment, Header, Form } from "semantic-ui-react";
 
 import { Question, QuestionType } from "../../extension/questions";
 import { defaultCard } from "../../extension/cards";
@@ -9,11 +9,11 @@ export type QuestionBlockProps = {
   markQues: (ans: string) => void;
 };
 
-class QuestionBlock extends React.Component<QuestionBlockProps, { form: any }> {
+class QuestionBlock extends React.Component<QuestionBlockProps, { form: Array<any> }> {
   constructor(props: QuestionBlockProps) {
     super(props);
     this.state = {
-      form: []
+      form: props.question.option ? props.question.option.map(s => "") : [""]
     };
   }
 
@@ -52,58 +52,29 @@ class QuestionBlock extends React.Component<QuestionBlockProps, { form: any }> {
     };
 
     const genFillInBlankQues = (question: string[], options?: string[]) => {
-      const { userAns, getAnsCard, marked } = props.question.answer;
-      const handleOnChange = (i: number) => (e: any) =>
+      const { getAnsCard, marked } = props.question.answer;
+      const handleOnChange = (i: number) => (e: any) => {
+        let val = e.target.value;
         this.setState(state => {
-          state.form[i] = e.target.value;
+          state.form[i] = val;
           return state;
         });
-      const quesElem = options
-        ? question.map((op: string, i: number) =>
+      };
+      const quesElem =  question.map((op: string, i: number) =>
             i === question.length - 1 ? (
               <Form.Field key={i}>
                 <label>{op}</label>
               </Form.Field>
             ) : (
-              <Form.Field key={i}>
+              <Form.Field
+                key={i}
+                error={getAnsCard() !== defaultCard && getAnsCard().back !== this.state.form[i]}
+              >
                 <label>{op}</label>
-                <Input onChange={handleOnChange(i)} />
-              </Form.Field>
-            )
-          )
-        : question.map((op: string, i: number) =>
-            i === question.length - 1 ? (
-              <Form.Field key={i}>
-                <label>{op}</label>
-              </Form.Field>
-            ) : (
-              <Form.Field key={i}>
-                <label>{op}</label>
-                <Input onChange={handleOnChange(i)} />
+                <input name={op} value={this.state.form[i]} onChange={handleOnChange(i)} disabled={marked} />
               </Form.Field>
             )
           );
-      const optionButtons = options
-        ? options.map((op: string, i: number) => {
-            return (
-              <Button
-                onClick={() => mark(op)}
-                style={{
-                  backgroundColor:
-                    getAnsCard() !== defaultCard && getAnsCard().back === op
-                      ? "green"
-                      : userAns === op
-                      ? "red"
-                      : "grey"
-                }}
-                disabled={marked}
-                key={i}
-              >
-                {op}
-              </Button>
-            );
-          })
-        : null;
 
       const handleOnSubmit = () => {
         let ans = "";
@@ -133,7 +104,6 @@ class QuestionBlock extends React.Component<QuestionBlockProps, { form: any }> {
       return (
         <div className="question">
           <Segment attached="top">{segmentTop}</Segment>
-          <Segment attached="bottom">{optionButtons}</Segment>
         </div>
       );
     };
@@ -142,7 +112,6 @@ class QuestionBlock extends React.Component<QuestionBlockProps, { form: any }> {
       case QuestionType.MCQ:
         return genMCQQues(props.question.getQues() as string, props.question.option as string[]);
       case QuestionType.Fillinblanks:
-				console.log(props.question.getQues());
         return genFillInBlankQues(props.question.getQues() as string[], props.question.option);
       default:
         return null;
