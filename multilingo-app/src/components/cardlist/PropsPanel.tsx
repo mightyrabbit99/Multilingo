@@ -8,8 +8,8 @@ export type PropsPanelProps = {
   deck: CardDeck;
   handleShowAddCardPanel: () => void;
   handleTest: () => void;
-	card?: Card;
-	contextRef: any;
+  card?: Card;
+  contextRef: any;
 };
 
 //const PropsPanelLocation = 'Main';
@@ -20,14 +20,14 @@ const PropsPanel: React.FC<PropsPanelProps> = props => {
     color: props.color,
     handleShowAddCardPanel: props.handleShowAddCardPanel,
     handleTest: props.handleTest
-	};
+  };
   return (
     <div className="propspanel">
       <Sticky className="propspanel description" context={props.contextRef}>
-				<Segment>
-        <p>This is the description of the decks and cards</p>
-				</Segment>
-				<ControlBar {...currentControlBarProps} />
+        <Segment style={{ height: "90vh" }}>
+          <p>This is the description of the decks and cards</p>
+        </Segment>
+        <ControlBar {...currentControlBarProps} />
       </Sticky>
     </div>
   );

@@ -1,5 +1,5 @@
-import { Button, Icon} from 'semantic-ui-react';
-import * as React from 'react';
+import { Button, Icon } from "semantic-ui-react";
+import * as React from "react";
 
 type controlButtonOptionals = {
   className?: string;
@@ -7,8 +7,8 @@ type controlButtonOptionals = {
 };
 
 const defaultOptions = {
-  className: '',
-  labelPosition: 'left'
+  className: "",
+  labelPosition: "left"
 };
 
 export function controlButton(
