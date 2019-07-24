@@ -2,6 +2,7 @@ import * as React from "react";
 import { Icon, Modal, Image, Header, Grid } from "semantic-ui-react";
 
 import FillForm, { FillFormProps } from "../FillForm";
+import { MainPage } from '../../main'
 
 import { CardDeck, Card } from "../../../extension/cards";
 import { QuestionGeneratorSettings } from "../../../extension/questions";
@@ -17,10 +18,13 @@ export type CardListControlBarProps = {
 };
 
 export type MainControlBarProps = {
-  location: "Main";
+	location: "Main";
+	page: MainPage;
   color: string;
   modalOpen: boolean;
-  handleAddDeck: (deck: CardDeck) => void;
+	handleAddDeck: (deck: CardDeck) => void;
+	handleToDeck: () => void;
+	handleToDict: () => void;
 };
 
 export type TestControlBarProps = {
@@ -68,7 +72,56 @@ class ControlBar extends React.Component<
       if (this.props.location === "CardList") {
         this.props.handleTest();
       }
-    };
+		};
+
+		const handleToDictOnClick = () => {
+      if (this.props.location === "Main") {
+        this.props.handleToDict();
+      }
+		};
+
+		const handleToDeckOnClick = () => {
+      if (this.props.location === "Main") {
+        this.props.handleToDeck();
+      }
+		};
+		
+		const dictButton = (
+      <Icon
+        onClick={handleToDictOnClick}
+        className="controlbar button"
+        style={{
+          position: "absolute",
+          padding: "5px",
+          bottom: "5%",
+          right: "20%",
+          borderRadius: "50%",
+          color: "green"
+        }}
+        name="chess"
+        size="huge"
+        link
+      />
+		);
+		
+		const deckButton = (
+      <Icon
+        onClick={handleToDeckOnClick}
+        className="controlbar button"
+        style={{
+          position: "absolute",
+          padding: "5px",
+          bottom: "5%",
+          right: "20%",
+          borderRadius: "50%",
+          color: "green"
+        }}
+        name="chess"
+        size="huge"
+        link
+      />
+    );
+
     const testButton = (
       <Icon
         onClick={handleTestButtonOnClick}
@@ -117,7 +170,12 @@ class ControlBar extends React.Component<
           }
         };
         return (
-          <div className="buttonarray">
+          <Grid
+            className="buttonarray"
+            columns={2}
+            style={{ marginTop: "15%" }}
+          >
+            <Grid.Column width={2} style={{ margin: "auto" }}>
             <Modal
               trigger={addButton}
               open={this.state.modalopen}
@@ -137,7 +195,11 @@ class ControlBar extends React.Component<
                 </Modal.Description>
               </Modal.Content>
             </Modal>
-          </div>
+						</Grid.Column>
+						<Grid.Column width={2} style={{ margin: "auto" }}>
+              {dictButton}
+            </Grid.Column>
+          </Grid>
         );
       }
       case "CardList": {

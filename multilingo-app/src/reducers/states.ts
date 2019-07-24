@@ -8,16 +8,24 @@ import {
 } from "../extension/cards";
 import { TestPaperView } from "../components/test";
 import { QuestionGeneratorSettings, QuestionGenerator, Question } from "../extension/questions";
+import Dict, { defaultDict, SearchResult, wordNotFound } from "../extension/dict";
 
 export interface IState {
   readonly main: IMainState;
   readonly session: ISessionState;
-  readonly test: ITestState;
+	readonly test: ITestState;
+	readonly dict: IDictState;
 }
 
 export interface IMainState {
   colour: string;
   user: IUserState;
+}
+
+export interface IDictState {
+	searched: boolean;
+	dictionary: Dict;
+	searchResult: SearchResult;
 }
 
 export interface ISessionState {
@@ -74,8 +82,15 @@ export const defaultMain: IMainState = {
   user: defaultUserState
 };
 
+export const defaultDictState: IDictState = {
+	searched: false,
+	dictionary: defaultDict,
+	searchResult: wordNotFound
+}
+
 export const defaultState: IState = {
   main: defaultMain,
   session: defaultSessionState,
-  test: defaultTestState
+	test: defaultTestState,
+	dict: defaultDictState
 };

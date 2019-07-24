@@ -1,36 +1,48 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 
-import { CardDeck } from "../../extension/cards";
+import { CardDeck, defaultDeck } from "../../extension/cards";
 import Deck, { DeckProps } from "./Deck";
+import Dictionary, { DictionaryProps } from "./Dictionary";
 import ControlBar, { MainControlBarProps } from "../commons/ControlBar";
+import Dict, { SearchResult } from "../../extension/dict";
 
-export interface MainProps
-  extends MainDispatchProps,
-    MainStateProps,
-    RouteComponentProps<{}> {}
+export interface MainProps extends MainDispatchProps, MainStateProps, RouteComponentProps<{}> {}
 
 export interface MainStateProps {
   title: string;
   decks: CardDeck[];
-  newDeck: CardDeck | null;
+	newDeck: CardDeck | null;
+	searched: boolean;
+	wordMeaning: SearchResult;
+	dict: Dict;
 }
 
 export interface MainDispatchProps {
   logout: () => void;
   handleSelectDeck: (deck: CardDeck) => void;
   handleAddDeck: (deck: CardDeck) => void;
-  receiveDecks: (decks: CardDeck[]) => void;
+	receiveDecks: (decks: CardDeck[]) => void;
+	searchingWord: (word: string, dict: Dict) => void;
+}
+
+export enum MainPage {
+  Main = "Main",
+  Dict = "Dict"
 }
 
 type MainState = {
+  page: MainPage;
   selectedDeck: CardDeck;
 };
 
 class Main extends React.Component<MainProps, MainState> {
   constructor(props: MainProps) {
     super(props);
-    (window as any).decks = props.decks;
+    this.state = {
+      page: MainPage.Main,
+      selectedDeck: defaultDeck
+    };
   }
 
   componentDidMount() {
@@ -49,37 +61,51 @@ class Main extends React.Component<MainProps, MainState> {
 
     const controlBar = () => {
       let props: MainControlBarProps = {
-        location: "Main",
+				location: "Main",
+				page: this.state.page,
         color: "green",
 				handleAddDeck: this.props.handleAddDeck,
-				modalOpen: false
+				handleToDict: () => this.setState({...this.state, page: MainPage.Dict}),
+				handleToDeck: () => this.setState({...this.state, page: MainPage.Main}),
+        modalOpen: false
       };
       return <ControlBar {...props} />;
     };
 
-    return (
-      <div className="Main" style={{ display: "inline" }}>
-        <div
-          className="Application_main"
-          style={{
-            flexDirection: "row",
-            flexWrap: "wrap"
-          }}
-        >
-          {this.props.decks.length === 0 ? (
-            <img
-              src="https://i.imgur.com/kvZ0fst.png"
+    switch (this.state.page) {
+      case MainPage.Main:
+        return (
+          <div className="Main" style={{ display: "inline" }}>
+            <div
+              className="Application_main"
               style={{
-                margin: "auto"
+                flexDirection: "row",
+                flexWrap: "wrap"
               }}
-            />
-          ) : null}
+            >
+              {this.props.decks.length === 0 ? (
+                <img
+                  src="https://i.imgur.com/kvZ0fst.png"
+                  style={{
+                    margin: "auto"
+                  }}
+                />
+              ) : null}
 
-          {this.props.decks.map(generateDeck)}
-        </div>
-        {controlBar()}
-      </div>
-    );
+              {this.props.decks.map(generateDeck)}
+            </div>
+            {controlBar()}
+          </div>
+        );
+      case MainPage.Dict: {
+				const dictProps: DictionaryProps = {
+					searching: !this.props.searched,
+					searchResult: this.props.wordMeaning,
+					searchingWord: (word: string) => this.props.searchingWord(word, this.props.dict)
+				}
+				return <Dictionary {...dictProps}/>;
+			}
+    }
   }
 }
 

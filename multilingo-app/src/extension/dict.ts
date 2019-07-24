@@ -1,38 +1,40 @@
-import request from "request-promise-native";
+import request from "request";
 import cheerio from "cheerio";
 import { Card, createCard, CardType } from "./cards";
 
-type SearchResult = any;
+export type SearchResult = any;
 
 class Dictionary {
   constructor(url: string) {
     this.dicturl = url;
-		this.search = this.search.bind(this);
-		this.generateCards = this.generateCards.bind(this);
+    this.search = this.search.bind(this);
+    this.generateCards = this.generateCards.bind(this);
   }
 
-	dicturl: string = "";
-	
-	generateCards(word: string): Card[] {
-		let res = this.search(word);
-		let ans: any = [];
-		if(res) {
-			res[0].meaning.forEach((elem: any, i: number) => {
-				if(elem.definition) {
-					ans.push(createCard("dictionary autocreate", elem.definition, word, CardType.Expl))
-				}
-				if(elem.synonyms) {
-					let syn: string = elem.synonyms.shift();
-					elem.synonyms.forEach((word: string) => {syn += ", " + word;});
-					ans.push(createCard("dictionary autocreate", syn, word, CardType.Expl))
-				}
-			})
-		} 
-		return ans;
-	}
+  dicturl: string = "";
+
+  generateCards(word: string): Card[] {
+    let res = this.search(word);
+    let ans: any = [];
+    if (res) {
+      res[0].meaning.forEach((elem: any, i: number) => {
+        if (elem.definition) {
+          ans.push(createCard("dictionary autocreate", elem.definition, word, CardType.Expl));
+        }
+        if (elem.synonyms) {
+          let syn: string = elem.synonyms.shift();
+          elem.synonyms.forEach((word: string) => {
+            syn += ", " + word;
+          });
+          ans.push(createCard("dictionary autocreate", syn, word, CardType.Expl));
+        }
+      });
+    }
+    return ans;
+  }
 
   search(word: string): SearchResult {
-		let wordd = word;
+    let wordd = word;
     let dict;
     let url = encodeURI(this.dicturl + word);
     request(
@@ -42,9 +44,13 @@ class Dictionary {
         headers: {
           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0"
         }
-      }).then(
-      body => {
-				var $ = cheerio.load(body);
+      },
+      function(err, res, body) {
+        if (err) {
+          return console.error(err);
+        }
+
+        var $ = cheerio.load(body);
 
         if (!$(".hwg .hw").first()[0]) {
           console.log(
@@ -153,10 +159,15 @@ class Dictionary {
         });
 
         dict = dictionary;
-      }).catch(function (err: any) {console.log(err)});
 
-    return dict;
+        return dict;
+      }
+    );
   }
 }
+
+export const defaultDict = new Dictionary("https://www.lexico.com/en/definition/");
+
+export const wordNotFound: SearchResult = {};
 
 export default Dictionary;

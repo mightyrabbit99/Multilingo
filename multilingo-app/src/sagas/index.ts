@@ -6,21 +6,30 @@ import { push } from "connected-react-router";
 import * as actions from "../actions";
 import * as actionTypes from "../actions/actionTypes";
 
-import { CardDeck } from "../extension/cards";
-
 //database
 import rsf from "../backend/rsf";
+import { SearchResult } from "../extension/dict";
 
 function* mainSaga() {
   //yield fork(fetchDecksDataSaga);
 	yield* sessionSaga();
 	yield* userSaga();
+	yield* dictSaga();
 }
 
 function* fetchDecksDataSaga() {
   yield take(actionTypes.RECEIVE_DECKS_DATA);
   const snapshot = yield call(rsf.getCollection, "Decks");
   yield put(actions.receiveDecksData(snapshot.docs[0].data().CardDecks));
+}
+
+function* dictSaga(): SagaIterator {
+	yield takeEvery(actionTypes.START_SEARCH_WORD, function*(action) {
+		const word = (action as actionTypes.IAction).payload.word;
+		const searchRes: SearchResult = (action as actionTypes.IAction).payload.dict.search(word);
+		console.log(searchRes);
+		yield put(actions.wordSearched(searchRes));
+	});
 }
 
 function* sessionSaga(): SagaIterator {

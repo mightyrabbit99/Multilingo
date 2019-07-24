@@ -20,3 +20,8 @@ export const RECEIVE_DECKS_DATA = "RECEIVE_DECKS_DATA";
 
 /** User */
 export const GO_TO_LOGIN = "GO_TO_LOGIN";
+
+/** Dict */
+export const INSERT_DICT_URL = "INSERT_DICT_URL";
+export const START_SEARCH_WORD = "START_SEARCH_WORD";
+export const WORD_SEARCHED = "WORD_SEARCHED";
