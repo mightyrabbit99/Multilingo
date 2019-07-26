@@ -20,7 +20,6 @@ export const updateDatabaseDecks = (
       category: string;
       dateAdded: number;
     };
-    collection: CardCollection;
   }[]
 ) => {
   return {

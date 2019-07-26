@@ -38,11 +38,10 @@ function* fetchDecksDataSaga() {
 function* updateDatabaseDecksSaga() {
   yield takeEvery(actionTypes.UPDATE_DATABASE_DECKS, function*(action) {
     const newDeck = (action as actionTypes.IAction).payload.decks;
-    console.log("hi to updateDAtabase");
     yield call(
       rsf.updateDocument,
       "Decks/n8Rs6Vb6SaiEZWB6o9fF",
-      "carddeck",
+      "CardDecks",
       newDeck
     );
   });

@@ -215,10 +215,13 @@ export class CardDeck {
       this.addCard(anotherDeck.cards[i]);
     }
   }
+}
 
-  public toJSON() {
-    return { cards: this.cards, info: this.info, collection: this.collection };
-  }
+export function cardToJSON(carddeck: CardDeck) {
+  return {
+    cards: carddeck.cards,
+    info: carddeck.info
+  };
 }
 
 export function createDeck(

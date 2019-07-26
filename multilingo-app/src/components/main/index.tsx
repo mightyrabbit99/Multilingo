@@ -5,7 +5,8 @@ import {
   CardDeck,
   defaultDeck,
   Card,
-  CardCollection
+  CardCollection,
+  cardToJSON
 } from "../../extension/cards";
 import Deck, { DeckProps } from "./Deck";
 import Dictionary, { DictionaryProps } from "./Dictionary";
@@ -41,7 +42,6 @@ export interface MainDispatchProps {
         category: string;
         dateAdded: number;
       };
-      collection: CardCollection;
     }[]
   ) => void;
 }
@@ -69,7 +69,6 @@ class Main extends React.Component<MainProps, MainState> {
     this.props.receiveDecks(this.props.decks);
   }
 
-  /*
   componentDidUpdate() {
     let index = 0;
     let toStore: {
@@ -80,14 +79,12 @@ class Main extends React.Component<MainProps, MainState> {
         category: string;
         dateAdded: number;
       };
-      collection: CardCollection;
     }[] = [];
     for (index = 0; index < this.props.decks.length; index++) {
-      toStore[index] = this.props.decks[index].toJSON();
+      toStore[index] = cardToJSON(this.props.decks[index]);
     }
     this.props.updateDatabaseDecks(toStore);
   }
-  */
 
   public render() {
     console.log("main render");
