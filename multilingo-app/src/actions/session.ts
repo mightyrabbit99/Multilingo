@@ -13,7 +13,7 @@ export const backToMain = () => ({
 });
 
 export const toTest = () => ({
-	type: actionTypes.TO_TEST
+  type: actionTypes.TO_TEST
 });
 
 /** Deck */
@@ -35,20 +35,21 @@ export const addDeck = (deck: CardDeck) => ({
 /** Card */
 
 export const addCardToDeck = (card: Card) => {
-	return ({
-	type: actionTypes.ADD_CARD_TO_SELECTED_DECK,
-	payload: {
-		card: card
-	}
-});}
+  return {
+    type: actionTypes.ADD_CARD_TO_SELECTED_DECK,
+    payload: {
+      card: card
+    }
+  };
+};
 
 /** Test */
 
 export const saveTestSettings = (settings: QuestionGeneratorSettings) => {
-	return ({
-		type: actionTypes.SAVE_TEST_SETTINGS,
-		payload: {
-			settings: settings
-		}
-	});
+  return {
+    type: actionTypes.SAVE_TEST_SETTINGS,
+    payload: {
+      settings: settings
+    }
+  };
 };

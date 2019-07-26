@@ -2,7 +2,7 @@ import * as React from "react";
 import { Icon, Modal, Image, Header, Grid } from "semantic-ui-react";
 
 import FillForm, { FillFormProps } from "../FillForm";
-import { MainPage } from '../../main'
+import { MainPage } from "../../main";
 
 import { CardDeck, Card } from "../../../extension/cards";
 import { QuestionGeneratorSettings } from "../../../extension/questions";
@@ -18,13 +18,13 @@ export type CardListControlBarProps = {
 };
 
 export type MainControlBarProps = {
-	location: "Main";
-	page: MainPage;
+  location: "Main";
+  page: MainPage;
   color: string;
   modalOpen: boolean;
-	handleAddDeck: (deck: CardDeck) => void;
-	handleToDeck: () => void;
-	handleToDict: () => void;
+  handleAddDeck: (deck: CardDeck) => void;
+  handleToDeck: () => void;
+  handleToDict: () => void;
 };
 
 export type TestControlBarProps = {
@@ -72,21 +72,21 @@ class ControlBar extends React.Component<
       if (this.props.location === "CardList") {
         this.props.handleTest();
       }
-		};
+    };
 
-		const handleToDictOnClick = () => {
+    const handleToDictOnClick = () => {
       if (this.props.location === "Main") {
         this.props.handleToDict();
       }
-		};
+    };
 
-		const handleToDeckOnClick = () => {
+    const handleToDeckOnClick = () => {
       if (this.props.location === "Main") {
         this.props.handleToDeck();
       }
-		};
-		
-		const dictButton = (
+    };
+
+    const dictButton = (
       <Icon
         onClick={handleToDictOnClick}
         className="controlbar button"
@@ -102,9 +102,9 @@ class ControlBar extends React.Component<
         size="huge"
         link
       />
-		);
-		
-		const deckButton = (
+    );
+
+    const deckButton = (
       <Icon
         onClick={handleToDeckOnClick}
         className="controlbar button"
@@ -176,27 +176,27 @@ class ControlBar extends React.Component<
             style={{ marginTop: "15%" }}
           >
             <Grid.Column width={2} style={{ margin: "auto" }}>
-            <Modal
-              trigger={addButton}
-              open={this.state.modalopen}
-              onClose={() => dispModal(false)}
-              onOpen={() => dispModal(true)}
-            >
-              <Modal.Header>Add New Deck</Modal.Header>
-              <Modal.Content image>
-                <Image
-                  wrapped
-                  size="medium"
-                  src="https://react.semantic-ui.com/images/avatar/large/rachel.png"
-                />
-                <Modal.Description>
-                  <Header>Add a deck</Header>
-                  <FillForm {...currentformprop} />
-                </Modal.Description>
-              </Modal.Content>
-            </Modal>
-						</Grid.Column>
-						<Grid.Column width={2} style={{ margin: "auto" }}>
+              <Modal
+                trigger={addButton}
+                open={this.state.modalopen}
+                onClose={() => dispModal(false)}
+                onOpen={() => dispModal(true)}
+              >
+                <Modal.Header>Add New Deck</Modal.Header>
+                <Modal.Content image>
+                  <Image
+                    wrapped
+                    size="medium"
+                    src="https://react.semantic-ui.com/images/avatar/large/rachel.png"
+                  />
+                  <Modal.Description>
+                    <Header>Add a deck</Header>
+                    <FillForm {...currentformprop} />
+                  </Modal.Description>
+                </Modal.Content>
+              </Modal>
+            </Grid.Column>
+            <Grid.Column width={2} style={{ margin: "auto" }}>
               {dictButton}
             </Grid.Column>
           </Grid>

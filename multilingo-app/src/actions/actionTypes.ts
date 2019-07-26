@@ -17,6 +17,7 @@ export const SAVE_TEST_SETTINGS = "SAVE_SETTINGS";
 
 /** Backend */
 export const RECEIVE_DECKS_DATA = "RECEIVE_DECKS_DATA";
+export const UPDATE_DATABASE_DECKS = "UPDATE_DATABASE_DECKS";
 
 /** User */
 export const GO_TO_LOGIN = "GO_TO_LOGIN";

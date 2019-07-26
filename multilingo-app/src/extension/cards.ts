@@ -10,22 +10,22 @@ import { Comment } from "./questions";
  */
 
 export enum FaceType {
-	Front= "Front",
-	Back= "Back"
+  Front = "Front",
+  Back = "Back"
 }
 
 export class Face {
-	constructor(type: FaceType, text: string) {
-		this.text = text;
-		this.type = type;
-		this.getLinks = this.getLinks.bind(this);
-	}
-	type: FaceType;
-	text: string;
-	links: Face[] = [];
-	getLinks(): string[] {
-		return this.links.map((f: Face) => f.text);
-	}
+  constructor(type: FaceType, text: string) {
+    this.text = text;
+    this.type = type;
+    this.getLinks = this.getLinks.bind(this);
+  }
+  type: FaceType;
+  text: string;
+  links: Face[] = [];
+  getLinks(): string[] {
+    return this.links.map((f: Face) => f.text);
+  }
 }
 
 export enum CardType {
@@ -42,7 +42,12 @@ const initialCardInfo = {
 };
 
 export class Card {
-  constructor(category: string, front: string, back: string, type: CardType = CardType.Expl) {
+  constructor(
+    category: string,
+    front: string,
+    back: string,
+    type: CardType = CardType.Expl
+  ) {
     this.category = category;
     this.front = front;
     this.back = back;
@@ -68,7 +73,9 @@ export class Card {
   public back: string;
   public equals(anotherCard: Card): boolean {
     return (
-      this.front === anotherCard.front && this.back === anotherCard.back && this.type === anotherCard.type
+      this.front === anotherCard.front &&
+      this.back === anotherCard.back &&
+      this.type === anotherCard.type
     );
   }
 
@@ -97,7 +104,12 @@ export class Card {
  * Examples of explanation card
  */
 
-export const exampleExplCard1: Card = createCard("Animal name", "<n> A female deer", "Doe", CardType.Expl);
+export const exampleExplCard1: Card = createCard(
+  "Animal name",
+  "<n> A female deer",
+  "Doe",
+  CardType.Expl
+);
 
 export const exampleExplCard2: Card = createCard(
   "Animal name",
@@ -126,7 +138,12 @@ export const exampleExplCard4: Card = createCard(
  * Example of an example card
  */
 
-export const exampleExampleCard: Card = createCard("Animal name", "I have a pet doe", "Doe", CardType.Ex);
+export const exampleExampleCard: Card = createCard(
+  "Animal name",
+  "I have a pet doe",
+  "Doe",
+  CardType.Ex
+);
 
 /**
  * Card is categorised by category and word to simplify search
@@ -161,11 +178,11 @@ export class CardDeck {
   public cards: Card[];
   public collection: CardCollection = {
     byBack: {},
-		byCategory: {},
-		byType: {
-			Explanation: [],
-			Example: []
-		}
+    byCategory: {},
+    byType: {
+      Explanation: [],
+      Example: []
+    }
   };
   constructor(name: string, category: string = "") {
     this.info = { name: name, category: category, dateAdded: Date.now() };
@@ -184,12 +201,12 @@ export class CardDeck {
       this.collection.byBack[card.back] = [];
     }
     this.collection.byCategory[card.category].unshift(card);
-		this.collection.byBack[card.back].unshift(card);
-		if(card.type === CardType.Expl) {
-			this.collection.byType.Explanation.unshift(card);
-		} else {
-			this.collection.byType.Example.unshift(card);
-		}
+    this.collection.byBack[card.back].unshift(card);
+    if (card.type === CardType.Expl) {
+      this.collection.byType.Explanation.unshift(card);
+    } else {
+      this.collection.byType.Example.unshift(card);
+    }
     this.cards.push(card);
   }
 
@@ -198,9 +215,17 @@ export class CardDeck {
       this.addCard(anotherDeck.cards[i]);
     }
   }
+
+  public toJSON() {
+    return { cards: this.cards, info: this.info, collection: this.collection };
+  }
 }
 
-export function createDeck(name: string, category: string, ...cards: Card[]): CardDeck {
+export function createDeck(
+  name: string,
+  category: string,
+  ...cards: Card[]
+): CardDeck {
   let deck = new CardDeck(name, category);
   cards.forEach((value: Card) => deck.addCard(value));
   return deck;
@@ -209,10 +234,10 @@ export function createDeck(name: string, category: string, ...cards: Card[]): Ca
 export const exampleDeck: CardDeck = createDeck(
   "Chapter 3.5: Animals",
   "Biology",
-	exampleExplCard1,
-	exampleExplCard2,
-	exampleExplCard3,
-	exampleExplCard4,
+  exampleExplCard1,
+  exampleExplCard2,
+  exampleExplCard3,
+  exampleExplCard4,
   exampleExampleCard
 );
 
@@ -224,8 +249,8 @@ defaultDeck.addCard(defaultCard);
 
 export function sampleDecks(): CardDeck[] {
   let ans = [];
-	ans.push(exampleDeck);
-	(window as any).example = exampleDeck;
+  ans.push(exampleDeck);
+  (window as any).example = exampleDeck;
   ans.push(new CardDeck("deck2"));
   ans[1].addCard(createCard("a", "haha", "shit"));
   ans[1].addCard(createCard("a", "haha", "shit"));

@@ -1,29 +1,49 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 
-import { CardDeck, defaultDeck } from "../../extension/cards";
+import {
+  CardDeck,
+  defaultDeck,
+  Card,
+  CardCollection
+} from "../../extension/cards";
 import Deck, { DeckProps } from "./Deck";
 import Dictionary, { DictionaryProps } from "./Dictionary";
 import ControlBar, { MainControlBarProps } from "../commons/ControlBar";
 import Dict, { SearchResult } from "../../extension/dict";
 
-export interface MainProps extends MainDispatchProps, MainStateProps, RouteComponentProps<{}> {}
+export interface MainProps
+  extends MainDispatchProps,
+    MainStateProps,
+    RouteComponentProps<{}> {}
 
 export interface MainStateProps {
   title: string;
   decks: CardDeck[];
-	newDeck: CardDeck | null;
-	searched: boolean;
-	wordMeaning: SearchResult;
-	dict: Dict;
+  newDeck: CardDeck | null;
+  searched: boolean;
+  wordMeaning: SearchResult;
+  dict: Dict;
 }
 
 export interface MainDispatchProps {
   logout: () => void;
   handleSelectDeck: (deck: CardDeck) => void;
   handleAddDeck: (deck: CardDeck) => void;
-	receiveDecks: (decks: CardDeck[]) => void;
-	searchingWord: (word: string, dict: Dict) => void;
+  receiveDecks: (decks: CardDeck[]) => void;
+  searchingWord: (word: string, dict: Dict) => void;
+  updateDatabaseDecks: (
+    decks: {
+      cards: Card[];
+      info: {
+        [key: string]: any;
+        name: string;
+        category: string;
+        dateAdded: number;
+      };
+      collection: CardCollection;
+    }[]
+  ) => void;
 }
 
 export enum MainPage {
@@ -46,8 +66,28 @@ class Main extends React.Component<MainProps, MainState> {
   }
 
   componentDidMount() {
-    //this.props.receiveDecks([]);
+    this.props.receiveDecks(this.props.decks);
   }
+
+  /*
+  componentDidUpdate() {
+    let index = 0;
+    let toStore: {
+      cards: Card[];
+      info: {
+        [key: string]: any;
+        name: string;
+        category: string;
+        dateAdded: number;
+      };
+      collection: CardCollection;
+    }[] = [];
+    for (index = 0; index < this.props.decks.length; index++) {
+      toStore[index] = this.props.decks[index].toJSON();
+    }
+    this.props.updateDatabaseDecks(toStore);
+  }
+  */
 
   public render() {
     console.log("main render");
@@ -61,12 +101,14 @@ class Main extends React.Component<MainProps, MainState> {
 
     const controlBar = () => {
       let props: MainControlBarProps = {
-				location: "Main",
-				page: this.state.page,
+        location: "Main",
+        page: this.state.page,
         color: "green",
-				handleAddDeck: this.props.handleAddDeck,
-				handleToDict: () => this.setState({...this.state, page: MainPage.Dict}),
-				handleToDeck: () => this.setState({...this.state, page: MainPage.Main}),
+        handleAddDeck: this.props.handleAddDeck,
+        handleToDict: () =>
+          this.setState({ ...this.state, page: MainPage.Dict }),
+        handleToDeck: () =>
+          this.setState({ ...this.state, page: MainPage.Main }),
         modalOpen: false
       };
       return <ControlBar {...props} />;
@@ -98,13 +140,14 @@ class Main extends React.Component<MainProps, MainState> {
           </div>
         );
       case MainPage.Dict: {
-				const dictProps: DictionaryProps = {
-					searching: !this.props.searched,
-					searchResult: this.props.wordMeaning,
-					searchingWord: (word: string) => this.props.searchingWord(word, this.props.dict)
-				}
-				return <Dictionary {...dictProps}/>;
-			}
+        const dictProps: DictionaryProps = {
+          searching: !this.props.searched,
+          searchResult: this.props.wordMeaning,
+          searchingWord: (word: string) =>
+            this.props.searchingWord(word, this.props.dict)
+        };
+        return <Dictionary {...dictProps} />;
+      }
     }
   }
 }

@@ -3,7 +3,10 @@ import * as React from "react";
 import { Form, Header } from "semantic-ui-react";
 
 import * as CardDef from "../../extension/cards";
-import { QuestionGeneratorSettings, defaultGenSettings } from "../../extension/questions";
+import {
+  QuestionGeneratorSettings,
+  defaultGenSettings
+} from "../../extension/questions";
 
 type SettingsFormProps = {
   type: "Settings";
@@ -89,7 +92,9 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
     this.testsettingsform = this.testsettingsform.bind(this);
   }
 
-  private testsettingsform(onSubmit: (settings: QuestionGeneratorSettings) => void) {
+  private testsettingsform(
+    onSubmit: (settings: QuestionGeneratorSettings) => void
+  ) {
     let { currentSettings } = this.state;
     let setSettingsProp = (prop: string, field: string, newVal: any) =>
       this.setState(state => {
@@ -103,16 +108,18 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
         {Object.keys(currentSettings).map((type: string, key: number) => (
           <div key={key}>
             <Header>{type}</Header>
-            {Object.keys(currentSettings[type]).map((field: string, key: number) => (
-              <Form.Field key={key}>
-                <label>{field}</label>
-                <input
-                  name={field}
-                  value={currentSettings[type][field]}
-                  onChange={onChangeGenerator(type, field)}
-                />
-              </Form.Field>
-            ))}
+            {Object.keys(currentSettings[type]).map(
+              (field: string, key: number) => (
+                <Form.Field key={key}>
+                  <label>{field}</label>
+                  <input
+                    name={field}
+                    value={currentSettings[type][field]}
+                    onChange={onChangeGenerator(type, field)}
+                  />
+                </Form.Field>
+              )
+            )}
           </div>
         ))}
         <Form.Button content="submit" />
@@ -129,7 +136,8 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
         return state;
       });
     };
-    let textOnChangeGenerator = (field: string) => (e: any) => setCardProp(field, e.currentTarget.value);
+    let textOnChangeGenerator = (field: string) => (e: any) =>
+      setCardProp(field, e.currentTarget.value);
     return (
       <Form onSubmit={onSubmit}>
         <Form.Field>
@@ -197,7 +205,8 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
       currentDeck.info[prop] = newVal;
       this.setState(this.state);
     };
-    let onChangeGenerator = (field: string) => (e: any) => setDeckProp(field, e.target.value);
+    let onChangeGenerator = (field: string) => (e: any) =>
+      setDeckProp(field, e.target.value);
     return (
       <Form onSubmit={onSubmit}>
         <Form.Field>
@@ -230,20 +239,28 @@ class FillForm extends React.Component<FillFormProps, FillFormState> {
         return this.cardform(() => {
           if (!this.state.currentCard.isEmpty()) {
             thisprop.submitCardToDeck(this.state.currentCard);
-            this.setState({ ...this.state, currentCard: CardDef.createCard("", "", "") });
+            this.setState({
+              ...this.state,
+              currentCard: CardDef.createCard("", "", "")
+            });
           }
         });
       }
       case "Changecard": {
         const thisprop = this.props as ChangeCardProps;
-        return this.cardform(() => thisprop.amendCurrentCard(this.state.currentCard));
+        return this.cardform(() =>
+          thisprop.amendCurrentCard(this.state.currentCard)
+        );
       }
       case "Adddeck": {
         const thisprop = this.props as AddDeckFormProps;
         return this.deckform(() => {
           if (!this.state.currentDeck.isEmpty()) {
             thisprop.addNewDeck(this.state.currentDeck);
-            this.setState({ ...this.state, currentDeck: CardDef.createDeck("", "") });
+            this.setState({
+              ...this.state,
+              currentDeck: CardDef.createDeck("", "")
+            });
           }
         });
       }
