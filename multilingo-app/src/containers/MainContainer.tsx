@@ -36,6 +36,8 @@ const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (
     dispatch
   );
 
+
+	//main page
 export default withRouter(
   connect(
     mapStateToProps,
