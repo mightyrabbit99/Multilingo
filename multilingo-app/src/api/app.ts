@@ -2,7 +2,7 @@ import express from "express";
 import cheerio from "cheerio";
 import request from 'request';
 
-const app = express()();
+const app = express();
 
 app.get("/search/", function(req, res) {
     
@@ -17,10 +17,10 @@ app.get("/search/", function(req, res) {
             return res.status(404).send({});
         }
 
-        var url,
-            replaceDefine = {
+        var url: any,
+            replaceDefine: {[s: string]: string} = {
                 hi: 'matlab',
-                tr: 'nedir'
+								tr: 'nedir',
             };
             
         if (queriedLanguage !== 'en') {
@@ -42,9 +42,9 @@ app.get("/search/", function(req, res) {
 
                 var dictionary: any = {},
                     word = $("div.dDoNo span").first().text(),
-                    meaning,
-                    mainPart,
-                    definitions;
+                    meaning: any,
+                    mainPart: any,
+                    definitions: any;
 
                 if (word.length < 1) {
                     res.header("Access-Control-Allow-Origin", "*");
@@ -59,7 +59,7 @@ app.get("/search/", function(req, res) {
                 }
 
                 dictionary.phonetic = [];
-                $(".lr_dct_ph.XpoqFe").first().find('span').each(function(i, element) {
+                $(".lr_dct_ph.XpoqFe").first().find('span').each(function(this: any, i: any, element: any) {
                     dictionary.phonetic.push($(this).text());
                 });
 
@@ -70,8 +70,7 @@ app.get("/search/", function(req, res) {
                 mainPart = definitions.first().find(".lr_dct_sf_h");
 
 
-                    mainPart.each(function(i, element) {
-                        
+                    mainPart.each(function(this: any, i: any, element: any) {
                         var type = $(this).find('i').text(),
                             selector = $(".lr_dct_sf_sens").eq(i).find("div[style='margin-left:20px'] > .PNlCoe");
 
@@ -83,9 +82,9 @@ app.get("/search/", function(req, res) {
                                 synonyms,
                                 example;
 
-                            newDefinition.definition = $(this).find("div[data-dobid='dfn']").text();
-                            example = $(this).find("span.vmod .vk_gy").text();
-                            synonymsText = $(this).find("div.vmod td.lr_dct_nyms_ttl + td > span:not([data-log-string='synonyms-more-click'])").text();
+                            newDefinition.definition = $(self).find("div[data-dobid='dfn']").text();
+                            example = $(self).find("span.vmod .vk_gy").text();
+                            synonymsText = $(self).find("div.vmod td.lr_dct_nyms_ttl + td > span:not([data-log-string='synonyms-more-click'])").text();
 
                             synonyms = synonymsText.split(/,|;/).filter(synonym => synonym != ' ' && synonym).map(function(item) {
                                 return item.trim();
@@ -139,7 +138,7 @@ app.get("/search/", function(req, res) {
                 }
 
 
-                var dictionary = [],
+                var dictionary: any[] = [],
                     numberOfentryGroup,
                     arrayOfEntryGroup = [],
                     grambs = $("section.gramb"),
@@ -184,7 +183,7 @@ app.get("/search/", function(req, res) {
 
                         $(grambs[j]).find(".semb").each(function(j, element) {
 
-                            var meaningArray = [];
+                            var meaningArray: any[] = [];
 
                             $(element).find("> li").each(function(j, element) {
 
@@ -224,7 +223,7 @@ app.get("/search/", function(req, res) {
                     dictionary.push(entry);
                 }
 
-                Object.keys(dictionary).forEach(key => {
+                Object.keys(dictionary).forEach((key: any) => {
                     (Array.isArray(dictionary[key]) && !dictionary[key].length) && delete dictionary[key];
                 });
 
@@ -238,6 +237,6 @@ app.get("/search/", function(req, res) {
     }
 );
 
-app.listen(3001, process.env.IP, function() {
+app.listen(3001, process.env.PUBLIC_URL, function() {
     console.log("I am listening... on " + 3001);
 });
