@@ -41,7 +41,7 @@
   },
   "scripts": {
 		"start": "npm-run-all -p watch-css start-js start-dict-server",
-		"start-dict-server": "cd dictapi && yarn start",
+		"start-dict-server": "cd ../dictapi && yarn start",
     "start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts start",
     "build": "node-sass-chokidar src/ -o src/ && react-scripts build",
     "build-css": "node-sass-chokidar src/styles/index.scss -o src/",
