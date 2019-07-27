@@ -38,7 +38,7 @@
     "typescript": "3.4.5"
   },
   "scripts": {
-    "start": "npm-run-all -p watch-css start-js start-dict-server",
+    "start": "npm-run-all -p watch-css start-js",
     "start-dict-server": "cd googleDictionaryAPI && yarn start",
     "start-js": "rm -r coverage; BROWSER=none PORT=80 react-scripts start",
     "build": "node-sass-chokidar src/ -o src/ && react-scripts build",

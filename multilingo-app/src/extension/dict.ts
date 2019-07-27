@@ -1,5 +1,3 @@
-import request from "request";
-import cheerio from "cheerio";
 import { Card, createCard, CardType } from "./cards";
 
 export type SearchResult = any;
