@@ -5,7 +5,7 @@ import { CardDeck, defaultDeck } from "../../extension/cards";
 import Deck, { DeckProps } from "./Deck";
 import Dictionary, { DictionaryProps } from "./Dictionary";
 import ControlBar, { MainControlBarProps } from "../commons/ControlBar";
-import Dict, { SearchResult } from "../../extension/dict";
+import Dict, { SearchResult, wordNotFound } from "../../extension/dict";
 
 export interface MainProps extends MainDispatchProps, MainStateProps, RouteComponentProps<{}> {}
 
@@ -33,7 +33,8 @@ export enum MainPage {
 
 type MainState = {
   page: MainPage;
-  selectedDeck: CardDeck;
+	selectedDeck: CardDeck;
+	dictProps: DictionaryProps;
 };
 
 class Main extends React.Component<MainProps, MainState> {
@@ -41,13 +42,23 @@ class Main extends React.Component<MainProps, MainState> {
     super(props);
     this.state = {
       page: MainPage.Main,
-      selectedDeck: defaultDeck
+			selectedDeck: defaultDeck,
+			dictProps: {
+				searched: this.props.searched,
+				searchResult: this.props.wordMeaning,
+				searchingWord: (word: string) => this.props.searchingWord(word, this.props.dict)
+			}
     };
   }
 
   componentDidMount() {
     //this.props.receiveDecks([]);
-  }
+	}
+	
+	componentWillReceiveProps(nextProps: any) {
+		console.log(nextProps);
+		this.setState({...this.state, dictProps: {...this.state.dictProps, searched: nextProps.searched, searchResult: nextProps.wordMeaning}});
+	}
 
   public render() {
     console.log("main render");
@@ -98,12 +109,7 @@ class Main extends React.Component<MainProps, MainState> {
           </div>
         );
       case MainPage.Dict: {
-				const dictProps: DictionaryProps = {
-					searching: !this.props.searched,
-					searchResult: this.props.wordMeaning,
-					searchingWord: (word: string) => this.props.searchingWord(word, this.props.dict)
-				}
-				return <Dictionary {...dictProps}/>;
+				return <Dictionary {...this.state.dictProps}/>;
 			}
     }
   }

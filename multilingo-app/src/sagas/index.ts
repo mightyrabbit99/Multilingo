@@ -12,9 +12,9 @@ import { SearchResult } from "../extension/dict";
 
 function* mainSaga() {
   //yield fork(fetchDecksDataSaga);
-	yield* sessionSaga();
-	yield* userSaga();
-	yield* dictSaga();
+  yield* sessionSaga();
+  yield* userSaga();
+  yield* dictSaga();
 }
 
 function* fetchDecksDataSaga() {
@@ -24,12 +24,12 @@ function* fetchDecksDataSaga() {
 }
 
 function* dictSaga(): SagaIterator {
-	yield takeEvery(actionTypes.START_SEARCH_WORD, function*(action) {
-		const word = (action as actionTypes.IAction).payload.word;
-		const searchRes: SearchResult = (action as actionTypes.IAction).payload.dict.search(word);
-		console.log(searchRes);
-		yield put(actions.wordSearched(searchRes));
-	});
+  yield takeEvery(actionTypes.START_SEARCH_WORD, function*(action) {
+    const word = (action as actionTypes.IAction).payload.word;
+		const res = yield call((action as actionTypes.IAction).payload.dict.search, word);
+		console.log(res);
+		yield put(actions.wordSearched(res));
+  });
 }
 
 function* sessionSaga(): SagaIterator {
@@ -39,9 +39,9 @@ function* sessionSaga(): SagaIterator {
 
     // redirect to main
     yield put(push("/main"));
-	});
-	
-	yield takeEvery(actionTypes.TO_TEST, function*(action) {
+  });
+
+  yield takeEvery(actionTypes.TO_TEST, function*(action) {
     // redirect to main
     yield put(push("/test"));
   });
@@ -49,15 +49,13 @@ function* sessionSaga(): SagaIterator {
   yield takeEvery(actionTypes.SELECT_DECK, function*(action) {
     // redirect to cardlist
     yield put(push("/cardlist"));
-	});
-
+  });
 }
 
 function* userSaga(): SagaIterator {
   yield takeEvery(actionTypes.GO_TO_LOGIN, function*(action) {
     yield put(push("/login"));
   });
-
 }
 
 export default mainSaga;

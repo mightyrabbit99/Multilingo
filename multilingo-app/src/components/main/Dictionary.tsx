@@ -4,7 +4,7 @@ import Dict, { SearchResult, wordNotFound } from "../../extension/dict";
 import { Input } from "semantic-ui-react";
 
 export interface DictionaryProps {
-	searching: boolean;
+	searched: boolean;
   searchResult: SearchResult;
   searchingWord: (word: string) => void;
 }
@@ -16,7 +16,8 @@ enum DictStatus {
 
 type DictionaryState = {
   status: DictStatus;
-  word: string;
+	word: string;
+	meaning: SearchResult
 };
 
 class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
@@ -24,12 +25,14 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
     super(props);
     this.state = {
       status: DictStatus.Main,
-      word: ""
-    };
-  }
+			word: "",
+			meaning: wordNotFound
+		};
+		this.dispMeaning = this.dispMeaning.bind(this);
+	}
 
   dispMeaning() {
-		const res = this.props.searchResult;
+		const res = this.props.searchResult[0];
 		(window as any).res = res;
     const wordNotFoundText = "FUCK YOU!!!!!!!!!!";
     const meaningComponent = () => (
@@ -42,9 +45,9 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
             {res.meaning[s].map((a: any, i: number) => (
               <div className="meaningandexample" key={i}>
                 <p>{a.definition}</p>
-                {a.synonyms.map((ss: string, i: number) => (
+                {a.synonyms ? a.synonyms.map((ss: string, i: number) => (
                   <p key={i}>{ss}</p>
-                ))}
+                )): null}
               </div>
             ))}
           </div>
@@ -53,13 +56,14 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
     );
     return (
       <div className="meaning">
-        {this.props.searching ? null :
-					this.props.searchResult === wordNotFound ? wordNotFoundText : meaningComponent()}
+        {this.props.searched ? 
+					(this.props.searchResult === wordNotFound ? wordNotFoundText : meaningComponent()): null}
       </div>
     );
   }
 
   render() {
+		console.log(this.props.searched);
     const searchBarChange = (e: any) => {
       this.props.searchingWord(e.target.value);
       this.setState({ ...this.state, word: e.target.value, status: DictStatus.Searched });

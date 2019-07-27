@@ -20,6 +20,7 @@ export const reducer: Reducer<IDictState> = (
 		}
 
 		case WORD_SEARCHED : {
+			console.log(action.payload.res);
 			return {
 				...state,
 				searched: true,
