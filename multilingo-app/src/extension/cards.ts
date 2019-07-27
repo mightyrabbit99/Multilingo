@@ -71,6 +71,7 @@ export class Card {
   public type: CardType;
   public front: string;
   public back: string;
+
   public equals(anotherCard: Card): boolean {
     return (
       this.front === anotherCard.front &&
@@ -98,6 +99,20 @@ export class Card {
   }
 
   [key: string]: any;
+}
+
+export function cardToJSON(card: Card) {
+  return {
+    category: card.category,
+    front: card.front,
+    back: card.back,
+    type: card.type,
+    originalCard: null,
+    dateAdded: card.dateAdded,
+    comments: [],
+    description: "",
+    info: initialCardInfo
+  };
 }
 
 /**
@@ -217,9 +232,10 @@ export class CardDeck {
   }
 }
 
-export function cardToJSON(carddeck: CardDeck) {
+//for database use
+export function cardDeckToJSON(carddeck: CardDeck) {
   return {
-    cards: carddeck.cards,
+    cards: carddeck.cards.map(x => cardToJSON(x)),
     info: carddeck.info
   };
 }
@@ -252,11 +268,11 @@ defaultDeck.addCard(defaultCard);
 
 export function sampleDecks(): CardDeck[] {
   let ans = [];
+  ans.push(new CardDeck("Test"));
   ans.push(exampleDeck);
   (window as any).example = exampleDeck;
-  ans.push(new CardDeck("deck2"));
-  ans[1].addCard(createCard("a", "haha", "shit"));
-  ans[1].addCard(createCard("a", "haha", "shit"));
+  ans[0].addCard(createCard("a", "run off", "flee"));
+  ans[0].addCard(createCard("b", "penalize", "confiscate"));
   return ans;
 }
 

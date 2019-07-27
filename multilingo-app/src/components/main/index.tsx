@@ -6,7 +6,8 @@ import {
   defaultDeck,
   Card,
   CardCollection,
-  cardToJSON
+  cardDeckToJSON,
+  CardType
 } from "../../extension/cards";
 import Deck, { DeckProps } from "./Deck";
 import Dictionary, { DictionaryProps } from "./Dictionary";
@@ -35,7 +36,23 @@ export interface MainDispatchProps {
   searchingWord: (word: string, dict: Dict) => void;
   updateDatabaseDecks: (
     decks: {
-      cards: Card[];
+      cards: {
+        category: string;
+        front: string;
+        back: string;
+        type: CardType;
+        originalCard: null;
+        dateAdded: number;
+        comments: never[];
+        description: string;
+        info: {
+          lastRevised: number;
+          lastResult: number;
+          correct: number;
+          wrong: number;
+          asked: number;
+        };
+      }[];
       info: {
         [key: string]: any;
         name: string;
@@ -72,7 +89,23 @@ class Main extends React.Component<MainProps, MainState> {
   componentDidUpdate() {
     let index = 0;
     let toStore: {
-      cards: Card[];
+      cards: {
+        category: string;
+        front: string;
+        back: string;
+        type: CardType;
+        originalCard: null;
+        dateAdded: number;
+        comments: never[];
+        description: string;
+        info: {
+          lastRevised: number;
+          lastResult: number;
+          correct: number;
+          wrong: number;
+          asked: number;
+        };
+      }[];
       info: {
         [key: string]: any;
         name: string;
@@ -81,7 +114,7 @@ class Main extends React.Component<MainProps, MainState> {
       };
     }[] = [];
     for (index = 0; index < this.props.decks.length; index++) {
-      toStore[index] = cardToJSON(this.props.decks[index]);
+      toStore[index] = cardDeckToJSON(this.props.decks[index]);
     }
     this.props.updateDatabaseDecks(toStore);
   }

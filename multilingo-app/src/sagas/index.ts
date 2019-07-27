@@ -17,14 +17,20 @@ import * as actionTypes from "../actions/actionTypes";
 //database
 import rsf from "../backend/rsf";
 import { SearchResult } from "../extension/dict";
-import { CardDeck, Card, CardCollection } from "../extension/cards";
+import {
+  CardDeck,
+  Card,
+  CardCollection,
+  exampleExplCard1,
+  cardToJSON
+} from "../extension/cards";
 
 function* mainSaga() {
   yield fork(fetchDecksDataSaga);
   yield* sessionSaga();
   yield* userSaga();
   yield* dictSaga();
-  yield* updateDatabaseDecksSaga();
+  //yield* updateDatabaseDecksSaga();
 }
 
 //Fetch Data from Firebase
@@ -37,13 +43,19 @@ function* fetchDecksDataSaga() {
 //Add Decks to Firebase
 function* updateDatabaseDecksSaga() {
   yield takeEvery(actionTypes.UPDATE_DATABASE_DECKS, function*(action) {
-    const newDeck = (action as actionTypes.IAction).payload.decks;
+    const newCardDecks = (action as actionTypes.IAction).payload.decks;
     yield call(
       rsf.updateDocument,
       "Decks/n8Rs6Vb6SaiEZWB6o9fF",
       "CardDecks",
-      newDeck
+      newCardDecks
     );
+    /*
+    console.log(Object.values(exampleExplCard1));
+    yield call(rsf.updateDocument, "Decks/n8Rs6Vb6SaiEZWB6o9fF", "cards", [
+      cardToJSON(exampleExplCard1)
+    ]);
+    */
   });
 }
 
