@@ -1,7 +1,7 @@
 {
   "name": "multilingo-app",
   "version": "0.1.0",
-	"private": true,
+  "private": true,
   "dependencies": {
     "@firebase/firestore": "^1.4.2",
     "@types/cheerio": "^0.22.12",

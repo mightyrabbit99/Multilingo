@@ -70,8 +70,8 @@ export enum MainPage {
 
 type MainState = {
   page: MainPage;
-	selectedDeck: CardDeck;
-	dictProps: DictionaryProps;
+  selectedDeck: CardDeck;
+  dictProps: DictionaryProps;
 };
 
 class Main extends React.Component<MainProps, MainState> {
@@ -79,17 +79,30 @@ class Main extends React.Component<MainProps, MainState> {
     super(props);
     this.state = {
       page: MainPage.Main,
-			selectedDeck: defaultDeck,
-			dictProps: {
-				searched: this.props.searched,
-				searchResult: this.props.wordMeaning,
-				searchingWord: (word: string) => this.props.searchingWord(word, this.props.dict)
-			}
+      selectedDeck: defaultDeck,
+      dictProps: {
+        searched: this.props.searched,
+        searchResult: this.props.wordMeaning,
+        searchingWord: (word: string) =>
+          this.props.searchingWord(word, this.props.dict)
+      }
     };
   }
 
   componentDidMount() {
     this.props.receiveDecks(this.props.decks);
+  }
+
+  componentWillReceiveProps(nextProps: any) {
+    console.log(nextProps);
+    this.setState({
+      ...this.state,
+      dictProps: {
+        ...this.state.dictProps,
+        searched: nextProps.searched,
+        searchResult: nextProps.wordMeaning
+      }
+    });
   }
 
   componentDidUpdate() {
@@ -176,8 +189,8 @@ class Main extends React.Component<MainProps, MainState> {
           </div>
         );
       case MainPage.Dict: {
-				return <Dictionary {...this.state.dictProps}/>;
-			}
+        return <Dictionary {...this.state.dictProps} />;
+      }
     }
   }
 }

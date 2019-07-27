@@ -19,14 +19,23 @@ class Dictionary {
     if (res) {
       res[0].meaning.forEach((elem: any, i: number) => {
         if (elem.definition) {
-          cardAdder(createCard("dictionary autocreate", elem.definition, res.word, CardType.Expl));
+          cardAdder(
+            createCard(
+              "dictionary autocreate",
+              elem.definition,
+              res.word,
+              CardType.Expl
+            )
+          );
         }
         if (elem.synonyms) {
           let syn: string = elem.synonyms.shift();
           elem.synonyms.forEach((word: string) => {
             syn += ", " + word;
           });
-          cardAdder(createCard("dictionary autocreate", syn, res.word, CardType.Expl));
+          cardAdder(
+            createCard("dictionary autocreate", syn, res.word, CardType.Expl)
+          );
         }
       });
     }
@@ -36,19 +45,22 @@ class Dictionary {
     let res: SearchResult;
     this.search(word).then(result => {
       res = result;
-		});
-		let count = 0;
-		while(!res && count < 200) {count++;}
-		if(res) {
-			return res;
-		} else {
-			return wordNotFound;
-		}
+    });
+    let count = 0;
+    while (!res && count < 200) {
+      count++;
+    }
+    if (res) {
+      return res;
+    } else {
+      return wordNotFound;
+    }
   }
 
   search(word: string) {
-    return fetch(`http://localhost:3001/search/?define=${word}`)
-			.then(res => res.json());
+    return fetch(`http://localhost:3001/?define=${word}`).then(res =>
+      res.json()
+    );
   }
 }
 
