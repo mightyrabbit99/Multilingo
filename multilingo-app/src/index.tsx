@@ -9,14 +9,17 @@ import { ConnectedRouter } from "connected-react-router";
 import { store } from "./createStore";
 import { history } from "./utils/history";
 import AppContainer from "./containers/AppContainer";
+import "reflect-metadata";
+import "es6-shim";
 
 ReactDOM.render(
-    <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <AppContainer/>
-        </ConnectedRouter>
-    </Provider>
-    , document.getElementById("root"));
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <AppContainer />
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

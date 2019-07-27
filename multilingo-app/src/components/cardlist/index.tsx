@@ -3,9 +3,14 @@ import { RouteComponentProps } from "react-router";
 
 import { CardDeck, Card } from "../../extension/cards";
 import WordCard, { WordCardProps } from "./WordCard";
-import WordListPushablePanels, { WordListPushablePanelsProps } from "./WordListPushablePanels";
+import WordListPushablePanels, {
+  WordListPushablePanelsProps
+} from "./WordListPushablePanels";
 
-export interface CardListProps extends CardListDispatchProps, CardListStateProps, RouteComponentProps<{}> {}
+export interface CardListProps
+  extends CardListDispatchProps,
+    CardListStateProps,
+    RouteComponentProps<{}> {}
 
 export interface CardListStateProps {
   title: string;
@@ -16,9 +21,10 @@ export interface CardListStateProps {
 }
 
 export interface CardListDispatchProps {
-	addCardToDeck: (card: Card) => void;
-	selectDeck: (deck: CardDeck) => void;
-	handleToTest: () => void;
+  addCardToDeck: (card: Card) => void;
+  selectDeck: (deck: CardDeck) => void;
+  handleToTest: () => void;
+  updateDatabaseDecks: (deck: CardDeck[]) => void;
 }
 
 type CardListState = {
@@ -42,6 +48,8 @@ class CardList extends React.Component<CardListProps, CardListState> {
   public componentWillReceiveProps(newProps: CardListProps) {
     if (newProps.newCard) {
       this.state.currentDeck.addCard(newProps.newCard);
+      //update database
+      this.props.updateDatabaseDecks(this.props.decks);
     }
   }
 
@@ -57,24 +65,24 @@ class CardList extends React.Component<CardListProps, CardListState> {
       return <WordCard {...props} key={i} />;
     };
     let currentPushablePanelProps: WordListPushablePanelsProps = {
-			color: "green",
-			activeDeck: this.state.currentDeck,
-			activeCard: this.state.selectedCard,
-			handleToTest: this.props.handleToTest,
-			decksPanel: {
-				decks: this.props.decks,
-				visible: this.state.decksPanelVisible,
-				selectDeck: this.props.selectDeck
-			},
-			addCardPanel: {
-				visible: this.state.addCardPanelVisible,
-				addCardToDeck: this.props.addCardToDeck
-			}
+      color: "green",
+      activeDeck: this.state.currentDeck,
+      activeCard: this.state.selectedCard,
+      handleToTest: this.props.handleToTest,
+      decksPanel: {
+        decks: this.props.decks,
+        visible: this.state.decksPanelVisible,
+        selectDeck: this.props.selectDeck
+      },
+      addCardPanel: {
+        visible: this.state.addCardPanelVisible,
+        addCardToDeck: this.props.addCardToDeck
+      }
     };
     return (
-        <WordListPushablePanels {...currentPushablePanelProps}>
-          {this.props.selectedDeck.cards.map(generateCard)}
-        </WordListPushablePanels>
+      <WordListPushablePanels {...currentPushablePanelProps}>
+        {this.props.selectedDeck.cards.map(generateCard)}
+      </WordListPushablePanels>
     );
   }
 }

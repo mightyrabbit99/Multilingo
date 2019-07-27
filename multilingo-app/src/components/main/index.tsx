@@ -1,14 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 
-import {
-  CardDeck,
-  defaultDeck,
-  Card,
-  CardCollection,
-  cardDeckToJSON,
-  CardType
-} from "../../extension/cards";
+import { CardDeck, defaultDeck } from "../../extension/cards";
 import Deck, { DeckProps } from "./Deck";
 import Dictionary, { DictionaryProps } from "./Dictionary";
 import ControlBar, { MainControlBarProps } from "../commons/ControlBar";
@@ -34,33 +27,7 @@ export interface MainDispatchProps {
   handleAddDeck: (deck: CardDeck) => void;
   receiveDecks: (decks: CardDeck[]) => void;
   searchingWord: (word: string, dict: Dict) => void;
-  updateDatabaseDecks: (
-    decks: {
-      cards: {
-        category: string;
-        front: string;
-        back: string;
-        type: CardType;
-        originalCard: null;
-        dateAdded: number;
-        comments: any[];
-        description: string;
-        info: {
-          lastRevised: number;
-          lastResult: number;
-          correct: number;
-          wrong: number;
-          asked: number;
-        };
-      }[];
-      info: {
-        [key: string]: any;
-        name: string;
-        category: string;
-        dateAdded: number;
-      };
-    }[]
-  ) => void;
+  updateDatabaseDecks: (deck: CardDeck[]) => void;
 }
 
 export enum MainPage {
@@ -89,7 +56,7 @@ class Main extends React.Component<MainProps, MainState> {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.receiveDecks(this.props.decks);
   }
 
@@ -106,36 +73,7 @@ class Main extends React.Component<MainProps, MainState> {
   }
 
   componentDidUpdate() {
-    let index = 0;
-    let toStore: {
-      cards: {
-        category: string;
-        front: string;
-        back: string;
-        type: CardType;
-        originalCard: null;
-        dateAdded: number;
-        comments: any[];
-        description: string;
-        info: {
-          lastRevised: number;
-          lastResult: number;
-          correct: number;
-          wrong: number;
-          asked: number;
-        };
-      }[];
-      info: {
-        [key: string]: any;
-        name: string;
-        category: string;
-        dateAdded: number;
-      };
-    }[] = [];
-    for (index = 0; index < this.props.decks.length; index++) {
-      toStore[index] = cardDeckToJSON(this.props.decks[index]);
-    }
-    this.props.updateDatabaseDecks(toStore);
+    this.props.updateDatabaseDecks(this.props.decks);
   }
 
   public render() {

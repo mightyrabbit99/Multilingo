@@ -1,4 +1,6 @@
 import { Comment } from "./questions";
+import { Type, classToPlain } from "class-transformer";
+import "reflect-metadata";
 
 //Cards
 /**
@@ -101,20 +103,6 @@ export class Card {
   [key: string]: any;
 }
 
-export function cardToJSON(card: Card) {
-  return {
-    category: card.category,
-    front: card.front,
-    back: card.back,
-    type: card.type,
-    originalCard: null,
-    dateAdded: card.dateAdded,
-    comments: [],
-    description: "",
-    info: initialCardInfo
-  };
-}
-
 /**
  * Examples of explanation card
  */
@@ -164,12 +152,6 @@ export const exampleExampleCard: Card = createCard(
  * Card is categorised by category and word to simplify search
  */
 
-export type CardCollection = {
-  byCategory: { [type: string]: Card[] };
-  byBack: { [back: string]: Card[] };
-  byType: { Explanation: Card[]; Example: Card[] };
-};
-
 export function createCard(
   category: string,
   front: string,
@@ -190,18 +172,30 @@ export class CardDeck {
     dateAdded: number;
     [key: string]: any;
   };
+
+  @Type(() => Card)
   public cards: Card[];
-  public collection: CardCollection = {
-    byBack: {},
-    byCategory: {},
-    byType: {
-      Explanation: [],
-      Example: []
-    }
+
+  public collection: {
+    byBack: any;
+    byCategory: any;
   };
+
+  @Type(() => Card)
+  public collectionExplanation: Card[];
+
+  @Type(() => Card)
+  public collectionExample: Card[];
+
   constructor(name: string, category: string = "") {
     this.info = { name: name, category: category, dateAdded: Date.now() };
     this.cards = [];
+    this.collection = {
+      byBack: {},
+      byCategory: {}
+    };
+    this.collectionExplanation = [];
+    this.collectionExample = [];
   }
 
   public isEmpty(): boolean {
@@ -210,17 +204,18 @@ export class CardDeck {
   public addCard(card: Card) {
     if (this.cards.includes(card)) return;
     if (this.collection.byCategory[card.category] === undefined) {
-      this.collection.byCategory[card.category] = [];
+      this.collection.byCategory[card.category] = 0;
     }
     if (this.collection.byBack[card.back] === undefined) {
-      this.collection.byBack[card.back] = [];
+      this.collection.byBack[card.back] = 0;
     }
-    this.collection.byCategory[card.category].unshift(card);
-    this.collection.byBack[card.back].unshift(card);
+    this.collection.byCategory[card.category]++;
+    this.collection.byBack[card.back]++;
+
     if (card.type === CardType.Expl) {
-      this.collection.byType.Explanation.unshift(card);
+      this.collectionExplanation.unshift(card);
     } else {
-      this.collection.byType.Example.unshift(card);
+      this.collectionExample.unshift(card);
     }
     this.cards.push(card);
   }
@@ -230,14 +225,6 @@ export class CardDeck {
       this.addCard(anotherDeck.cards[i]);
     }
   }
-}
-
-//for database use
-export function cardDeckToJSON(carddeck: CardDeck) {
-  return {
-    cards: carddeck.cards.map(x => cardToJSON(x)),
-    info: carddeck.info
-  };
 }
 
 export function createDeck(

@@ -16,28 +16,24 @@ import * as actionTypes from "../actions/actionTypes";
 
 //database
 import rsf from "../backend/rsf";
+import { Type, classToPlain, plainToClass } from "class-transformer";
 import { SearchResult } from "../extension/dict";
-import {
-  CardDeck,
-  Card,
-  CardCollection,
-  exampleExplCard1,
-  cardToJSON
-} from "../extension/cards";
+import { CardDeck } from "../extension/cards";
 
 function* mainSaga() {
-  //yield fork(fetchDecksDataSaga);
+  yield fork(fetchDecksDataSaga);
   yield* sessionSaga();
   yield* userSaga();
   yield* dictSaga();
-  //yield* updateDatabaseDecksSaga();
+  yield* updateDatabaseDecksSaga();
 }
 
 //Fetch Data from Firebase
 function* fetchDecksDataSaga() {
   yield take(actionTypes.RECEIVE_DECKS_DATA);
   const snapshot = yield call(rsf.getDocument, "Decks/n8Rs6Vb6SaiEZWB6o9fF");
-  yield put(actions.receiveDecksData(snapshot.data().CardDecks));
+  const cardDecks = snapshot.data().CardDecks;
+  yield put(actions.receiveDecksData(plainToClass(CardDeck, cardDecks)));
 }
 
 //Add Decks to Firebase
@@ -48,15 +44,20 @@ function* updateDatabaseDecksSaga() {
       rsf.updateDocument,
       "Decks/n8Rs6Vb6SaiEZWB6o9fF",
       "CardDecks",
-      newCardDecks
+      classToPlain(newCardDecks)
     );
-    /*
-    console.log(Object.values(exampleExplCard1));
-    yield call(rsf.updateDocument, "Decks/n8Rs6Vb6SaiEZWB6o9fF", "cards", [
-      cardToJSON(exampleExplCard1)
-    ]);
-    */
   });
+  /*
+  yield takeEvery(actionTypes.ADD_CARD_TO_SELECTED_DECK, function*(action) {
+    const newCardDecks = (action as actionTypes.IAction).payload.decks;
+    yield call(
+      rsf.updateDocument,
+      "Decks/n8Rs6Vb6SaiEZWB6o9fF",
+      "dDecks",
+      classToPlain(newCardDecks)
+    );
+  });
+  */
 }
 
 function* dictSaga(): SagaIterator {

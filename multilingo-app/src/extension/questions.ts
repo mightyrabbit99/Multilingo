@@ -56,7 +56,12 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export class Question {
-  constructor(type: QuestionType, question: Card | string, answer: Answer, options?: (Card | string)[]) {
+  constructor(
+    type: QuestionType,
+    question: Card | string,
+    answer: Answer,
+    options?: (Card | string)[]
+  ) {
     if (question instanceof Card) {
       this.questionCard = question;
     } else {
@@ -81,12 +86,17 @@ export class Question {
           this.question =
             this.questionCard.type === CardType.Expl
               ? this.questionCard.front
-              : this.questionCard.front.replace(new RegExp(this.questionCard.back, "ig"), "__________");
+              : this.questionCard.front.replace(
+                  new RegExp(this.questionCard.back, "ig"),
+                  "__________"
+                );
           break;
         }
         case QuestionType.Fillinblanks: {
           if (this.questionCard.type === CardType.Ex) {
-            this.question = this.questionCard.front.split(new RegExp(this.questionCard.back, "ig"));
+            this.question = this.questionCard.front.split(
+              new RegExp(this.questionCard.back, "ig")
+            );
           }
           break;
         }
@@ -136,12 +146,12 @@ export function getUpperLimit(deck: CardDeck): QuestionGeneratorSettings {
       noOfOption: Object.keys(deck.collection.byBack).length
     },
     Fillinblanks: {
-      noOfQuestion: deck.collection.byType.Example.length,
+      noOfQuestion: deck.collectionExample.length,
       Withoptions: false,
       Casesensitive: false
     },
     Rearrange: {
-      noOfQuestion: deck.collection.byType.Example.length
+      noOfQuestion: deck.collectionExample.length
     }
   };
 }
@@ -189,30 +199,51 @@ export class QuestionGenerator {
     }
     thisoptions.push(questionCard.back);
     shuffle(thisoptions);
-    const ans = new Answer(questionCard, (ans: string) => ans === questionCard.back);
+    const ans = new Answer(
+      questionCard,
+      (ans: string) => ans === questionCard.back
+    );
     return new Question(QuestionType.MCQ, questionCard, ans, thisoptions);
   }
 
   makeFillInBlanks(questionCard: Card, optionCard: string[]) {
-    const ans = new Answer(questionCard, (ans: string) => ans === questionCard.front);
-    return new Question(QuestionType.Fillinblanks, questionCard, ans, optionCard);
+    const ans = new Answer(
+      questionCard,
+      (ans: string) => ans === questionCard.front
+    );
+    return new Question(
+      QuestionType.Fillinblanks,
+      questionCard,
+      ans,
+      optionCard
+    );
   }
 
   makeRearrange(questionCard: Card) {
-    const ans = new Answer(questionCard, (ans: string) => ans === questionCard.front);
+    const ans = new Answer(
+      questionCard,
+      (ans: string) => ans === questionCard.front
+    );
     return new Question(QuestionType.Rearrange, questionCard, ans);
   }
 
   generateQuestions(deck: CardDeck): Question[] {
     let ques: Question[] = [];
     let allCards = deck.cards.slice();
-    let exampleCards = deck.collection.byType.Example.slice();
+    let exampleCards = deck.collectionExample.slice();
     let { MCQ, Fillinblanks, Rearrange } = this.settings;
     for (let i = 0; i < MCQ.noOfQuestion && allCards.length > 0; i++) {
-      ques.push(this.makeMCQ(popRandom(allCards), Object.keys(deck.collection.byBack)));
+      ques.push(
+        this.makeMCQ(popRandom(allCards), Object.keys(deck.collection.byBack))
+      );
     }
     for (let i = 0; i < Fillinblanks.noOfQuestion && allCards.length > 0; i++) {
-      ques.push(this.makeFillInBlanks(popRandom(exampleCards), Object.keys(deck.collection.byBack)));
+      ques.push(
+        this.makeFillInBlanks(
+          popRandom(exampleCards),
+          Object.keys(deck.collection.byBack)
+        )
+      );
     }
     for (let i = 0; i < Rearrange.noOfQuestion && allCards.length > 0; i++) {
       ques.push(this.makeRearrange(popRandom(exampleCards)));
