@@ -1,29 +1,66 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 
-import { CardDeck, defaultDeck } from "../../extension/cards";
+import {
+  CardDeck,
+  defaultDeck,
+  Card,
+  CardCollection,
+  cardDeckToJSON,
+  CardType
+} from "../../extension/cards";
 import Deck, { DeckProps } from "./Deck";
 import Dictionary, { DictionaryProps } from "./Dictionary";
 import ControlBar, { MainControlBarProps } from "../commons/ControlBar";
 import Dict, { SearchResult, wordNotFound } from "../../extension/dict";
 
-export interface MainProps extends MainDispatchProps, MainStateProps, RouteComponentProps<{}> {}
+export interface MainProps
+  extends MainDispatchProps,
+    MainStateProps,
+    RouteComponentProps<{}> {}
 
 export interface MainStateProps {
   title: string;
   decks: CardDeck[];
-	newDeck: CardDeck | null;
-	searched: boolean;
-	wordMeaning: SearchResult;
-	dict: Dict;
+  newDeck: CardDeck | null;
+  searched: boolean;
+  wordMeaning: SearchResult;
+  dict: Dict;
 }
 
 export interface MainDispatchProps {
   logout: () => void;
   handleSelectDeck: (deck: CardDeck) => void;
   handleAddDeck: (deck: CardDeck) => void;
-	receiveDecks: (decks: CardDeck[]) => void;
-	searchingWord: (word: string, dict: Dict) => void;
+  receiveDecks: (decks: CardDeck[]) => void;
+  searchingWord: (word: string, dict: Dict) => void;
+  updateDatabaseDecks: (
+    decks: {
+      cards: {
+        category: string;
+        front: string;
+        back: string;
+        type: CardType;
+        originalCard: null;
+        dateAdded: number;
+        comments: any[];
+        description: string;
+        info: {
+          lastRevised: number;
+          lastResult: number;
+          correct: number;
+          wrong: number;
+          asked: number;
+        };
+      }[];
+      info: {
+        [key: string]: any;
+        name: string;
+        category: string;
+        dateAdded: number;
+      };
+    }[]
+  ) => void;
 }
 
 export enum MainPage {
@@ -52,13 +89,41 @@ class Main extends React.Component<MainProps, MainState> {
   }
 
   componentDidMount() {
-    //this.props.receiveDecks([]);
-	}
-	
-	componentWillReceiveProps(nextProps: any) {
-		console.log(nextProps);
-		this.setState({...this.state, dictProps: {...this.state.dictProps, searched: nextProps.searched, searchResult: nextProps.wordMeaning}});
-	}
+    this.props.receiveDecks(this.props.decks);
+  }
+
+  componentDidUpdate() {
+    let index = 0;
+    let toStore: {
+      cards: {
+        category: string;
+        front: string;
+        back: string;
+        type: CardType;
+        originalCard: null;
+        dateAdded: number;
+        comments: any[];
+        description: string;
+        info: {
+          lastRevised: number;
+          lastResult: number;
+          correct: number;
+          wrong: number;
+          asked: number;
+        };
+      }[];
+      info: {
+        [key: string]: any;
+        name: string;
+        category: string;
+        dateAdded: number;
+      };
+    }[] = [];
+    for (index = 0; index < this.props.decks.length; index++) {
+      toStore[index] = cardDeckToJSON(this.props.decks[index]);
+    }
+    this.props.updateDatabaseDecks(toStore);
+  }
 
   public render() {
     console.log("main render");
@@ -72,12 +137,14 @@ class Main extends React.Component<MainProps, MainState> {
 
     const controlBar = () => {
       let props: MainControlBarProps = {
-				location: "Main",
-				page: this.state.page,
+        location: "Main",
+        page: this.state.page,
         color: "green",
-				handleAddDeck: this.props.handleAddDeck,
-				handleToDict: () => this.setState({...this.state, page: MainPage.Dict}),
-				handleToDeck: () => this.setState({...this.state, page: MainPage.Main}),
+        handleAddDeck: this.props.handleAddDeck,
+        handleToDict: () =>
+          this.setState({ ...this.state, page: MainPage.Dict }),
+        handleToDeck: () =>
+          this.setState({ ...this.state, page: MainPage.Main }),
         modalOpen: false
       };
       return <ControlBar {...props} />;
