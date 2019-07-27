@@ -1,5 +1,3 @@
-import request from "request";
-import cheerio from "cheerio";
 import { Card, createCard, CardType } from "./cards";
 
 export type SearchResult = any;
@@ -58,7 +56,7 @@ class Dictionary {
   }
 
   search(word: string) {
-    return fetch(`http://localhost:3001/?define=${word}`).then(s => s.json());
+    return fetch(`/search/?define=${word}`).then(s => {console.log(s);return s.json()});
   }
 }
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-
+import * as qs from "query-string";
 import { CardDeck, defaultDeck } from "../../extension/cards";
 import Deck, { DeckProps } from "./Deck";
 import Dictionary, { DictionaryProps } from "./Dictionary";
@@ -44,16 +44,33 @@ type MainState = {
 class Main extends React.Component<MainProps, MainState> {
   constructor(props: MainProps) {
     super(props);
-    this.state = {
-      page: MainPage.Main,
-      selectedDeck: defaultDeck,
-      dictProps: {
-        searched: this.props.searched,
-        searchResult: this.props.wordMeaning,
-        searchingWord: (word: string) =>
-          this.props.searchingWord(word, this.props.dict)
-      }
-    };
+    const query = qs.parse(this.props.location.search);
+    if (query.define) {
+      this.state = {
+        page: MainPage.Dict,
+        selectedDeck: defaultDeck,
+        dictProps: {
+          word: query.define as string,
+          searched: this.props.searched,
+          searchResult: this.props.wordMeaning,
+          searchingWord: (word: string) =>
+            this.props.searchingWord(word, this.props.dict)
+        }
+      };
+      this.props.searchingWord(query.define as string, this.props.dict);
+    } else {
+      this.state = {
+        page: MainPage.Main,
+        selectedDeck: defaultDeck,
+        dictProps: {
+          word: "",
+          searched: this.props.searched,
+          searchResult: this.props.wordMeaning,
+          searchingWord: (word: string) =>
+            this.props.searchingWord(word, this.props.dict)
+        }
+      };
+    }
   }
 
   componentWillMount() {

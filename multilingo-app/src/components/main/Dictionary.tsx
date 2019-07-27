@@ -4,6 +4,7 @@ import Dict, { SearchResult, wordNotFound } from "../../extension/dict";
 import { Input } from "semantic-ui-react";
 
 export interface DictionaryProps {
+  word: string;
   searched: boolean;
   searchResult: SearchResult;
   searchingWord: (word: string) => void;
@@ -24,8 +25,8 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
   constructor(props: DictionaryProps) {
     super(props);
     this.state = {
-      status: DictStatus.Main,
-      word: "",
+      status: props.word ? DictStatus.Searched : DictStatus.Main,
+      word: props.word,
       meaning: wordNotFound
     };
     this.dispMeaning = this.dispMeaning.bind(this);
@@ -46,11 +47,8 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
               {res.meaning[s].map((a: any, i: number) => (
                 <div className="meaningandexample" key={i}>
                   <p>{a.definition}</p>
-                  {a.synonyms
-                    ? a.synonyms.map((ss: string, i: number) => (
-                        <p key={i}>{ss}</p>
-                      ))
-                    : null}
+                  {a.example ? <p key={i}>{a.example}</p> : null}
+                  {a.synonyms ? a.synonyms.map((ss: string, i: number) => <p key={i}>{ss}</p>) : null}
                 </div>
               ))}
             </div>
@@ -74,10 +72,7 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
     console.log(this.props.searched);
     const search = (string: string) => {
       clearTimeout(this.timeoutvar);
-      this.timeoutvar = setTimeout(
-        () => this.props.searchingWord(string),
-        1000
-      );
+      this.timeoutvar = setTimeout(() => this.props.searchingWord(string), 1000);
     };
     const searchBarChange = (e: any) => {
       if (e.target.value) search(e.target.value);
