@@ -4,6 +4,7 @@ import Dict, { SearchResult, wordNotFound } from "../../extension/dict";
 import { Input } from "semantic-ui-react";
 
 export interface DictionaryProps {
+	word: string;
   searched: boolean;
   searchResult: SearchResult;
   searchingWord: (word: string) => void;
@@ -24,8 +25,8 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
   constructor(props: DictionaryProps) {
     super(props);
     this.state = {
-      status: DictStatus.Main,
-      word: "",
+      status: props.word ? DictStatus.Searched : DictStatus.Main,
+      word: props.word,
       meaning: wordNotFound
     };
     this.dispMeaning = this.dispMeaning.bind(this);

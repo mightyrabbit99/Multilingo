@@ -58,7 +58,7 @@ class Dictionary {
   }
 
   search(word: string) {
-    return fetch(`http://localhost:3001/?define=${word}`).then(s => s.json());
+    return fetch(`http://localhost:3001/search/?define=${word}`).then(s => s.json());
   }
 }
 
