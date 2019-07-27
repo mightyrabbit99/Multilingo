@@ -26,7 +26,7 @@ import {
 } from "../extension/cards";
 
 function* mainSaga() {
-  yield fork(fetchDecksDataSaga);
+  //yield fork(fetchDecksDataSaga);
   yield* sessionSaga();
   yield* userSaga();
   yield* dictSaga();
@@ -62,9 +62,12 @@ function* updateDatabaseDecksSaga() {
 function* dictSaga(): SagaIterator {
   yield takeEvery(actionTypes.START_SEARCH_WORD, function*(action) {
     const word = (action as actionTypes.IAction).payload.word;
-		const res = yield call((action as actionTypes.IAction).payload.dict.search, word);
-		console.log(res);
-		yield put(actions.wordSearched(res));
+    const res = yield call(
+      (action as actionTypes.IAction).payload.dict.search,
+      word
+    );
+    console.log(res);
+    yield put(actions.wordSearched(res));
   });
 }
 
