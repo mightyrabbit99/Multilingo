@@ -26,18 +26,11 @@ import {
 } from "../extension/cards";
 
 function* mainSaga() {
-<<<<<<< HEAD
-  //yield fork(fetchDecksDataSaga);
-  yield* sessionSaga();
-  yield* userSaga();
-  yield* dictSaga();
-=======
   yield fork(fetchDecksDataSaga);
   yield* sessionSaga();
   yield* userSaga();
   yield* dictSaga();
   //yield* updateDatabaseDecksSaga();
->>>>>>> 2dba3341c911b939f1f542a341421f7822bc7593
 }
 
 //Fetch Data from Firebase
@@ -69,17 +62,9 @@ function* updateDatabaseDecksSaga() {
 function* dictSaga(): SagaIterator {
   yield takeEvery(actionTypes.START_SEARCH_WORD, function*(action) {
     const word = (action as actionTypes.IAction).payload.word;
-<<<<<<< HEAD
 		const res = yield call((action as actionTypes.IAction).payload.dict.search, word);
 		console.log(res);
 		yield put(actions.wordSearched(res));
-=======
-    const searchRes: SearchResult = (action as actionTypes.IAction).payload.dict.search(
-      word
-    );
-    console.log(searchRes);
-    yield put(actions.wordSearched(searchRes));
->>>>>>> 2dba3341c911b939f1f542a341421f7822bc7593
   });
 }
 
