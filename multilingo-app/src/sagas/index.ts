@@ -1,5 +1,13 @@
 import { SagaIterator } from "redux-saga";
-import { call, put, race, select, take, takeEvery, fork } from "redux-saga/effects";
+import {
+  call,
+  put,
+  race,
+  select,
+  take,
+  takeEvery,
+  fork
+} from "redux-saga/effects";
 
 import { push } from "connected-react-router";
 
@@ -35,36 +43,58 @@ function* fetchDecksDataSaga() {
 function* updateDatabaseDecksSaga() {
   yield takeEvery(actionTypes.UPDATE_DATABASE_DECKS, function*(action) {
     const newCardDecks = (action as actionTypes.IAction).payload.decks;
-    yield call(rsf.updateDocument, "Decks/n8Rs6Vb6SaiEZWB6o9fF", "CardDecks", classToPlain(newCardDecks));
+    yield call(
+      rsf.updateDocument,
+      "Decks/n8Rs6Vb6SaiEZWB6o9fF",
+      "CardDecks",
+      classToPlain(newCardDecks)
+    );
   });
-  /*
-  yield takeEvery(actionTypes.ADD_CARD_TO_SELECTED_DECK, function*(action) {
+  yield takeEvery(actionTypes.DELETE_DECK, function*(action) {
     const newCardDecks = (action as actionTypes.IAction).payload.decks;
     yield call(
       rsf.updateDocument,
       "Decks/n8Rs6Vb6SaiEZWB6o9fF",
-      "dDecks",
+      "CardDecks",
       classToPlain(newCardDecks)
     );
   });
-  */
+  yield takeEvery(actionTypes.DELETE_CARD_FROM_DECK, function*(action) {
+    const newCardDecks = (action as actionTypes.IAction).payload.decks;
+    yield call(
+      rsf.updateDocument,
+      "Decks/n8Rs6Vb6SaiEZWB6o9fF",
+      "CardDecks",
+      classToPlain(newCardDecks)
+    );
+  });
 }
 
 function* dictSaga(): SagaIterator {
   yield takeEvery(actionTypes.START_SEARCH_WORD, function*(action) {
     const { word, lang } = (action as actionTypes.IAction).payload;
-    const res = yield call((action as actionTypes.IAction).payload.dict.search, word, lang);
+    const res = yield call(
+      (action as actionTypes.IAction).payload.dict.search,
+      word,
+      lang
+    );
     yield put(actions.wordSearched(res));
   });
 
   yield takeEvery(actionTypes.WORD_SEARCHED, function*(action) {
-		const res = (action as actionTypes.IAction).payload.res[0];
-		let allcards: Card[] = [];
+    const res = (action as actionTypes.IAction).payload.res[0];
+    let allcards: Card[] = [];
     Object.keys(res.meaning).map((s: string, i: number) => {
       res.meaning[s].forEach((expl: any, i: number) => {
-        allcards.push(createCard(s, `<${s}> ${expl.definition}`, res.word, CardType.Expl));
-        if (expl.example) allcards.push(createCard(s, expl.example, res.word, CardType.Ex));
-        if (expl.synonyms) allcards.push(createCard(s, expl.synonyms.join(", "), res.word, CardType.Expl));
+        allcards.push(
+          createCard(s, `<${s}> ${expl.definition}`, res.word, CardType.Expl)
+        );
+        if (expl.example)
+          allcards.push(createCard(s, expl.example, res.word, CardType.Ex));
+        if (expl.synonyms)
+          allcards.push(
+            createCard(s, expl.synonyms.join(", "), res.word, CardType.Expl)
+          );
       });
     });
     yield put(actions.newCardsGenerated(allcards));

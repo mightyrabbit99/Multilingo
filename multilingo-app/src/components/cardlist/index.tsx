@@ -25,6 +25,7 @@ export interface CardListDispatchProps {
   selectDeck: (deck: CardDeck) => void;
   handleToTest: () => void;
   updateDatabaseDecks: (deck: CardDeck[]) => void;
+  deleteCardFromDeck: (card: Card, deck: CardDeck) => void;
 }
 
 type CardListState = {
@@ -62,7 +63,9 @@ class CardList extends React.Component<CardListProps, CardListState> {
         card: card,
         handleCardClick: () => {
           this.setState({ selectedCard: card });
-        }
+        },
+        handleDeleteCard: () =>
+          this.props.deleteCardFromDeck(card, this.props.selectedDeck)
       };
       return <WordCard {...props} key={i} />;
     };
