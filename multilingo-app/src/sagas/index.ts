@@ -28,7 +28,7 @@ function* mainSaga() {
   yield* sessionSaga();
   yield* userSaga();
   yield* dictSaga();
-  //yield* updateDatabaseDecksSaga();
+  yield* updateDatabaseDecksSaga();
 }
 
 //Fetch Data from Firebase
@@ -42,24 +42,6 @@ function* fetchDecksDataSaga() {
 //Add Decks to Firebase
 function* updateDatabaseDecksSaga() {
   yield takeEvery(actionTypes.UPDATE_DATABASE_DECKS, function*(action) {
-    const newCardDecks = (action as actionTypes.IAction).payload.decks;
-    yield call(
-      rsf.updateDocument,
-      "Decks/n8Rs6Vb6SaiEZWB6o9fF",
-      "CardDecks",
-      classToPlain(newCardDecks)
-    );
-  });
-  yield takeEvery(actionTypes.DELETE_DECK, function*(action) {
-    const newCardDecks = (action as actionTypes.IAction).payload.decks;
-    yield call(
-      rsf.updateDocument,
-      "Decks/n8Rs6Vb6SaiEZWB6o9fF",
-      "CardDecks",
-      classToPlain(newCardDecks)
-    );
-  });
-  yield takeEvery(actionTypes.DELETE_CARD_FROM_DECK, function*(action) {
     const newCardDecks = (action as actionTypes.IAction).payload.decks;
     yield call(
       rsf.updateDocument,

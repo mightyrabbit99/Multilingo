@@ -44,16 +44,6 @@ class CardList extends React.Component<CardListProps, CardListState> {
       currentDeck: this.props.selectedDeck,
       selectedCard: this.props.selectedCard
     };
-	}
-	
-	public componentWillMount() {
-		this.props.updateDatabaseDecks(this.props.decks);
-	}
-
-  public componentWillReceiveProps(newProps: CardListProps) {
-    if (newProps.newCards.length > 0) {
-      this.props.updateDatabaseDecks(this.props.decks);
-    }
   }
 
   public render() {
@@ -64,8 +54,11 @@ class CardList extends React.Component<CardListProps, CardListState> {
         handleCardClick: () => {
           this.setState({ selectedCard: card });
         },
-        handleDeleteCard: () =>
-          this.props.deleteCardFromDeck(card, this.props.selectedDeck)
+        handleDeleteCard: () => {
+          this.props.deleteCardFromDeck(card, this.props.selectedDeck);
+          this.props.updateDatabaseDecks(this.props.decks);
+          this.setState(state => state);
+        }
       };
       return <WordCard {...props} key={i} />;
     };
@@ -81,7 +74,11 @@ class CardList extends React.Component<CardListProps, CardListState> {
       },
       addCardPanel: {
         visible: this.state.addCardPanelVisible,
-        addCardToDeck: (card: Card) => this.props.addCardsToDeck([card])
+        addCardToDeck: (card: Card) => {
+          this.props.addCardsToDeck([card]);
+          this.props.updateDatabaseDecks(this.props.decks);
+          this.setState(state => state);
+        }
       }
     };
     return (

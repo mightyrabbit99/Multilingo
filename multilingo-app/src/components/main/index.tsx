@@ -7,7 +7,10 @@ import Dictionary, { DictionaryProps } from "./Dictionary";
 import ControlBar, { MainControlBarProps } from "../commons/ControlBar";
 import Dict, { SearchResult, wordNotFound } from "../../extension/dict";
 
-export interface MainProps extends MainDispatchProps, MainStateProps, RouteComponentProps<{}> {}
+export interface MainProps
+  extends MainDispatchProps,
+    MainStateProps,
+    RouteComponentProps<{}> {}
 
 export interface MainStateProps {
   title: string;
@@ -49,17 +52,23 @@ class Main extends React.Component<MainProps, MainState> {
       page: query.define ? MainPage.Dict : MainPage.Main,
       selectedDeck: defaultDeck,
       dictProps: {
-				decks: props.decks,
+        decks: props.decks,
         word: query.define ? (query.define as string) : "",
         searched: this.props.searched,
         searchResult: this.props.wordMeaning,
         newCards: props.newCards,
-        searchingWord: (word: string, lang: string) => props.searchingWord(word, lang, this.props.dict),
+        searchingWord: (word: string, lang: string) =>
+          props.searchingWord(word, lang, this.props.dict),
         selectDeck: props.handleSelectDeck,
         addCardToDeck: props.handleAddCardToDeck
       }
     };
-    if (query.define) props.searchingWord(query.define as string, query.lang as string, this.props.dict);
+    if (query.define)
+      props.searchingWord(
+        query.define as string,
+        query.lang as string,
+        this.props.dict
+      );
   }
 
   componentWillMount() {
@@ -67,14 +76,14 @@ class Main extends React.Component<MainProps, MainState> {
   }
 
   componentWillReceiveProps(nextProps: MainProps) {
-		console.log(" haha");
+    console.log(" haha");
     this.setState({
       ...this.state,
       dictProps: {
         ...this.state.dictProps,
         searched: nextProps.searched,
         searchResult: nextProps.wordMeaning,
-				newCards: nextProps.newCards,
+        newCards: nextProps.newCards
       }
     });
   }
@@ -90,9 +99,10 @@ class Main extends React.Component<MainProps, MainState> {
         deck: deck,
         handleDeckClick: () => this.props.handleSelectDeck(deck),
         handleDeleteDeck: () => {
-					this.props.handleDeleteDeck(deck);
-					this.setState(state => state);
-				}
+          this.props.handleDeleteDeck(deck);
+          this.props.updateDatabaseDecks(this.props.decks);
+          this.setState(state => state);
+        }
       };
       return <Deck key={i} {...props} />;
     };
@@ -103,8 +113,10 @@ class Main extends React.Component<MainProps, MainState> {
         page: this.state.page,
         color: "green",
         handleAddDeck: this.props.handleAddDeck,
-        handleToDict: () => this.setState({ ...this.state, page: MainPage.Dict }),
-        handleToDeck: () => this.setState({ ...this.state, page: MainPage.Main }),
+        handleToDict: () =>
+          this.setState({ ...this.state, page: MainPage.Dict }),
+        handleToDeck: () =>
+          this.setState({ ...this.state, page: MainPage.Main }),
         modalOpen: false
       };
       return <ControlBar {...props} />;
