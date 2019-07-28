@@ -6,11 +6,12 @@ import {
   RECEIVE_DECKS_DATA,
   ADD_CARD_TO_SELECTED_DECK,
   UPDATE_DATABASE_DECKS,
-  DELETE_DECK
+  DELETE_DECK,
+  DELETE_CARD_FROM_DECK
 } from "../actions/actionTypes";
 
 import { defaultSessionState, ISessionState } from "./states";
-import { Card } from "../extension/cards";
+import { Card, CardDeck } from "../extension/cards";
 
 export const reducer: Reducer<ISessionState> = (
   state = defaultSessionState,
@@ -35,11 +36,11 @@ export const reducer: Reducer<ISessionState> = (
         ...state,
         newDeck: action.payload.deck
       };
-		case ADD_CARD_TO_SELECTED_DECK:
-			action.payload.cards.forEach((c: Card) => {
-				console.log(state.selectedDeck);
-				state.selectedDeck.addCard(c)
-			});
+    case ADD_CARD_TO_SELECTED_DECK:
+      action.payload.cards.forEach((c: Card) => {
+        console.log(state.selectedDeck);
+        state.selectedDeck.addCard(c);
+      });
       return {
         ...state,
         newCard: action.payload.cards
@@ -56,6 +57,20 @@ export const reducer: Reducer<ISessionState> = (
           action.payload.deck.info.dateAdded
         ) {
           state.decks.splice(number, 1);
+          break;
+        }
+      }
+      return {
+        ...state
+      };
+    case DELETE_CARD_FROM_DECK:
+      let i = 0;
+      for (i = 0; i < state.decks.length; i++) {
+        if (
+          state.decks[i].info.dateAdded === action.payload.deck.info.dateAdded
+        ) {
+          state.decks[i] = action.payload.deck;
+          break;
         }
       }
       return {

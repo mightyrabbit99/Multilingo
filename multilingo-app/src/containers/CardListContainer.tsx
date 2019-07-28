@@ -8,6 +8,7 @@ import CardList, {
 } from "../components/cardlist";
 import { IState } from "../reducers/states";
 import { addCardsToDeck, selectDeck, toTest } from "../actions/session";
+import { deleteCardFromDeck } from "../actions/backend";
 import { updateDatabaseDecks } from "../actions";
 
 const mapStateToProps: MapStateToProps<
@@ -31,7 +32,8 @@ const mapDispatchToProps: MapDispatchToProps<CardListDispatchProps, {}> = (
       addCardsToDeck: addCardsToDeck,
       selectDeck: selectDeck,
       handleToTest: toTest,
-      updateDatabaseDecks: updateDatabaseDecks
+      updateDatabaseDecks: updateDatabaseDecks,
+      deleteCardFromDeck: deleteCardFromDeck
     },
     dispatch
   );

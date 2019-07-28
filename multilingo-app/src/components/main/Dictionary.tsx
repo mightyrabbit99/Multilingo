@@ -59,7 +59,9 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
               {res.meaning[s].map((a: any, i: number) => (
                 <div className="meaningandexample" key={i}>
                   <p className="meaning">{a.definition}</p>
-                  {a.example ? <p className="example-sentence">{a.example}</p> : null}
+                  {a.example ? (
+                    <p className="example-sentence">{a.example}</p>
+                  ) : null}
                   {a.synonyms
                     ? a.synonyms.map((ss: string, i: number) => (
                         <p className="synonyms" key={i}>
@@ -87,10 +89,13 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
   timeoutvar: any;
 
   render() {
-		console.log("dict render");
+    console.log("dict render");
     const search = (string: string) => {
       clearTimeout(this.timeoutvar);
-      this.timeoutvar = setTimeout(() => this.props.searchingWord(string, this.state.lang), 1000);
+      this.timeoutvar = setTimeout(
+        () => this.props.searchingWord(string, this.state.lang),
+        1000
+      );
     };
     const searchBarChange = (e: any) => {
       if (e.target.value) search(e.target.value);
@@ -115,11 +120,12 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
     };
 
     const handleAddCardsClick = () => {
-			if(this.state.currentDeck) this.props.selectDeck(this.state.currentDeck);
-			this.props.addCardToDeck(this.props.newCards);
-		}
+      if (this.state.currentDeck) this.props.selectDeck(this.state.currentDeck);
+      this.props.addCardToDeck(this.props.newCards);
+    };
 
     const handleSelectCard = (card: Card) => () => {};
+    const deleteCardFromDeck = (card: Card) => () => {};
 
     const cardsModalOpenHandler = (open: boolean) => () =>
       this.setState({ ...this.state, cardsModalOpen: open });
@@ -179,7 +185,12 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
             <Modal.Description>
               {res.length > 0
                 ? res.map((card: Card, i: number) => (
-                    <WordCard handleCardClick={handleSelectCard(card)} card={card} key={i} />
+                    <WordCard
+                      handleCardClick={handleSelectCard(card)}
+                      handleDeleteCard={deleteCardFromDeck(card)}
+                      card={card}
+                      key={i}
+                    />
                   ))
                 : null}
             </Modal.Description>

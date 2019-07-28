@@ -225,6 +225,16 @@ export class CardDeck {
       this.addCard(anotherDeck.cards[i]);
     }
   }
+
+  public deleteCard(card: Card) {
+    let number = 0;
+    for (number = 0; number < this.cards.length; number++) {
+      if (this.cards[number].equals(card)) {
+        this.cards.splice(number, 1);
+        break;
+      }
+    }
+  }
 }
 
 export function createDeck(

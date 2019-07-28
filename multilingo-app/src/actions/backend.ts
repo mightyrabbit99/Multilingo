@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
 
-import { CardDeck } from "../extension/cards";
+import { CardDeck, Card } from "../extension/cards";
 
 export const receiveDecksData = (data: CardDeck[]) => {
   return {
@@ -25,6 +25,16 @@ export const deleteDeck = (data: CardDeck) => {
     type: actionTypes.DELETE_DECK,
     payload: {
       deck: data
+    }
+  };
+};
+
+export const deleteCardFromDeck = (data: Card, deck: CardDeck) => {
+  deck.deleteCard(data);
+  return {
+    type: actionTypes.DELETE_CARD_FROM_DECK,
+    payload: {
+      deck: deck
     }
   };
 };
