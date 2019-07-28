@@ -43,7 +43,11 @@ class CardList extends React.Component<CardListProps, CardListState> {
       currentDeck: this.props.selectedDeck,
       selectedCard: this.props.selectedCard
     };
-  }
+	}
+	
+	public componentWillMount() {
+		this.props.updateDatabaseDecks(this.props.decks);
+	}
 
   public componentWillReceiveProps(newProps: CardListProps) {
     if (newProps.newCards.length > 0) {
