@@ -25,7 +25,7 @@ function* mainSaga() {
   yield* sessionSaga();
   yield* userSaga();
   yield* dictSaga();
-  yield* updateDatabaseDecksSaga();
+  //yield* updateDatabaseDecksSaga();
 }
 
 //Fetch Data from Firebase

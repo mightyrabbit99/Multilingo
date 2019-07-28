@@ -9,7 +9,8 @@ import {
   addDeck,
   receiveDecksData,
   searchingWord,
-  updateDatabaseDecks
+  updateDatabaseDecks,
+  deleteDeck
 } from "../actions";
 
 const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
@@ -31,7 +32,8 @@ const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (
       handleAddDeck: addDeck,
       receiveDecks: receiveDecksData,
       searchingWord: searchingWord,
-      updateDatabaseDecks: updateDatabaseDecks
+      updateDatabaseDecks: updateDatabaseDecks,
+      handleDeleteDeck: deleteDeck
     },
     dispatch
   );
