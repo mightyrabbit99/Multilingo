@@ -1,18 +1,13 @@
 import { SagaIterator } from "redux-saga";
-import {
-  call,
-  put,
-  race,
-  select,
-  take,
-  takeEvery,
-  fork
-} from "redux-saga/effects";
+import { call, put, race, select, take, takeEvery, fork } from "redux-saga/effects";
 
 import { push } from "connected-react-router";
 
 import * as actions from "../actions";
 import * as actionTypes from "../actions/actionTypes";
+
+//extension
+import { Card, createCard, CardType } from "../extension/cards";
 
 //database
 import rsf from "../backend/rsf";
@@ -40,12 +35,7 @@ function* fetchDecksDataSaga() {
 function* updateDatabaseDecksSaga() {
   yield takeEvery(actionTypes.UPDATE_DATABASE_DECKS, function*(action) {
     const newCardDecks = (action as actionTypes.IAction).payload.decks;
-    yield call(
-      rsf.updateDocument,
-      "Decks/n8Rs6Vb6SaiEZWB6o9fF",
-      "CardDecks",
-      classToPlain(newCardDecks)
-    );
+    yield call(rsf.updateDocument, "Decks/n8Rs6Vb6SaiEZWB6o9fF", "CardDecks", classToPlain(newCardDecks));
   });
   /*
   yield takeEvery(actionTypes.ADD_CARD_TO_SELECTED_DECK, function*(action) {
@@ -63,13 +53,25 @@ function* updateDatabaseDecksSaga() {
 function* dictSaga(): SagaIterator {
   yield takeEvery(actionTypes.START_SEARCH_WORD, function*(action) {
     const { word, lang } = (action as actionTypes.IAction).payload;
-    const res = yield call(
-      (action as actionTypes.IAction).payload.dict.search,
-			word,
-			lang
-    );
+    const res = yield call((action as actionTypes.IAction).payload.dict.search, word, lang);
     console.log(res);
     yield put(actions.wordSearched(res));
+  });
+
+  yield takeEvery(actionTypes.WORD_SEARCHED, function*(action) {
+		const res = (action as actionTypes.IAction).payload.res[0];
+		let allcards: Card[] = [];
+		console.log(res);
+    Object.keys(res.meaning).map((s: string, i: number) => {
+      let wordcards: Card[] = [];
+      res.meaning[s].forEach((expl: any, i: number) => {
+        wordcards.push(createCard(s, `<${s}> ${expl.definition}`, res.word, CardType.Expl));
+        if (expl.example) wordcards.push(createCard(s, expl.example, res.word, CardType.Ex));
+        if (expl.synonyms) wordcards.push(createCard(s, expl.synonyms.join(", "), res.word, CardType.Expl));
+      });
+      allcards.concat(wordcards);
+    });
+    yield put(actions.newCardsGenerated(allcards));
   });
 }
 

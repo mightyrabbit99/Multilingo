@@ -2,7 +2,7 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router";
 
 import { CardDeck, Card } from "../../extension/cards";
-import WordCard, { WordCardProps } from "./WordCard";
+import WordCard, { WordCardProps } from "../commons/WordCard";
 import WordListPushablePanels, {
   WordListPushablePanelsProps
 } from "./WordListPushablePanels";

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import * as qs from "query-string";
-import { CardDeck, defaultDeck } from "../../extension/cards";
+import { CardDeck, defaultDeck, Card } from "../../extension/cards";
 import Deck, { DeckProps } from "./Deck";
 import Dictionary, { DictionaryProps } from "./Dictionary";
 import ControlBar, { MainControlBarProps } from "../commons/ControlBar";
@@ -15,7 +15,8 @@ export interface MainProps
 export interface MainStateProps {
   title: string;
   decks: CardDeck[];
-  newDeck: CardDeck | null;
+	newDeck: CardDeck | null;
+	newCards: Card[];
   searched: boolean;
   wordMeaning: SearchResult;
   dict: Dict;
@@ -52,12 +53,13 @@ class Main extends React.Component<MainProps, MainState> {
         dictProps: {
           word: query.define as string,
           searched: this.props.searched,
-          searchResult: this.props.wordMeaning,
+					searchResult: this.props.wordMeaning,
+					newCards: props.newCards,
           searchingWord: (word: string, lang: string) =>
-            this.props.searchingWord(word, lang, this.props.dict)
+            props.searchingWord(word, lang, this.props.dict)
         }
       };
-      this.props.searchingWord(query.define as string, query.lang as string, this.props.dict);
+      props.searchingWord(query.define as string, query.lang as string, this.props.dict);
     } else {
       this.state = {
         page: MainPage.Main,
@@ -65,9 +67,10 @@ class Main extends React.Component<MainProps, MainState> {
         dictProps: {
           word: "",
           searched: this.props.searched,
-          searchResult: this.props.wordMeaning,
+					searchResult: this.props.wordMeaning,
+					newCards: props.newCards,
           searchingWord: (word: string, lang: string) =>
-            this.props.searchingWord(word, lang, this.props.dict)
+						props.searchingWord(word, lang, this.props.dict)
         }
       };
     }
@@ -77,14 +80,15 @@ class Main extends React.Component<MainProps, MainState> {
     this.props.receiveDecks(this.props.decks);
   }
 
-  componentWillReceiveProps(nextProps: any) {
+  componentWillReceiveProps(nextProps: MainProps) {
     console.log(nextProps);
     this.setState({
       ...this.state,
       dictProps: {
         ...this.state.dictProps,
         searched: nextProps.searched,
-        searchResult: nextProps.wordMeaning
+				searchResult: nextProps.wordMeaning,
+				newCards: nextProps.newCards
       }
     });
   }

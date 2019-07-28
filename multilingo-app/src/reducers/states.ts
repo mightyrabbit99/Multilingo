@@ -26,6 +26,7 @@ export interface IDictState {
 	searched: boolean;
 	dictionary: Dict;
 	searchResult: SearchResult;
+	newCards: Card[];
 }
 
 export interface ISessionState {
@@ -85,7 +86,8 @@ export const defaultMain: IMainState = {
 export const defaultDictState: IDictState = {
 	searched: false,
 	dictionary: defaultDict,
-	searchResult: wordNotFound
+	searchResult: wordNotFound,
+	newCards: []
 }
 
 export const defaultState: IState = {

@@ -1,12 +1,15 @@
 import * as React from "react";
-import Dict, { SearchResult, wordNotFound } from "../../extension/dict";
+import { SearchResult, wordNotFound } from "../../extension/dict";
 
-import { Input, Dropdown } from "semantic-ui-react";
+import { Input, Dropdown, Button, Modal } from "semantic-ui-react";
+import WordCard from "../commons/WordCard";
+import { Card } from "../../extension/cards";
 
 export interface DictionaryProps {
   word: string;
   searched: boolean;
   searchResult: SearchResult;
+  newCards: Card[];
   searchingWord: (word: string, lang: string) => void;
 }
 
@@ -48,9 +51,15 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
               <h3>{s}</h3>
               {res.meaning[s].map((a: any, i: number) => (
                 <div className="meaningandexample" key={i}>
-                  <p>{a.definition}</p>
-                  {a.example ? <p key={i}>{a.example}</p> : null}
-                  {a.synonyms ? a.synonyms.map((ss: string, i: number) => <p key={i}>{ss}</p>) : null}
+                  <p className="meaning">{a.definition}</p>
+                  {a.example ? <p className="example-sentence">{a.example}</p> : null}
+                  {a.synonyms
+                    ? a.synonyms.map((ss: string, i: number) => (
+                        <p className="synonyms" key={i}>
+                          {ss}
+                        </p>
+                      ))
+                    : null}
                 </div>
               ))}
             </div>
@@ -71,8 +80,6 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
   timeoutvar: any;
 
   render() {
-		console.log(this.props.searched);
-		console.log(this.props.searchResult);
     const search = (string: string) => {
       clearTimeout(this.timeoutvar);
       this.timeoutvar = setTimeout(() => this.props.searchingWord(string, this.state.lang), 1000);
@@ -91,6 +98,12 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
         lang: value
       });
     };
+
+    const handleSelectCard = (card: Card) => () => {};
+
+    const res = this.props.newCards;
+
+    const generateButton = <Button basic color="red" disabled={!this.props.searched} content="generate" />;
     const langoptions = [
       { key: 1, text: "English", value: "en" },
       { key: 2, text: "Hindi", value: "hi" },
@@ -120,6 +133,18 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
           selection
           value={this.state.lang}
         />
+        <Modal trigger={generateButton}>
+          <Modal.Header>Autogenerate Cards</Modal.Header>
+          <Modal.Content>
+            <Modal.Description>
+              {res.length > 0
+                ? res.map((card: Card, i: number) => (
+                    <WordCard handleCardClick={handleSelectCard(card)} card={card} key={i} />
+                  ))
+                : null}
+            </Modal.Description>
+          </Modal.Content>
+        </Modal>
         {this.state.status === DictStatus.Searched ? this.dispMeaning() : null}
       </div>
     );

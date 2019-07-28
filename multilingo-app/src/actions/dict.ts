@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import Dictionary, { SearchResult } from "../extension/dict";
+import { Card } from "../extension/cards";
 
 export const dictUrl = (url: string) => ({
   type: actionTypes.INSERT_DICT_URL,
@@ -26,3 +27,10 @@ export const wordSearched = (meaning: SearchResult) => {
     }
   };
 };
+
+export const newCardsGenerated = (cards: Card[]) => ({
+	type: actionTypes.DISP_AUTOGEN_CARDS,
+	payload: {
+		newCards: cards
+	}
+})

@@ -15,7 +15,8 @@ import {
 const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
   title: "state.main.title",
   decks: state.session.decks,
-  newDeck: state.session.newDeck,
+	newDeck: state.session.newDeck,
+	newCards: state.dict.newCards,
   searched: state.dict.searched,
   wordMeaning: state.dict.searchResult,
   dict: state.dict.dictionary
