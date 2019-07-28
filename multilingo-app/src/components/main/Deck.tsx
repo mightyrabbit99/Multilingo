@@ -5,6 +5,7 @@ import { CardDeck } from "../../extension/cards";
 export type DeckProps = {
   deck: CardDeck;
   handleDeckClick: () => void;
+  handleDeleteDeck: () => void;
 };
 
 class Deck extends React.Component<DeckProps, {}> {
@@ -22,7 +23,12 @@ class Deck extends React.Component<DeckProps, {}> {
           ui={false}
         />
         <Card.Content>
-          <Card.Header>{carddeck.name}</Card.Header>
+          <Card.Header>
+            {carddeck.name}
+            <span style={{ float: "right" }}>
+              <Icon name="close" onClick={this.props.handleDeleteDeck} />
+            </span>
+          </Card.Header>
           <Card.Meta>
             <span className="date">
               Last revised in: {carddeck.lastRevised}

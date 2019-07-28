@@ -19,3 +19,12 @@ export const updateDatabaseDecks = (data: CardDeck[]) => {
     }
   };
 };
+
+export const deleteDeck = (data: CardDeck) => {
+  return {
+    type: actionTypes.DELETE_DECK,
+    payload: {
+      deck: data
+    }
+  };
+};

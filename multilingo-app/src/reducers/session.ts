@@ -5,10 +5,12 @@ import {
   ADD_DECK,
   RECEIVE_DECKS_DATA,
   ADD_CARD_TO_SELECTED_DECK,
-  UPDATE_DATABASE_DECKS
+  UPDATE_DATABASE_DECKS,
+  DELETE_DECK
 } from "../actions/actionTypes";
 
 import { defaultSessionState, ISessionState } from "./states";
+import { statement } from "@babel/template";
 
 export const reducer: Reducer<ISessionState> = (
   state = defaultSessionState,
@@ -39,6 +41,19 @@ export const reducer: Reducer<ISessionState> = (
         newCard: action.payload.card
       };
     case UPDATE_DATABASE_DECKS:
+      return {
+        ...state
+      };
+    case DELETE_DECK:
+      let number = 0;
+      for (number = 0; number < state.decks.length; number++) {
+        if (
+          state.decks[number].info.dateAdded ===
+          action.payload.deck.info.dateAdded
+        ) {
+          state.decks.splice(number, 1);
+        }
+      }
       return {
         ...state
       };

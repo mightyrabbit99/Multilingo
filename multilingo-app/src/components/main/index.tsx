@@ -29,6 +29,7 @@ export interface MainDispatchProps {
   receiveDecks: (decks: CardDeck[]) => void;
   searchingWord: (word: string, lang: string, dict: Dict) => void;
   updateDatabaseDecks: (deck: CardDeck[]) => void;
+  handleDeleteDeck: (deck: CardDeck) => void;
 }
 
 export enum MainPage {
@@ -102,7 +103,8 @@ class Main extends React.Component<MainProps, MainState> {
     const generateDeck = (deck: CardDeck, i: number) => {
       let props: DeckProps = {
         deck: deck,
-        handleDeckClick: () => this.props.handleSelectDeck(deck)
+        handleDeckClick: () => this.props.handleSelectDeck(deck),
+        handleDeleteDeck: () => this.props.handleDeleteDeck(deck)
       };
       return <Deck key={i} {...props} />;
     };
