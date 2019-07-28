@@ -1,13 +1,13 @@
 import * as React from "react";
 import Dict, { SearchResult, wordNotFound } from "../../extension/dict";
 
-import { Input } from "semantic-ui-react";
+import { Input, Dropdown } from "semantic-ui-react";
 
 export interface DictionaryProps {
   word: string;
   searched: boolean;
   searchResult: SearchResult;
-  searchingWord: (word: string) => void;
+  searchingWord: (word: string, lang: string) => void;
 }
 
 enum DictStatus {
@@ -19,6 +19,7 @@ type DictionaryState = {
   status: DictStatus;
   word: string;
   meaning: SearchResult;
+  lang: string;
 };
 
 class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
@@ -27,7 +28,8 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
     this.state = {
       status: props.word ? DictStatus.Searched : DictStatus.Main,
       word: props.word,
-      meaning: wordNotFound
+      meaning: wordNotFound,
+      lang: "en"
     };
     this.dispMeaning = this.dispMeaning.bind(this);
   }
@@ -69,10 +71,11 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
   timeoutvar: any;
 
   render() {
-    console.log(this.props.searched);
+		console.log(this.props.searched);
+		console.log(this.props.searchResult);
     const search = (string: string) => {
       clearTimeout(this.timeoutvar);
-      this.timeoutvar = setTimeout(() => this.props.searchingWord(string), 1000);
+      this.timeoutvar = setTimeout(() => this.props.searchingWord(string, this.state.lang), 1000);
     };
     const searchBarChange = (e: any) => {
       if (e.target.value) search(e.target.value);
@@ -82,6 +85,26 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
         status: DictStatus.Searched
       });
     };
+    const handleLangChange = (e: any, { value }: any) => {
+      this.setState({
+        ...this.state,
+        lang: value
+      });
+    };
+    const langoptions = [
+      { key: 1, text: "English", value: "en" },
+      { key: 2, text: "Hindi", value: "hi" },
+      { key: 3, text: "Spanish", value: "es" },
+      { key: 4, text: "French", value: "fr" },
+      { key: 5, text: "Russian", value: "ru" },
+      { key: 6, text: "Simplified Chinese", value: "zh-CN" },
+      { key: 7, text: "German", value: "de" },
+      { key: 8, text: "Italian", value: "it" },
+      { key: 9, text: "Korean", value: "ko" },
+      { key: 10, text: "Brazilian Portugese", value: "pt-BR" },
+      { key: 11, text: "Arabic", value: "ar" },
+      { key: 12, text: "Turkic", value: "tr" }
+    ];
     return (
       <div className="dictionary">
         <Input
@@ -89,6 +112,13 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
           placeholder="Search..."
           value={this.state.word}
           onChange={searchBarChange}
+        />
+        <Dropdown
+          onChange={handleLangChange}
+          options={langoptions}
+          placeholder="Choose language"
+          selection
+          value={this.state.lang}
         />
         {this.state.status === DictStatus.Searched ? this.dispMeaning() : null}
       </div>

@@ -8,10 +8,11 @@ export const dictUrl = (url: string) => ({
   }
 });
 
-export const searchingWord = (word: string, dict: Dictionary) => ({
+export const searchingWord = (word: string, lang: string, dict: Dictionary) => ({
   type: actionTypes.START_SEARCH_WORD,
   payload: {
-    word: word,
+		word: word,
+		lang: lang,
     dict: dict
   }
 });

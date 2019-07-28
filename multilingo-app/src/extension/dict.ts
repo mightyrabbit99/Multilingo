@@ -39,9 +39,9 @@ class Dictionary {
     }
   }
 
-  searchInDict(word: string): SearchResult {
+  searchInDict(word: string, lang: string = 'en'): SearchResult {
     let res: SearchResult;
-    this.search(word).then(result => {
+    this.search(word, lang).then(result => {
       res = result;
     });
     let count = 0;
@@ -55,8 +55,8 @@ class Dictionary {
     }
   }
 
-  search(word: string) {
-    return fetch(`/search/?define=${word}`).then(s => {console.log(s);return s.json()});
+  search(word: string, lang: string = 'en') {
+    return fetch(`/search/?define=${word}` + `&lang=${lang}`).then(s => {console.log(s);return s.json()});
   }
 }
 

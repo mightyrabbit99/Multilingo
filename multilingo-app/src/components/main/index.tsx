@@ -26,7 +26,7 @@ export interface MainDispatchProps {
   handleSelectDeck: (deck: CardDeck) => void;
   handleAddDeck: (deck: CardDeck) => void;
   receiveDecks: (decks: CardDeck[]) => void;
-  searchingWord: (word: string, dict: Dict) => void;
+  searchingWord: (word: string, lang: string, dict: Dict) => void;
   updateDatabaseDecks: (deck: CardDeck[]) => void;
   handleDeleteDeck: (deck: CardDeck) => void;
 }
@@ -54,11 +54,11 @@ class Main extends React.Component<MainProps, MainState> {
           word: query.define as string,
           searched: this.props.searched,
           searchResult: this.props.wordMeaning,
-          searchingWord: (word: string) =>
-            this.props.searchingWord(word, this.props.dict)
+          searchingWord: (word: string, lang: string) =>
+            this.props.searchingWord(word, lang, this.props.dict)
         }
       };
-      this.props.searchingWord(query.define as string, this.props.dict);
+      this.props.searchingWord(query.define as string, query.lang as string, this.props.dict);
     } else {
       this.state = {
         page: MainPage.Main,
@@ -67,8 +67,8 @@ class Main extends React.Component<MainProps, MainState> {
           word: "",
           searched: this.props.searched,
           searchResult: this.props.wordMeaning,
-          searchingWord: (word: string) =>
-            this.props.searchingWord(word, this.props.dict)
+          searchingWord: (word: string, lang: string) =>
+            this.props.searchingWord(word, lang, this.props.dict)
         }
       };
     }
