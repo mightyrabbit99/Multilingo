@@ -67,6 +67,7 @@ class Main extends React.Component<MainProps, MainState> {
   }
 
   componentWillReceiveProps(nextProps: MainProps) {
+		console.log(" haha");
     this.setState({
       ...this.state,
       dictProps: {
@@ -88,7 +89,10 @@ class Main extends React.Component<MainProps, MainState> {
       let props: DeckProps = {
         deck: deck,
         handleDeckClick: () => this.props.handleSelectDeck(deck),
-        handleDeleteDeck: () => this.props.handleDeleteDeck(deck)
+        handleDeleteDeck: () => {
+					this.props.handleDeleteDeck(deck);
+					this.setState(state => state);
+				}
       };
       return <Deck key={i} {...props} />;
     };

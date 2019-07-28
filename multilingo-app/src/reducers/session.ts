@@ -59,9 +59,9 @@ export const reducer: Reducer<ISessionState> = (
           state.decks.splice(number, 1);
           break;
         }
-      }
+			}
       return {
-        ...state
+				...state
       };
     case DELETE_CARD_FROM_DECK:
       let i = 0;
