@@ -1,7 +1,7 @@
 import * as React from "react";
 import { SearchResult, wordNotFound } from "../../extension/dict";
 
-import { Input, Dropdown, Button, Modal } from "semantic-ui-react";
+import { Input, Dropdown, Button, Modal, Icon, Grid } from "semantic-ui-react";
 import WordCard from "../commons/WordCard";
 import { Card, CardDeck } from "../../extension/cards";
 
@@ -137,7 +137,7 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
         basic
         color="red"
         disabled={!this.props.searched}
-        content="generate"
+        content="Generate Cards!"
         onClick={cardsModalOpenHandler(true)}
       />
     );
@@ -161,47 +161,76 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
       value: i
     }));
     return (
-      <div className="dictionary">
-        <Input
-          className="inputbar"
-          placeholder="Search..."
-          value={this.state.word}
-          onChange={searchBarChange}
-        />
-        <Dropdown
-          onChange={handleLangChange}
-          options={langoptions}
-          placeholder="Choose language"
-          selection
-          value={this.state.lang}
-        />
-        <Modal
-          trigger={generateButton}
-          open={this.state.cardsModalOpen}
-          onClose={cardsModalOpenHandler(false)}
-        >
-          <Modal.Header>Autogenerate Cards</Modal.Header>
-          <Modal.Content>
-            <Modal.Description>
-              {res.length > 0
-                ? res.map((card: Card, i: number) => (
-                    <WordCard
-                      handleCardClick={handleSelectCard(card)}
-                      handleDeleteCard={deleteCardFromDeck(card)}
-                      card={card}
-                      key={i}
+      <div className="dictionary" style={{ margin: "10vh 0vw 0vh 25vw" }}>
+        <Grid columns={4}>
+          <Grid.Row style={{ paddingBottom: "0.1em" }}>
+            <Grid.Column width={1} />
+            <Grid.Column width={3}>Phrases</Grid.Column>
+            <Grid.Column width={3}>Language</Grid.Column>
+            <Grid.Column width={3} />
+          </Grid.Row>
+          <Grid.Row style={{ paddingTop: "0.1em" }}>
+            <Grid.Column width={1}>
+              <Icon name="search" size="big" />
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <Input
+                className="inputbar"
+                placeholder="Search..."
+                value={this.state.word}
+                onChange={searchBarChange}
+              />
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <Dropdown
+                onChange={handleLangChange}
+                options={langoptions}
+                placeholder="Choose language"
+                selection
+                value={this.state.lang}
+              />
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <Modal
+                trigger={generateButton}
+                open={this.state.cardsModalOpen}
+                onClose={cardsModalOpenHandler(false)}
+              >
+                <Modal.Header>Autogenerate Cards</Modal.Header>
+                <Modal.Content>
+                  <Modal.Description>
+                    {res.length > 0
+                      ? res.map((card: Card, i: number) => (
+                          <WordCard
+                            handleCardClick={handleSelectCard(card)}
+                            handleDeleteCard={deleteCardFromDeck(card)}
+                            card={card}
+                            key={i}
+                          />
+                        ))
+                      : null}
+                  </Modal.Description>
+                  <div
+                    className="generateButtons"
+                    style={{ marginTop: "0.5em", marginLeft: "1em" }}
+                  >
+                    <Dropdown
+                      onChange={handleDeckChange}
+                      options={deckoptions}
+                      placeholder="Select Deck"
+                      style={{ marginRight: "1em" }}
                     />
-                  ))
-                : null}
-            </Modal.Description>
-            <Dropdown onChange={handleDeckChange} options={deckoptions} />
-            <Button
-              onClick={handleAddCardsClick}
-              content="Add to deck"
-              disabled={!this.state.currentDeck && true}
-            />
-          </Modal.Content>
-        </Modal>
+                    <Button
+                      onClick={handleAddCardsClick}
+                      content="Add to deck"
+                      disabled={!this.state.currentDeck && true}
+                    />
+                  </div>
+                </Modal.Content>
+              </Modal>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         {this.state.status === DictStatus.Searched ? this.dispMeaning() : null}
       </div>
     );

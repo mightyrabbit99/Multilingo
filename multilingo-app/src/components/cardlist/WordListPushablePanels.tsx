@@ -70,11 +70,11 @@ const AddCardPanel: React.FC<AddCardPanelProps> = props => {
   };
   return (
     <Sidebar
-			as={Segment}
+      as={Segment}
       animation="overlay"
       icon="labeled"
-			direction="left"
-			backgroundcolor="white"
+      direction="left"
+      backgroundcolor="white"
       onHide={createAddCardPanelShowHandler(false)}
       visible={visible}
       width="wide"
@@ -127,7 +127,9 @@ class WordListPushablePanels extends React.Component<
         activeDeck: this.props.activeDeck,
         decks: this.props.decksPanel.decks,
         handleChangeDeck: this.props.decksPanel.selectDeck,
-        createDecksPanelShowHandler: (show: boolean = !this.state.decksPanel.visible) => () =>
+        createDecksPanelShowHandler: (
+          show: boolean = !this.state.decksPanel.visible
+        ) => () =>
           this.setState({
             ...this.state,
             decksPanel: {
@@ -139,7 +141,9 @@ class WordListPushablePanels extends React.Component<
       addCardPanel: {
         ...pushableState,
         handleAddCard: this.props.addCardPanel.addCardToDeck,
-        createAddCardPanelShowHandler: (show: boolean = !this.state.addCardPanel.visible) => () =>
+        createAddCardPanelShowHandler: (
+          show: boolean = !this.state.addCardPanel.visible
+        ) => () =>
           this.setState({
             ...this.state,
             addCardPanel: {
@@ -158,7 +162,9 @@ class WordListPushablePanels extends React.Component<
       color: "green",
       deck: this.props.activeDeck,
       card: this.state.selectedCard,
-      handleShowAddCardPanel: this.state.addCardPanel.createAddCardPanelShowHandler(true),
+      handleShowAddCardPanel: this.state.addCardPanel.createAddCardPanelShowHandler(
+        true
+      ),
       handleTest: this.props.handleToTest,
       contextRef: this.contextRef
     };
@@ -173,14 +179,21 @@ class WordListPushablePanels extends React.Component<
                 className="deckspanelcaller"
                 onClick={this.state.decksPanel.createDecksPanelShowHandler()}
                 style={{
-                  height: window.screen.height,
+                  height: "100%",
+                  position: "fixed",
+                  bottom: "0",
+                  top: "0",
                   width: "1%",
-                  float: "left",
-                  backgroundColor: this.state.decksPanel.visible ? "white" : "green"
+                  overflow: "auto",
+                  backgroundColor: this.state.decksPanel.visible
+                    ? "white"
+                    : "green"
                 }}
               />
               <Ref innerRef={this.contextRef}>
-                <div className="cardlist content" style={{marginLeft: "1%"}}>{this.props.children}</div>
+                <div className="cardlist content" style={{ marginLeft: "1%" }}>
+                  {this.props.children}
+                </div>
               </Ref>
             </Sidebar.Pusher>
           </Sidebar.Pushable>

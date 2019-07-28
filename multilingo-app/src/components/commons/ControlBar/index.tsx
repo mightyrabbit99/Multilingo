@@ -91,14 +91,14 @@ class ControlBar extends React.Component<
         onClick={handleToDictOnClick}
         className="controlbar button"
         style={{
-          position: "absolute",
+          position: "fixed",
           padding: "5px",
           bottom: "5%",
-          right: "20%",
+          right: "11%",
           borderRadius: "50%",
           color: "green"
         }}
-        name="chess"
+        name="search"
         size="huge"
         link
       />
@@ -127,10 +127,10 @@ class ControlBar extends React.Component<
         onClick={handleTestButtonOnClick}
         className="controlbar button"
         style={{
-          position: "absolute",
+          position: "fixed",
           padding: "5px",
           bottom: "5%",
-          right: "20%",
+          right: "11%",
           borderRadius: "50%",
           color: "green"
         }}
@@ -144,7 +144,7 @@ class ControlBar extends React.Component<
       <Icon
         onClick={handleAddButtonOnClick}
         style={{
-          position: "absolute",
+          position: "fixed",
           padding: "5px",
           bottom: "5%",
           right: "5%",
