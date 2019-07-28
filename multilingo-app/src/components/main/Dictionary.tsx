@@ -3,14 +3,17 @@ import { SearchResult, wordNotFound } from "../../extension/dict";
 
 import { Input, Dropdown, Button, Modal } from "semantic-ui-react";
 import WordCard from "../commons/WordCard";
-import { Card } from "../../extension/cards";
+import { Card, CardDeck } from "../../extension/cards";
 
 export interface DictionaryProps {
+  decks: CardDeck[];
   word: string;
   searched: boolean;
   searchResult: SearchResult;
   newCards: Card[];
   searchingWord: (word: string, lang: string) => void;
+  selectDeck: (deck: CardDeck) => void;
+  addCardToDeck: (cards: Card[]) => void;
 }
 
 enum DictStatus {
@@ -19,20 +22,24 @@ enum DictStatus {
 }
 
 type DictionaryState = {
+  currentDeck: CardDeck | null;
   status: DictStatus;
   word: string;
   meaning: SearchResult;
   lang: string;
+  cardsModalOpen: boolean;
 };
 
 class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
   constructor(props: DictionaryProps) {
     super(props);
     this.state = {
+      currentDeck: null,
       status: props.word ? DictStatus.Searched : DictStatus.Main,
       word: props.word,
       meaning: wordNotFound,
-      lang: "en"
+      lang: "en",
+      cardsModalOpen: false
     };
     this.dispMeaning = this.dispMeaning.bind(this);
   }
@@ -100,11 +107,34 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
       });
     };
 
+    const handleDeckChange = (e: any, { value }: any) => {
+      this.setState({
+        ...this.state,
+        currentDeck: this.props.decks[value]
+      });
+    };
+
+    const handleAddCardsClick = () => {
+			if(this.state.currentDeck) this.props.selectDeck(this.state.currentDeck);
+			this.props.addCardToDeck(this.props.newCards);
+		}
+
     const handleSelectCard = (card: Card) => () => {};
+
+    const cardsModalOpenHandler = (open: boolean) => () =>
+      this.setState({ ...this.state, cardsModalOpen: open });
 
     const res = this.props.newCards;
 
-    const generateButton = <Button basic color="red" disabled={!this.props.searched} content="generate" />;
+    const generateButton = (
+      <Button
+        basic
+        color="red"
+        disabled={!this.props.searched}
+        content="generate"
+        onClick={cardsModalOpenHandler(true)}
+      />
+    );
     const langoptions = [
       { key: 1, text: "English", value: "en" },
       { key: 2, text: "Hindi", value: "hi" },
@@ -119,6 +149,11 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
       { key: 11, text: "Arabic", value: "ar" },
       { key: 12, text: "Turkic", value: "tr" }
     ];
+    const deckoptions = this.props.decks.map((d: CardDeck, i: number) => ({
+      key: i,
+      text: d.info.name,
+      value: i
+    }));
     return (
       <div className="dictionary">
         <Input
@@ -134,7 +169,11 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
           selection
           value={this.state.lang}
         />
-        <Modal trigger={generateButton}>
+        <Modal
+          trigger={generateButton}
+          open={this.state.cardsModalOpen}
+          onClose={cardsModalOpenHandler(false)}
+        >
           <Modal.Header>Autogenerate Cards</Modal.Header>
           <Modal.Content>
             <Modal.Description>
@@ -144,6 +183,12 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
                   ))
                 : null}
             </Modal.Description>
+            <Dropdown onChange={handleDeckChange} options={deckoptions} />
+            <Button
+              onClick={handleAddCardsClick}
+              content="Add to deck"
+              disabled={!this.state.currentDeck && true}
+            />
           </Modal.Content>
         </Modal>
         {this.state.status === DictStatus.Searched ? this.dispMeaning() : null}

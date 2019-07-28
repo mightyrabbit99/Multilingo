@@ -98,7 +98,7 @@ export type WordListPushablePanelsProps = {
   };
   addCardPanel: {
     visible: boolean;
-    addCardToDeck: (card: Card) => void;
+    addCardToDeck: (cards: Card) => void;
   };
 };
 

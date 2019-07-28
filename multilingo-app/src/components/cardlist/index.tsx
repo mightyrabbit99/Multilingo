@@ -17,11 +17,11 @@ export interface CardListStateProps {
   decks: CardDeck[];
   selectedDeck: CardDeck;
   selectedCard: Card;
-  newCard: Card | null;
+  newCards: Card[];
 }
 
 export interface CardListDispatchProps {
-  addCardToDeck: (card: Card) => void;
+  addCardsToDeck: (card: Card[]) => void;
   selectDeck: (deck: CardDeck) => void;
   handleToTest: () => void;
   updateDatabaseDecks: (deck: CardDeck[]) => void;
@@ -46,9 +46,7 @@ class CardList extends React.Component<CardListProps, CardListState> {
   }
 
   public componentWillReceiveProps(newProps: CardListProps) {
-    if (newProps.newCard) {
-      this.state.currentDeck.addCard(newProps.newCard);
-      //update database
+    if (newProps.newCards.length > 0) {
       this.props.updateDatabaseDecks(this.props.decks);
     }
   }
@@ -76,7 +74,7 @@ class CardList extends React.Component<CardListProps, CardListState> {
       },
       addCardPanel: {
         visible: this.state.addCardPanelVisible,
-        addCardToDeck: this.props.addCardToDeck
+        addCardToDeck: (card: Card) => this.props.addCardsToDeck([card])
       }
     };
     return (

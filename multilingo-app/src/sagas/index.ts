@@ -54,7 +54,6 @@ function* dictSaga(): SagaIterator {
   yield takeEvery(actionTypes.START_SEARCH_WORD, function*(action) {
     const { word, lang } = (action as actionTypes.IAction).payload;
     const res = yield call((action as actionTypes.IAction).payload.dict.search, word, lang);
-    console.log(res);
     yield put(actions.wordSearched(res));
   });
 

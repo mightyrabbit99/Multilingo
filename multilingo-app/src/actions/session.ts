@@ -34,11 +34,11 @@ export const addDeck = (deck: CardDeck) => ({
 
 /** Card */
 
-export const addCardToDeck = (card: Card) => {
+export const addCardsToDeck = (cards: Card[]) => {
   return {
     type: actionTypes.ADD_CARD_TO_SELECTED_DECK,
     payload: {
-      card: card
+      cards: cards
     }
   };
 };

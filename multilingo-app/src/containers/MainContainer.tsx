@@ -10,7 +10,8 @@ import {
   receiveDecksData,
   searchingWord,
   updateDatabaseDecks,
-  deleteDeck
+  deleteDeck,
+	addCardsToDeck
 } from "../actions";
 
 const mapStateToProps: MapStateToProps<MainStateProps, {}, IState> = state => ({
@@ -30,7 +31,8 @@ const mapDispatchToProps: MapDispatchToProps<MainDispatchProps, {}> = (
     {
       logout: () => {},
       handleSelectDeck: selectDeck,
-      handleAddDeck: addDeck,
+			handleAddDeck: addDeck,
+			handleAddCardToDeck: addCardsToDeck,
       receiveDecks: receiveDecksData,
       searchingWord: searchingWord,
       updateDatabaseDecks: updateDatabaseDecks,

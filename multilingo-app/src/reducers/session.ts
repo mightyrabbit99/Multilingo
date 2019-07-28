@@ -10,7 +10,7 @@ import {
 } from "../actions/actionTypes";
 
 import { defaultSessionState, ISessionState } from "./states";
-import { statement } from "@babel/template";
+import { Card } from "../extension/cards";
 
 export const reducer: Reducer<ISessionState> = (
   state = defaultSessionState,
@@ -35,10 +35,14 @@ export const reducer: Reducer<ISessionState> = (
         ...state,
         newDeck: action.payload.deck
       };
-    case ADD_CARD_TO_SELECTED_DECK:
+		case ADD_CARD_TO_SELECTED_DECK:
+			action.payload.cards.forEach((c: Card) => {
+				console.log(state.selectedDeck);
+				state.selectedDeck.addCard(c)
+			});
       return {
         ...state,
-        newCard: action.payload.card
+        newCard: action.payload.cards
       };
     case UPDATE_DATABASE_DECKS:
       return {

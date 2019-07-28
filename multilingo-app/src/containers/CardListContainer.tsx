@@ -7,7 +7,7 @@ import CardList, {
   CardListStateProps
 } from "../components/cardlist";
 import { IState } from "../reducers/states";
-import { addCardToDeck, selectDeck, toTest } from "../actions/session";
+import { addCardsToDeck, selectDeck, toTest } from "../actions/session";
 import { updateDatabaseDecks } from "../actions";
 
 const mapStateToProps: MapStateToProps<
@@ -20,7 +20,7 @@ const mapStateToProps: MapStateToProps<
   decks: state.session.decks,
   selectedDeck: state.session.selectedDeck,
   selectedCard: state.session.selectedCard,
-  newCard: state.session.newCard
+  newCards: state.session.newCards
 });
 
 const mapDispatchToProps: MapDispatchToProps<CardListDispatchProps, {}> = (
@@ -28,7 +28,7 @@ const mapDispatchToProps: MapDispatchToProps<CardListDispatchProps, {}> = (
 ) =>
   bindActionCreators<any, any>(
     {
-      addCardToDeck: addCardToDeck,
+      addCardsToDeck: addCardsToDeck,
       selectDeck: selectDeck,
       handleToTest: toTest,
       updateDatabaseDecks: updateDatabaseDecks
