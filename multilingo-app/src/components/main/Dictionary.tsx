@@ -80,6 +80,7 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
   timeoutvar: any;
 
   render() {
+		console.log("dict render");
     const search = (string: string) => {
       clearTimeout(this.timeoutvar);
       this.timeoutvar = setTimeout(() => this.props.searchingWord(string, this.state.lang), 1000);

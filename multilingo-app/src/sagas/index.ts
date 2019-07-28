@@ -61,15 +61,12 @@ function* dictSaga(): SagaIterator {
   yield takeEvery(actionTypes.WORD_SEARCHED, function*(action) {
 		const res = (action as actionTypes.IAction).payload.res[0];
 		let allcards: Card[] = [];
-		console.log(res);
     Object.keys(res.meaning).map((s: string, i: number) => {
-      let wordcards: Card[] = [];
       res.meaning[s].forEach((expl: any, i: number) => {
-        wordcards.push(createCard(s, `<${s}> ${expl.definition}`, res.word, CardType.Expl));
-        if (expl.example) wordcards.push(createCard(s, expl.example, res.word, CardType.Ex));
-        if (expl.synonyms) wordcards.push(createCard(s, expl.synonyms.join(", "), res.word, CardType.Expl));
+        allcards.push(createCard(s, `<${s}> ${expl.definition}`, res.word, CardType.Expl));
+        if (expl.example) allcards.push(createCard(s, expl.example, res.word, CardType.Ex));
+        if (expl.synonyms) allcards.push(createCard(s, expl.synonyms.join(", "), res.word, CardType.Expl));
       });
-      allcards.concat(wordcards);
     });
     yield put(actions.newCardsGenerated(allcards));
   });
