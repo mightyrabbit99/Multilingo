@@ -35,7 +35,7 @@ function* mainSaga() {
 function* fetchDecksDataSaga() {
   yield take(actionTypes.RECEIVE_DECKS_DATA);
   const snapshot = yield call(rsf.getDocument, "Decks/n8Rs6Vb6SaiEZWB6o9fF");
-  const cardDecks = snapshot.data().CardDecks;
+  const cardDecks = snapshot.data().TestDecks;
   yield put(actions.receiveDecksData(plainToClass(CardDeck, cardDecks)));
 }
 
@@ -46,7 +46,7 @@ function* updateDatabaseDecksSaga() {
     yield call(
       rsf.updateDocument,
       "Decks/n8Rs6Vb6SaiEZWB6o9fF",
-      "CardDecks",
+      "TestDecks",
       classToPlain(newCardDecks)
     );
   });

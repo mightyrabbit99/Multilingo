@@ -36,6 +36,7 @@ type DictionaryState = {
   meaning: SearchResult;
   lang: string;
   cardsModalOpen: boolean;
+  newCards: Card[];
 };
 
 class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
@@ -47,9 +48,17 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
       word: props.word,
       meaning: wordNotFound,
       lang: "en",
-      cardsModalOpen: false
+      cardsModalOpen: false,
+      newCards: this.props.newCards
     };
     this.dispMeaning = this.dispMeaning.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps: DictionaryProps) {
+    this.setState({
+      ...this.state,
+      newCards: nextProps.newCards
+    });
   }
 
   dispMeaning() {
@@ -133,12 +142,21 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
     };
 
     const handleSelectCard = (card: Card) => () => {};
-    const deleteCardFromDeck = (card: Card) => () => {};
+    const deleteCardFromDeck = (card: Card) => () => {
+      let number = 0;
+      for (number; number < this.state.newCards.length; number++) {
+        if (this.state.newCards[number].equals(card)) {
+          this.state.newCards.splice(number, 1);
+          break;
+        }
+      }
+      this.setState(state => state);
+    };
 
     const cardsModalOpenHandler = (open: boolean) => () =>
       this.setState({ ...this.state, cardsModalOpen: open });
 
-    const res = this.props.newCards;
+    const res = this.state.newCards;
 
     const generateButton = (
       <Button

@@ -76,7 +76,7 @@ class Main extends React.Component<MainProps, MainState> {
   }
 
   componentWillReceiveProps(nextProps: MainProps) {
-    console.log(" haha");
+    console.log(" componentwillreceiveprops");
     this.setState({
       ...this.state,
       dictProps: {
@@ -135,7 +135,7 @@ class Main extends React.Component<MainProps, MainState> {
             >
               {this.props.decks.length === 0 ? (
                 <img
-                  src="https://i.imgur.com/kvZ0fst.png"
+                  src="https://i.imgur.com/I5WtHdX.png"
                   style={{
                     margin: "auto"
                   }}
