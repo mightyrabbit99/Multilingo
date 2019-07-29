@@ -22,6 +22,7 @@ export interface DictionaryProps {
   searchingWord: (word: string, lang: string) => void;
   selectDeck: (deck: CardDeck) => void;
   addCardToDeck: (cards: Card[]) => void;
+  updateDatabaseDecks: (decks: CardDeck[]) => void;
 }
 
 enum DictStatus {
@@ -42,6 +43,7 @@ type DictionaryState = {
 class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
   constructor(props: DictionaryProps) {
     super(props);
+
     this.state = {
       currentDeck: null,
       status: props.word ? DictStatus.Searched : DictStatus.Main,
@@ -54,6 +56,10 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
     this.dispMeaning = this.dispMeaning.bind(this);
   }
 
+  componentWillMount() {
+    this.setState(state => state);
+    console.log(this.props.decks);
+  }
   componentWillReceiveProps(nextProps: DictionaryProps) {
     this.setState({
       ...this.state,
@@ -139,6 +145,7 @@ class Dictionary extends React.Component<DictionaryProps, DictionaryState> {
     const handleAddCardsClick = () => {
       if (this.state.currentDeck) this.props.selectDeck(this.state.currentDeck);
       this.props.addCardToDeck(this.props.newCards);
+      this.props.updateDatabaseDecks(this.props.decks);
     };
 
     const handleSelectCard = (card: Card) => () => {};

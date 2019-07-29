@@ -6,6 +6,7 @@ import Deck, { DeckProps } from "./Deck";
 import Dictionary, { DictionaryProps } from "./Dictionary";
 import ControlBar, { MainControlBarProps } from "../commons/ControlBar";
 import Dict, { SearchResult, wordNotFound } from "../../extension/dict";
+import { updateDatabaseDecks } from "../../actions";
 
 export interface MainProps
   extends MainDispatchProps,
@@ -60,7 +61,8 @@ class Main extends React.Component<MainProps, MainState> {
         searchingWord: (word: string, lang: string) =>
           props.searchingWord(word, lang, this.props.dict),
         selectDeck: props.handleSelectDeck,
-        addCardToDeck: props.handleAddCardToDeck
+        addCardToDeck: props.handleAddCardToDeck,
+        updateDatabaseDecks: props.updateDatabaseDecks
       }
     };
     if (query.define)
@@ -72,6 +74,7 @@ class Main extends React.Component<MainProps, MainState> {
   }
 
   componentWillMount() {
+    console.log("receiving...");
     this.props.receiveDecks(this.props.decks);
   }
 
@@ -88,12 +91,12 @@ class Main extends React.Component<MainProps, MainState> {
     });
   }
 
-  componentDidUpdate() {
-    this.props.updateDatabaseDecks(this.props.decks);
-  }
-
   public render() {
     console.log("main render");
+    {
+      //props.decks are only up to date during main render
+      this.state.dictProps.decks = this.props.decks;
+    }
     const generateDeck = (deck: CardDeck, i: number) => {
       let props: DeckProps = {
         deck: deck,
@@ -112,7 +115,10 @@ class Main extends React.Component<MainProps, MainState> {
         location: "Main",
         page: this.state.page,
         color: "green",
-        handleAddDeck: this.props.handleAddDeck,
+        handleAddDeck: (deck: CardDeck) => {
+          this.props.handleAddDeck(deck);
+          this.props.updateDatabaseDecks(this.props.decks);
+        },
         handleToDict: () =>
           this.setState({ ...this.state, page: MainPage.Dict }),
         handleToDeck: () =>
