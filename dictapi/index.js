@@ -10,7 +10,10 @@ app.get("/search", function(req, res) {
     queriedLanguage = req.query.lang || "en";
   console.log(queriedWord);
 
-  if (encodeURIComponent(queriedWord).includes("%20") && queriedLanguage === "en") {
+  if (
+    encodeURIComponent(queriedWord).includes("%20") &&
+    queriedLanguage === "en"
+  ) {
     res.header("Access-Control-Allow-Origin", "*");
 
     return res.status(404).send({});
@@ -21,7 +24,7 @@ app.get("/search", function(req, res) {
       tr: "nedir"
     };
 
-  if (queriedLanguage !== "en") {
+  if (queriedLanguage === "en") {
     url = `https://www.google.co.in/search?hl=${queriedLanguage}&q=${
       replaceDefine[queriedLanguage] ? replaceDefine[queriedLanguage] : "define"
     }+${queriedWord}`;
@@ -31,7 +34,8 @@ app.get("/search", function(req, res) {
         method: "GET",
         url: url,
         headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0"
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0"
         }
       },
       function(err, response, body) {
@@ -59,8 +63,12 @@ app.get("/search", function(req, res) {
           .text();
 
         if (!$(".lr_dct_spkr.lr_dct_spkr_off audio")) {
-          dictionary.pronunciation = "https:" + $(".lr_dct_spkr.lr_dct_spkr_off audio")[0].attribs.src;
-          dictionary.pronunciation = dictionary.pronunciation.replace("--_gb", "--_us");
+          dictionary.pronunciation =
+            "https:" + $(".lr_dct_spkr.lr_dct_spkr_off audio")[0].attribs.src;
+          dictionary.pronunciation = dictionary.pronunciation.replace(
+            "--_gb",
+            "--_us"
+          );
         }
 
         dictionary.phonetic = [];
@@ -100,7 +108,9 @@ app.get("/search", function(req, res) {
               .find("span.vmod .vk_gy")
               .text();
             synonymsText = $(this)
-              .find("div.vmod td.lr_dct_nyms_ttl + td > span:not([data-log-string='synonyms-more-click'])")
+              .find(
+                "div.vmod td.lr_dct_nyms_ttl + td > span:not([data-log-string='synonyms-more-click'])"
+              )
               .text();
 
             synonyms = synonymsText
@@ -110,7 +120,8 @@ app.get("/search", function(req, res) {
                 return item.trim();
               });
 
-            if (example.length > 0) newDefinition.example = example.replace(/(^")|("$)/g, "");
+            if (example.length > 0)
+              newDefinition.example = example.replace(/(^")|("$)/g, "");
 
             if (synonyms.length > 0) newDefinition.synonyms = synonyms;
 
@@ -121,9 +132,11 @@ app.get("/search", function(req, res) {
         dictionary.meaning = meaning;
 
         Object.keys(dictionary).forEach(key => {
-          Array.isArray(dictionary[key]) && !dictionary[key].length && delete dictionary[key];
-				});
-				dictionary = [dictionary];
+          Array.isArray(dictionary[key]) &&
+            !dictionary[key].length &&
+            delete dictionary[key];
+        });
+        dictionary = [dictionary];
 
         res.header("Content-Type", "application/json");
         res.header("Access-Control-Allow-Origin", "*");
@@ -139,7 +152,8 @@ app.get("/search", function(req, res) {
         method: "GET",
         url: url,
         headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0"
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0"
         }
       },
       function(err, response, body) {
@@ -148,7 +162,7 @@ app.get("/search", function(req, res) {
         }
 
         const $ = cheerio.load(body);
-
+        console.log($(".hwg .hw").first());
         if (!$(".hwg .hw").first()[0]) {
           console.log(
             $(".searchHeading")
@@ -157,7 +171,7 @@ app.get("/search", function(req, res) {
           );
           console.log(queriedWord + " is not present in Dictionary.");
           res.header("Access-Control-Allow-Origin", "*");
-          return res.status(404).sendFile(path.join(__dirname + "/views/404.html"));
+          return res.status(404).send({});
         }
 
         var dictionary = [],
@@ -174,7 +188,9 @@ app.get("/search", function(req, res) {
             $("#" + entryHead[0].attribs.id + " ~ .gramb").length -
             $("#" + entryHead[i].attribs.id + " ~ .gramb").length;
         }
-        arrayOfEntryGroup[i] = $("#" + entryHead[0].attribs.id + " ~ .gramb").length;
+        arrayOfEntryGroup[i] = $(
+          "#" + entryHead[0].attribs.id + " ~ .gramb"
+        ).length;
 
         numberOfentryGroup = arrayOfEntryGroup.length - 1;
 
@@ -192,7 +208,8 @@ app.get("/search", function(req, res) {
           entry.word = word;
 
           if (phonetic) {
-            entry.phonetic = phonetic.childNodes[0] && phonetic.childNodes[0].data;
+            entry.phonetic =
+              phonetic.childNodes[0] && phonetic.childNodes[0].data;
           }
           if (pronunciation) {
             entry.pronunciation = $(pronunciation)
@@ -247,9 +264,14 @@ app.get("/search", function(req, res) {
                         .text();
                     }
 
-                    if (definition.length > 0) newDefinition.definition = definition;
+                    if (definition.length > 0)
+                      newDefinition.definition = definition;
 
-                    if (example.length > 0) newDefinition.example = example.substring(1, example.length - 1);
+                    if (example.length > 0)
+                      newDefinition.example = example.substring(
+                        1,
+                        example.length - 1
+                      );
 
                     if (synonyms.length > 0) newDefinition.synonyms = synonyms;
 
@@ -265,7 +287,9 @@ app.get("/search", function(req, res) {
         }
 
         Object.keys(dictionary).forEach(key => {
-          Array.isArray(dictionary[key]) && !dictionary[key].length && delete dictionary[key];
+          Array.isArray(dictionary[key]) &&
+            !dictionary[key].length &&
+            delete dictionary[key];
         });
 
         if ($(".hwg .hw").first()[0]) {
